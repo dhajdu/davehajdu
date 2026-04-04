@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Dave Hajdu - AI Consultant for Mid-Size Business Founders",
+  title: "Dave Hajdu — The Other 50%",
   description:
-    "With 25+ years of experience from Microsoft to founding multiple companies, Dave Hajdu helps business leaders unlock AI-driven growth through speaking, consulting, and the AI Officer Institute.",
+    "AI Keynote Speaker, Consultant, and Author. Where business fluency meets technical depth — the rare combination that makes AI actually work inside organizations.",
 };
 
 export default function RootLayout({

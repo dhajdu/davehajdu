@@ -54,23 +54,34 @@ export default function ContactCTA() {
   return (
     <section className="bg-[#04102D] w-full py-16 md:py-24">
       <div className="max-w-[880px] mx-auto px-8 sm:px-5">
+        {/* Label */}
+        <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-5 text-center">
+          Let&apos;s Work Together
+        </div>
+
         {/* Headline */}
-        <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">
-          Stop Buying AI Tools. Start Building AI Officers.
+        <h2
+          className="text-white font-black tracking-tight leading-[1.05] text-center mb-6"
+          style={{ fontSize: 'clamp(32px, 4.5vw, 54px)' }}
+        >
+          Ready to bridge
+          <br />
+          the gap?
         </h2>
 
         {/* Supporting Text */}
-        <p className="text-white text-center opacity-75 mb-12 max-w-2xl mx-auto">
-          Ready to transform your business? Schedule a 30-minute consultation with Dave to discuss your AI strategy.
+        <p className="text-white/50 text-center mb-12 max-w-xl mx-auto text-[17px] leading-relaxed">
+          In five years, there will be two kinds of leaders — those who learned
+          to lead with AI, and those who got replaced by someone who did.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <button className="bg-[#6FF2C1] text-[#04102D] px-6 py-3 rounded-md text-xs font-bold tracking-[0.05em] uppercase hover:bg-[#5de8b3] transition-colors w-full sm:w-auto">
-            Book a Call
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-16">
+          <button className="bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors w-full sm:w-auto">
+            Book a Keynote
           </button>
-          <button className="border-2 border-white text-white px-6 py-3 rounded-md text-xs font-bold tracking-[0.05em] uppercase hover:bg-white hover:text-[#04102D] transition-colors w-full sm:w-auto">
-            Download AI Leadership Gap Report
+          <button className="border border-white/25 text-white px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:border-white/50 hover:bg-white/5 transition-all w-full sm:w-auto">
+            Schedule a Consultation
           </button>
         </div>
 

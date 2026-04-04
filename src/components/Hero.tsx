@@ -1,64 +1,78 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import Link from 'next/link';
 
 export default function Hero() {
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div
-      ref={heroRef}
-      className="reveal relative w-full bg-[#04102D] py-24 md:py-32 overflow-hidden"
-    >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#287BE8] to-transparent"></div>
+    <section className="relative w-full min-h-screen flex items-center bg-[#04102D] overflow-hidden">
+
+      {/* Ambient blue glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 70% 60% at 20% 55%, rgba(40,123,232,0.14) 0%, transparent 65%)',
+        }}
+      />
+
+      {/* Ghost "50" typographic element */}
+      <div
+        aria-hidden="true"
+        className="absolute right-[-40px] bottom-[-60px] font-black leading-none select-none pointer-events-none text-white/[0.025]"
+        style={{ fontSize: 'clamp(260px, 36vw, 520px)', letterSpacing: '-0.06em' }}
+      >
+        50
       </div>
 
       {/* Content */}
-      <div className="relative max-w-[880px] mx-auto px-8 sm:px-5 text-center">
-        {/* Section Label */}
-        <div className="text-[#287BE8] text-[10px] font-bold tracking-[0.12em] uppercase mb-6">
-          Personal Brand
+      <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+
+        {/* Eyebrow */}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
+          {['AI Keynote Speaker', 'Consultant', 'Author'].map((label, i) => (
+            <span key={i} className="flex items-center gap-5">
+              {i > 0 && <span className="w-1 h-1 rounded-full bg-[#6FF2C1]/40 inline-block" />}
+              <span className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase">
+                {label}
+              </span>
+            </span>
+          ))}
         </div>
 
-        {/* Headline */}
-        <h1 className="text-white font-bold text-4xl md:text-[47px] leading-tight mb-6">
-          Discover how AI will Unlock The Four Offices of the Future
+        {/* Main headline */}
+        <h1
+          className="text-white font-black leading-[1.0] tracking-[-0.045em] mb-7"
+          style={{ fontSize: 'clamp(52px, 8.5vw, 96px)', maxWidth: 680 }}
+        >
+          The Other
+          <br />
+          <span className="text-[#6FF2C1]">50%.</span>
         </h1>
 
-        {/* Supporting Text */}
-        <p className="text-white text-base md:text-lg mb-8 max-w-2xl mx-auto opacity-55">
-          Transform your business with proven frameworks and real-world AI solutions that deliver measurable ROI.
+        {/* Subtext */}
+        <p
+          className="text-white/55 leading-relaxed font-normal mb-12"
+          style={{ fontSize: 'clamp(17px, 2vw, 20px)', maxWidth: 500 }}
+        >
+          Where business fluency meets technical depth — the rare combination
+          that makes AI actually work inside organizations.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button className="bg-[#6FF2C1] text-[#04102D] px-6 py-3 rounded-md text-xs font-bold tracking-[0.05em] uppercase hover:bg-[#5de8b3] transition-colors w-full sm:w-auto">
-            Connect with Dave
-          </button>
-          <button className="border-2 border-white text-white px-6 py-3 rounded-md text-xs font-bold tracking-[0.05em] uppercase hover:bg-white hover:text-[#04102D] transition-colors w-full sm:w-auto">
-            Learn More
-          </button>
+        {/* CTAs */}
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/speaker-topics"
+            className="inline-block bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors"
+          >
+            Book a Keynote
+          </Link>
+          <Link
+            href="/ai-in-business"
+            className="inline-block border border-white/25 text-white px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:border-white/50 hover:bg-white/5 transition-all"
+          >
+            Schedule a Consultation
+          </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

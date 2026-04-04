@@ -4,47 +4,40 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer>
-      {/* Main Footer Content */}
-      <div className="border-t border-[#D4D9E0] py-12">
-        <div className="max-w-[880px] mx-auto px-8 max-md:px-5 text-center">
-          <p className="italic text-[#6B7280] mb-4">
-            Problem first. AI second. ROI always.
-          </p>
-          <h3 className="font-bold text-[#04102D] text-lg mb-2">Dave Hajdu</h3>
-          <p className="text-sm text-[#6B7280] mb-6">
-            Copyright {currentYear}. All rights reserved.
-          </p>
+    <footer className="bg-[#020C1E]">
+      <div className="max-w-[1080px] mx-auto px-8 sm:px-5 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
 
-          {/* Social Links */}
-          <div className="flex items-center justify-center gap-6">
-            <Link
-              href="https://linkedin.com/in/davehajdu"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#6B7280] hover:text-[#287BE8] transition-colors text-sm"
-              aria-label="LinkedIn"
-            >
-              LinkedIn
-            </Link>
-            <Link
-              href="https://twitter.com/davehajdu"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#6B7280] hover:text-[#287BE8] transition-colors text-sm"
-              aria-label="X / Twitter"
-            >
-              X / Twitter
-            </Link>
-          </div>
-        </div>
-      </div>
+        {/* Wordmark */}
+        <span className="text-white/35 text-[13px] font-semibold tracking-tight">
+          Dave Hajdu
+        </span>
 
-      {/* Bottom Navy Section */}
-      <div className="bg-[#04102D] text-white py-6">
-        <div className="max-w-[880px] mx-auto px-8 max-md:px-5 text-center text-sm">
-          <p>Building the future of business with AI</p>
+        {/* Nav */}
+        <div className="flex items-center gap-8">
+          {['Blog', 'Keynotes', 'Consultation', 'Books'].map((link) => (
+            <Link
+              key={link}
+              href={`/${link.toLowerCase()}`}
+              className="text-white/30 text-[12px] font-medium hover:text-white/60 transition-colors"
+            >
+              {link}
+            </Link>
+          ))}
         </div>
+
+        {/* Social + copyright */}
+        <div className="flex items-center gap-5">
+          <Link
+            href="https://linkedin.com/in/davehajdu"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/25 text-[12px] hover:text-white/50 transition-colors"
+          >
+            LinkedIn
+          </Link>
+          <span className="text-white/15 text-[12px]">© {currentYear} Dave Hajdu</span>
+        </div>
+
       </div>
     </footer>
   );
