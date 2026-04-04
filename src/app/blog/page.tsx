@@ -96,10 +96,10 @@ export default function BlogIndex() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#04102D] via-[#04102D]/85 to-[#04102D]/40 z-10" />
           {/* Hero photo — replace with your preferred speaking/portrait photo */}
           <Image
-            src="/images/dave-speaking.jpg"
+            src="/images/dave-speaking.jpeg"
             alt="Dave Hajdu speaking"
             fill
-            className="object-cover object-top opacity-50"
+            className="object-cover object-top opacity-55"
             priority
           />
         </div>

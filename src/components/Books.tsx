@@ -2,9 +2,9 @@ import Link from 'next/link';
 
 const books = [
   {
-    title: 'Leadership in the AI Era',
+    title: 'The Four Offices of the Future',
     subtitle:
-      'The definitive framework for executives navigating the AI transformation. Stop spending on tools and start building the leaders who make AI actually deliver.',
+      'A diagnostic lens that connects outcomes to AI. Most organizations are spending on AI with no clear line to results — this framework shows exactly where AI creates leverage across the four core functions of any business.',
     color: '#287BE8',
     accent: '#6FF2C1',
     tag: 'Available Now',
@@ -12,7 +12,7 @@ const books = [
   {
     title: 'The Other 50%',
     subtitle:
-      'A manifesto for the people built to stand in the gap between business and technology — the most valuable people in the room that almost nobody has trained.',
+      'Leadership has changed. 50% is human, 50% is AI. The leaders who win the next decade aren\'t the ones who adopt AI fastest — they\'re the ones who know how to lead with it.',
     color: '#1A2B5A',
     accent: '#287BE8',
     tag: 'Available Now',

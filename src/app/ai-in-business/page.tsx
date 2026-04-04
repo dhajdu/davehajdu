@@ -55,10 +55,10 @@ export default function AIInBusinessPage() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-[#04102D] via-[#04102D]/85 to-[#04102D]/50 z-10" />
           <Image
-            src="/images/dave-workshop.jpg"
-            alt="Dave Hajdu AI workshop"
+            src="/images/dave-panel.jpeg"
+            alt="Dave Hajdu AI workshop panel"
             fill
-            className="object-cover object-center opacity-40"
+            className="object-cover object-center opacity-55"
             priority
           />
         </div>

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function About() {
   return (
     <section className="bg-white py-24 md:py-32">
@@ -10,24 +12,43 @@ export default function About() {
               The Origin
             </div>
             <h2
-              className="text-[#04102D] font-black tracking-tight leading-[1.1] mb-7"
-              style={{ fontSize: 'clamp(30px, 4vw, 48px)' }}
+              className="text-[#04102D] font-black tracking-tight leading-[1.1] mb-3"
+              style={{ fontSize: 'clamp(28px, 3.5vw, 44px)' }}
             >
-              I graduated from
+              Foster School of Business.
               <br />
-              the business school.
-              <br />
-              <span className="text-[#287BE8]">In Information Systems.</span>
+              <span className="text-[#287BE8]">Information Systems.</span>
             </h2>
-            <p className="text-[#04102D]/50 text-[17px] leading-[1.7] mb-5 max-w-[420px]">
-              Half business strategy. Half computer science. In a world that loves
-              to put people in a box, I was built to stand in the gap between the two.
+            <p className="text-[#04102D]/35 text-[12px] font-semibold tracking-[0.08em] uppercase mb-7">
+              University of Washington
             </p>
-            <p className="text-[#04102D]/50 text-[17px] leading-[1.7] max-w-[420px]">
-              That duality is exactly what organizations need right now — someone
-              who speaks both languages and can translate AI from theory into
-              measurable ROI.
+            <p className="text-[#04102D]/55 text-[16px] leading-[1.75] mb-4 max-w-[420px]">
+              Before "automation" was a word anyone used, Dave was moving data and money inside Microsoft. He didn't read that most AI problems are data problems — he learned it by living inside one of the world's most data-driven companies when that still meant something.
             </p>
+            <p className="text-[#04102D]/55 text-[16px] leading-[1.75] mb-4 max-w-[420px]">
+              He built CMS systems for colleges and small businesses before WordPress was a thought. Then founded Vinasource (USTA, NCAA, MTV, Microsoft) and co-founded TINYpulse — raising $9.5M led by Baseline Ventures, the #2 investor in the world at the time — before its acquisition by WebMD.
+            </p>
+            <p className="text-[#04102D]/55 text-[16px] leading-[1.75] mb-8 max-w-[420px]">
+              He also coached nationally ranked tennis players. He knows what it takes to compete at the top — and he brings that same standard to every engagement. He founded EO Vietnam, served as SE Asia Area Director, and sits on EO's Global Tech Committee, overseeing the tools that run chapter management worldwide.
+            </p>
+
+            {/* Coaching photo */}
+            <div className="relative rounded-xl overflow-hidden" style={{ height: 220 }}>
+              <Image
+                src="/images/dave-coaching.jpeg"
+                alt="Dave coaching a client"
+                fill
+                className="object-cover"
+                style={{ objectPosition: 'center 30%' }}
+              />
+              <div className="absolute inset-0 bg-[#04102D]/10" />
+              <div className="absolute bottom-0 left-0 right-0 px-5 py-3"
+                style={{ background: 'linear-gradient(to top, rgba(4,16,45,0.75) 0%, transparent 100%)' }}>
+                <p className="text-white text-[12px] font-semibold tracking-wide">
+                  Working with leaders to turn AI into results
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Right: The 50/50 visual card */}
@@ -69,10 +90,16 @@ export default function About() {
             </div>
 
             {/* Pull quote */}
-            <p className="text-[#04102D]/40 text-[14px] italic text-center mt-6 leading-relaxed px-4">
-              "In the 50/50 era, the most valuable person in the room is not the
-              one who knows AI — it's the one who knows how to lead with it."
-            </p>
+            <div className="mt-6 px-4">
+              <p className="text-[#04102D] text-[20px] font-black tracking-tight leading-[1.2] text-center mb-2">
+                "The CMS is dead.
+                <br />
+                <span className="text-[#287BE8]">AI is the shooter."</span>
+              </p>
+              <p className="text-[#04102D]/35 text-[11px] font-bold tracking-[0.1em] uppercase text-center">
+                — Dave Hajdu
+              </p>
+            </div>
           </div>
 
         </div>
