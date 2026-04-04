@@ -90,48 +90,45 @@ export default function BlogIndex() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative bg-[#04102D] overflow-hidden min-h-[380px] flex items-center">
-        <div className="absolute inset-0">
-          {/* Gradient overlay — keeps text readable regardless of photo */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#04102D] via-[#04102D]/85 to-[#04102D]/40 z-10" />
-          {/* Hero photo — replace with your preferred speaking/portrait photo */}
-          <Image
-            src="/images/dave-speaking.jpeg"
-            alt="Dave Hajdu speaking"
-            fill
-            className="object-cover object-top opacity-55"
-            priority
-          />
-        </div>
+      <section className="relative bg-[#04102D] overflow-hidden min-h-[520px] flex items-center">
+        {/* Ambient glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 70% 60% at 20% 55%, rgba(40,123,232,0.14) 0%, transparent 65%)',
+          }}
+        />
 
-        <div className="relative z-20 max-w-[1100px] mx-auto px-8 max-md:px-5 py-16 md:py-24">
-          <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#6FF2C1] mb-4 flex items-center gap-2">
-            <span className="inline-block w-8 h-px bg-[#6FF2C1]" />
-            Dave Hajdu · Blog
-          </p>
-          <h1 className="text-[42px] md:text-[56px] font-black text-white leading-[1.05] mb-5 max-w-[600px]">
-            AI + Business{' '}
-            <span className="text-[#6FF2C1]">Insights</span>
+        <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
+            {['AI in Business', 'High Performance Culture', '88 Days of AI'].map((label, i) => (
+              <span key={i} className="flex items-center gap-5">
+                {i > 0 && <span className="w-1 h-1 rounded-full bg-[#6FF2C1]/40 inline-block" />}
+                <span className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase">
+                  {label}
+                </span>
+              </span>
+            ))}
+          </div>
+          <h1
+            className="text-white font-black leading-[1.0] tracking-[-0.04em] mb-7"
+            style={{ fontSize: 'clamp(44px, 7vw, 80px)', maxWidth: 680 }}
+          >
+            AI + Business
+            <br />
+            <span className="text-[#6FF2C1]">Insights.</span>
           </h1>
-          <p className="text-[16px] text-white/70 max-w-[480px] leading-relaxed mb-8">
+          <p
+            className="text-white/55 leading-relaxed font-normal"
+            style={{ fontSize: 'clamp(16px, 1.8vw, 19px)', maxWidth: 480 }}
+          >
             Real stories, practical frameworks, and honest takes on building businesses with AI — from someone doing it in real time.
           </p>
-          <div className="flex flex-wrap gap-2">
-            <span className="px-4 py-1.5 rounded-full border border-[#287BE8]/50 text-[#287BE8] text-[12px] font-semibold">
-              High Performance Culture
-            </span>
-            <span className="px-4 py-1.5 rounded-full border border-[#D1458B]/50 text-[#D1458B] text-[12px] font-semibold">
-              AI In Business
-            </span>
-            <span className="px-4 py-1.5 rounded-full border border-[#6FF2C1]/50 text-[#6FF2C1] text-[12px] font-semibold">
-              88 Days of AI
-            </span>
-          </div>
         </div>
       </section>
 
       {/* ── Intro Band ───────────────────────────────────────── */}
-      <div className="bg-[#F8F9FC] border-y border-[#D4D9E0]">
+      <div className="bg-white border-b border-[#04102D]/[0.06]">
         <div className="max-w-[800px] mx-auto px-8 max-md:px-5 py-8 text-center text-[15px] text-[#2A3044] leading-relaxed">
           Most AI content teaches you what AI can do.{' '}
           <strong className="text-[#04102D]">

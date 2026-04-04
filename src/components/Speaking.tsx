@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 const services = [
   {
@@ -36,31 +35,19 @@ export default function Speaking() {
     <section id="speaking" className="bg-[#F7F9FC] py-24 md:py-32">
       <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
 
-        {/* Speaking photo banner */}
-        <div className="relative rounded-2xl overflow-hidden mb-16" style={{ height: 320 }}>
-          <Image
-            src="/images/dave-speaking.jpeg"
-            alt="Dave Hajdu delivering a keynote"
-            fill
-            className="object-cover"
-            style={{ objectPosition: 'center 20%' }}
-          />
-          {/* Dark overlay for text legibility */}
-          <div className="absolute inset-0 bg-[#04102D]/55" />
-          {/* Text overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
-            <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
-              How I Can Help
-            </div>
-            <h2
-              className="text-white font-black tracking-tight leading-[1.1]"
-              style={{ fontSize: 'clamp(28px, 3.5vw, 42px)' }}
-            >
-              Problem first. AI second.
-              <br />
-              <span className="text-[#6FF2C1]">ROI always.</span>
-            </h2>
+        {/* Section header */}
+        <div className="text-center mb-16">
+          <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
+            How I Can Help
           </div>
+          <h2
+            className="text-[#04102D] font-black tracking-tight leading-[1.1]"
+            style={{ fontSize: 'clamp(28px, 3.5vw, 42px)' }}
+          >
+            Problem first. AI second.
+            <br />
+            <span className="text-[#287BE8]">ROI always.</span>
+          </h2>
         </div>
 
         {/* Cards */}

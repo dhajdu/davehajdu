@@ -21,28 +21,28 @@ const topics = [
     title: '88 Days of AI: What Daily Practice Teaches You',
     description:
       'Dave documented 88 consecutive days of AI experiments in public. This talk shares the most surprising lessons — what compounded, what failed, and what it revealed about how humans and AI actually work together.',
-    accent: '#D1458B',
+    accent: '#287BE8',
   },
   {
     tag: 'Business Growth',
     title: 'Problem First. AI Second. ROI Always.',
     description:
       'The most common AI mistake is starting with the tool instead of the problem. This practical framework shows how to identify your highest-leverage AI opportunities, prioritize ruthlessly, and measure what actually matters.',
-    accent: '#287BE8',
+    accent: '#6FF2C1',
   },
   {
     tag: 'Vietnam & Emerging Markets',
     title: 'Building in the World\'s Toughest Markets',
     description:
       'From Vietnam to Malaysia to the Middle East — Dave has built businesses where infrastructure, trust, and rules work differently. This talk covers the entrepreneurial lessons that only come from operating at the edge.',
-    accent: '#6FF2C1',
+    accent: '#287BE8',
   },
   {
     tag: 'Branding',
     title: 'Your AI Avatar Is Your Digital Twin',
     description:
       'AI avatars, digital twins, and always-on brand presence are no longer science fiction. This hands-on session shows how founders and executives can build an AI-powered personal brand that works while they sleep.',
-    accent: '#D1458B',
+    accent: '#6FF2C1',
   },
 ];
 
@@ -57,9 +57,9 @@ export default function SpeakerTopicsPage() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative bg-[#04102D] overflow-hidden min-h-[380px] flex items-center">
+      <section className="relative bg-[#04102D] overflow-hidden min-h-[520px] flex items-center">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#04102D] via-[#04102D]/80 to-[#04102D]/40 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#04102D] via-[#04102D]/80 to-[#04102D]/30 z-10" />
           <Image
             src="/images/dave-speaking.jpeg"
             alt="Dave Hajdu speaking"
@@ -68,47 +68,79 @@ export default function SpeakerTopicsPage() {
             priority
           />
         </div>
-        <div className="relative z-20 max-w-[1100px] mx-auto px-8 max-md:px-5 py-16 md:py-24">
-          <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#6FF2C1] mb-4 flex items-center gap-2">
-            <span className="inline-block w-8 h-px bg-[#6FF2C1]" />
-            Dave Hajdu · Speaker
-          </p>
-          <h1 className="text-[40px] md:text-[54px] font-black text-white leading-[1.05] mb-5 max-w-[600px]">
-            Build a Future-Ready Business{' '}
-            <span className="text-[#6FF2C1]">with AI That Delivers</span>
-          </h1>
-          <p className="text-[16px] text-white/70 max-w-[480px] leading-relaxed mb-8">
-            Proven growth frameworks, real-world case studies, and hands-on demos that audiences can implement the same week. Dave has spoken across 15+ countries to founders, executives, and leadership teams.
-          </p>
-          <Link
-            href="/#contact"
-            className="inline-block bg-[#6FF2C1] text-[#04102D] text-[13px] font-bold px-7 py-3 rounded-lg hover:bg-[#5de8b3] transition-colors"
+
+        {/* Ambient glow */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 60% 70% at 15% 55%, rgba(40,123,232,0.12) 0%, transparent 65%)',
+          }}
+        />
+
+        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
+            {['AI Keynote Speaker', 'Workshops', 'Executive Briefings'].map((label, i) => (
+              <span key={i} className="flex items-center gap-5">
+                {i > 0 && <span className="w-1 h-1 rounded-full bg-[#6FF2C1]/40 inline-block" />}
+                <span className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase">
+                  {label}
+                </span>
+              </span>
+            ))}
+          </div>
+          <h1
+            className="text-white font-black leading-[1.0] tracking-[-0.04em] mb-7"
+            style={{ fontSize: 'clamp(44px, 7vw, 80px)', maxWidth: 680 }}
           >
-            Book Dave to Speak →
-          </Link>
+            Talks That
+            <br />
+            <span className="text-[#6FF2C1]">Move People.</span>
+          </h1>
+          <p
+            className="text-white/55 leading-relaxed font-normal mb-12"
+            style={{ fontSize: 'clamp(16px, 1.8vw, 19px)', maxWidth: 480 }}
+          >
+            Proven frameworks, real-world stories, and hands-on demos that audiences can implement the same week. Dave has spoken across 15+ countries to founders, executives, and leadership teams.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/#contact"
+              className="inline-block bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors"
+            >
+              Book Dave to Speak
+            </Link>
+            <Link
+              href="/#contact"
+              className="inline-block border border-white/25 text-white px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:border-white/50 hover:bg-white/5 transition-all"
+            >
+              Schedule a Consultation
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* ── Social Proof Band ────────────────────────────────── */}
-      <div className="bg-[#F8F9FC] border-y border-[#D4D9E0]">
-        <div className="max-w-[900px] mx-auto px-8 max-md:px-5 py-8 text-center text-[15px] text-[#2A3044] leading-relaxed">
-          <strong className="text-[#04102D]">95% of attendees report actionable insights they implement immediately.</strong>{' '}
-          Dave speaks at conferences, leadership summits, corporate offsites, and university programs across Asia, the Middle East, and North America.
+      <div className="bg-white border-b border-[#04102D]/[0.06]">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-5 py-8 text-center">
+          <p className="text-[#04102D]/70 text-[16px] leading-relaxed">
+            <strong className="text-[#04102D]">95% of attendees report actionable insights they implement immediately.</strong>{' '}
+            Dave speaks at conferences, leadership summits, corporate offsites, and university programs across Asia, the Middle East, and North America.
+          </p>
         </div>
       </div>
 
       {/* ── Event Types ──────────────────────────────────────── */}
-      <section className="py-10 border-b border-[#D4D9E0]">
-        <div className="max-w-[1100px] mx-auto px-8 max-md:px-5">
-          <div className="flex flex-wrap gap-4 justify-center">
+      <section className="bg-white py-14">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+          <div className="flex flex-wrap gap-3 justify-center">
             {eventTypes.map((e) => (
               <div
                 key={e.label}
-                className="flex items-center gap-2 bg-white border border-[#D4D9E0] rounded-full px-5 py-2"
+                className="flex items-center gap-2 border border-[#04102D]/[0.08] rounded-full px-6 py-2.5"
               >
-                <span className="w-2 h-2 rounded-full bg-[#287BE8] flex-shrink-0" />
-                <span className="font-semibold text-[#04102D] text-[13px]">{e.label}</span>
-                <span className="text-[#6B7280] text-[12px]">· {e.detail}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6FF2C1] flex-shrink-0" />
+                <span className="font-bold text-[#04102D] text-[13px]">{e.label}</span>
+                <span className="text-[#04102D]/40 text-[12px]">· {e.detail}</span>
               </div>
             ))}
           </div>
@@ -116,32 +148,43 @@ export default function SpeakerTopicsPage() {
       </section>
 
       {/* ── Topics ───────────────────────────────────────────── */}
-      <section className="py-14">
-        <div className="max-w-[1100px] mx-auto px-8 max-md:px-5">
-          <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#287BE8] mb-3">
-            Speaking Topics
-          </p>
-          <h2 className="text-[30px] md:text-[36px] font-black text-[#04102D] mb-10 max-w-[520px] leading-snug">
-            Six Talks. All Built From Real Experience.
-          </h2>
+      <section className="bg-[#F7F9FC] py-24 md:py-32">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+          <div className="mb-16">
+            <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
+              Speaking Topics
+            </div>
+            <h2
+              className="text-[#04102D] font-black tracking-tight leading-[1.1]"
+              style={{ fontSize: 'clamp(28px, 3.5vw, 42px)' }}
+            >
+              Six talks. All built
+              <br />
+              <span className="text-[#287BE8]">from real experience.</span>
+            </h2>
+          </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             {topics.map((topic) => (
               <div
                 key={topic.title}
-                className="border border-[#D4D9E0] rounded-xl overflow-hidden hover:shadow-lg transition-shadow flex flex-col"
+                className="bg-white rounded-xl p-10 flex flex-col border border-[#04102D]/[0.06]"
               >
-                <div className="h-1 flex-shrink-0" style={{ background: topic.accent }} />
-                <div className="p-6 flex flex-col flex-1">
-                  <span
-                    className="inline-block text-[10px] font-bold tracking-[0.1em] uppercase px-2.5 py-1 rounded-full mb-3 self-start"
-                    style={{ background: `${topic.accent}18`, color: topic.accent }}
-                  >
-                    {topic.tag}
-                  </span>
-                  <h3 className="font-bold text-[#04102D] text-[16px] mb-2 leading-snug">{topic.title}</h3>
-                  <p className="text-[13px] text-[#6B7280] leading-relaxed flex-1">{topic.description}</p>
-                </div>
+                <span
+                  className="inline-block text-[10px] font-bold tracking-[0.1em] uppercase px-3 py-1.5 rounded-full mb-5 self-start"
+                  style={{
+                    background: topic.accent === '#6FF2C1' ? 'rgba(111,242,193,0.15)' : 'rgba(40,123,232,0.1)',
+                    color: topic.accent === '#6FF2C1' ? '#1A9E74' : '#287BE8',
+                  }}
+                >
+                  {topic.tag}
+                </span>
+                <h3 className="text-[#04102D] text-[18px] font-extrabold leading-[1.3] tracking-tight mb-4 flex-1">
+                  {topic.title}
+                </h3>
+                <p className="text-[#04102D]/50 text-[14px] leading-[1.7]">
+                  {topic.description}
+                </p>
               </div>
             ))}
           </div>
@@ -149,12 +192,21 @@ export default function SpeakerTopicsPage() {
       </section>
 
       {/* ── Past Audiences ───────────────────────────────────── */}
-      <section className="bg-[#F8F9FC] border-y border-[#D4D9E0] py-14">
-        <div className="max-w-[1100px] mx-auto px-8 max-md:px-5">
-          <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#287BE8] mb-3">
-            Who Dave Speaks To
-          </p>
-          <h2 className="text-[28px] font-black text-[#04102D] mb-8">Past Audiences Include</h2>
+      <section className="bg-white py-24 md:py-32">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+          <div className="mb-16">
+            <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
+              Who Dave Speaks To
+            </div>
+            <h2
+              className="text-[#04102D] font-black tracking-tight leading-[1.1]"
+              style={{ fontSize: 'clamp(28px, 3.5vw, 42px)' }}
+            >
+              Built for the rooms
+              <br />
+              <span className="text-[#287BE8]">where decisions get made.</span>
+            </h2>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               'Founders & CEOs',
@@ -168,7 +220,7 @@ export default function SpeakerTopicsPage() {
             ].map((audience) => (
               <div
                 key={audience}
-                className="bg-white border border-[#D4D9E0] rounded-lg px-4 py-3 text-[13px] font-medium text-[#2A3044] text-center"
+                className="border border-[#04102D]/[0.06] rounded-xl px-5 py-4 text-[13px] font-semibold text-[#04102D]/70 text-center"
               >
                 {audience}
               </div>
@@ -178,23 +230,42 @@ export default function SpeakerTopicsPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="bg-[#04102D] py-14">
-        <div className="max-w-[640px] mx-auto px-8 max-md:px-5 text-center">
-          <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#6FF2C1] mb-3">
+      <section className="bg-[#04102D] py-24 md:py-32 relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 70% 60% at 50% 100%, rgba(40,123,232,0.12) 0%, transparent 65%)',
+          }}
+        />
+        <div className="relative z-10 max-w-[640px] mx-auto px-8 sm:px-5 text-center">
+          <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-5">
             Invite Dave to Speak
-          </p>
-          <h2 className="text-[28px] font-black text-white mb-4 leading-snug">
-            Your audience will leave with a plan, not just inspiration.
+          </div>
+          <h2
+            className="text-white font-black tracking-tight leading-[1.05] mb-6"
+            style={{ fontSize: 'clamp(32px, 4.5vw, 52px)' }}
+          >
+            Your audience will leave
+            <br />
+            <span className="text-[#6FF2C1]">with a plan.</span>
           </h2>
-          <p className="text-white/60 text-[14px] mb-8 leading-relaxed">
+          <p className="text-white/50 text-[17px] leading-relaxed mb-12 max-w-[460px] mx-auto">
             Dave customizes every talk to your audience, industry, and goals. Tell him about your event and he'll tell you which topic fits best.
           </p>
-          <Link
-            href="/#contact"
-            className="inline-block bg-[#6FF2C1] text-[#04102D] text-[13px] font-bold px-8 py-3 rounded-lg hover:bg-[#5de8b3] transition-colors"
-          >
-            Enquire About Booking →
-          </Link>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link
+              href="/#contact"
+              className="inline-block bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors"
+            >
+              Enquire About Booking
+            </Link>
+            <Link
+              href="/ai-in-business"
+              className="inline-block border border-white/25 text-white px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:border-white/50 hover:bg-white/5 transition-all"
+            >
+              Schedule a Consultation
+            </Link>
+          </div>
         </div>
       </section>
     </>
