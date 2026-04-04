@@ -14,13 +14,13 @@ export default function Hero() {
         }}
       />
 
-      {/* Ghost "50" typographic element */}
+      {/* Ghost "50%" typographic element */}
       <div
         aria-hidden="true"
-        className="absolute right-[-40px] bottom-[-60px] font-black leading-none select-none pointer-events-none text-white/[0.025]"
-        style={{ fontSize: 'clamp(260px, 36vw, 520px)', letterSpacing: '-0.06em' }}
+        className="absolute right-[-20px] bottom-[-40px] font-black leading-none select-none pointer-events-none text-white/[0.04]"
+        style={{ fontSize: 'clamp(180px, 26vw, 380px)', letterSpacing: '-0.06em' }}
       >
-        50
+        50%
       </div>
 
       {/* Content */}
@@ -40,13 +40,17 @@ export default function Hero() {
 
         {/* Main headline */}
         <h1
-          className="text-white font-black leading-[1.0] tracking-[-0.045em] mb-7"
+          className="text-white font-black leading-[1.05] tracking-[-0.045em] mb-4"
           style={{ fontSize: 'clamp(52px, 8.5vw, 96px)', maxWidth: 680 }}
         >
-          The Other
-          <br />
-          <span className="text-[#6FF2C1]">50%.</span>
+          Dave Hajdu
         </h1>
+        <p
+          className="text-[#6FF2C1] font-black leading-none tracking-[-0.03em] mb-8"
+          style={{ fontSize: 'clamp(22px, 3.5vw, 40px)' }}
+        >
+          Chief AI Officer
+        </p>
 
         {/* Subtext */}
         <p

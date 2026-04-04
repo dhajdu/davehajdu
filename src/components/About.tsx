@@ -4,7 +4,7 @@ export default function About() {
   return (
     <section className="bg-white py-24 md:py-32">
       <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
-        <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
+        <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
 
           {/* Left: The story */}
           <div>
@@ -28,9 +28,13 @@ export default function About() {
             <p className="text-[#04102D]/55 text-[16px] leading-[1.75] mb-4 max-w-[420px]">
               He built CMS systems for colleges and small businesses before WordPress was a thought. Then founded Vinasource (USTA, NCAA, MTV, Microsoft) and co-founded TINYpulse — raising $9.5M led by Baseline Ventures, the #2 investor in the world at the time — before its acquisition by WebMD.
             </p>
-            <p className="text-[#04102D]/55 text-[16px] leading-[1.75] mb-8 max-w-[420px]">
+            <p className="text-[#04102D]/55 text-[16px] leading-[1.75] max-w-[420px]">
               He also coached nationally ranked tennis players. He knows what it takes to compete at the top — and he brings that same standard to every engagement. He founded EO Vietnam, served as SE Asia Area Director, and sits on EO's Global Tech Committee, overseeing the tools that run chapter management worldwide.
             </p>
+          </div>
+
+          {/* Right: photo + 50/50 card + pull quote */}
+          <div className="flex flex-col gap-6">
 
             {/* Coaching photo */}
             <div className="relative rounded-xl overflow-hidden" style={{ height: 220 }}>
@@ -49,9 +53,7 @@ export default function About() {
                 </p>
               </div>
             </div>
-          </div>
 
-          {/* Right: The 50/50 visual card */}
           <div>
             <div className="bg-[#04102D] rounded-2xl overflow-hidden grid grid-cols-2">
               {/* Business half */}
@@ -90,7 +92,7 @@ export default function About() {
             </div>
 
             {/* Pull quote */}
-            <div className="mt-6 px-4">
+            <div className="mt-2 px-4">
               <p className="text-[#04102D] text-[20px] font-black tracking-tight leading-[1.2] text-center mb-2">
                 "The CMS is dead.
                 <br />
@@ -100,6 +102,8 @@ export default function About() {
                 — Dave Hajdu
               </p>
             </div>
+          </div>
+
           </div>
 
         </div>
