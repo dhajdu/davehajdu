@@ -14,7 +14,7 @@ const services = [
     icon: '◈',
     label: 'Consultation',
     title: 'Turn your AI investment into measurable ROI.',
-    body: "Most organizations are spending on AI and getting zero return — not because the technology fails, but because their leaders were never trained to lead with it. Dave fixes that.",
+    body: "Most organizations are spending on AI and getting zero return, not because the technology fails, but because their leaders were never trained to lead with it. Dave fixes that.",
     cta: 'Schedule a Consultation',
     href: '/ai-in-business',
     accentClass: 'text-[#287BE8]',

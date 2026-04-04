@@ -71,7 +71,7 @@ export default function ContactCTA() {
 
         {/* Supporting Text */}
         <p className="text-white/50 text-center mb-12 max-w-xl mx-auto text-[17px] leading-relaxed">
-          In five years, there will be two kinds of leaders — those who learned
+          In five years, there will be two kinds of leaders: those who learned
           to lead with AI, and those who got replaced by someone who did.
         </p>
 

@@ -4,7 +4,7 @@ const books = [
   {
     title: 'The Four Offices of the Future',
     subtitle:
-      'A diagnostic lens that connects outcomes to AI. Most organizations are spending on AI with no clear line to results — this framework shows exactly where AI creates leverage across the four core functions of any business.',
+      'A diagnostic lens that connects outcomes to AI. Most organizations are spending on AI with no clear line to results. This framework shows exactly where AI creates leverage across the four core functions of any business.',
     color: '#287BE8',
     accent: '#6FF2C1',
     tag: 'Available Now',
@@ -12,7 +12,7 @@ const books = [
   {
     title: 'The Other 50%',
     subtitle:
-      'Leadership has changed. 50% is human, 50% is AI. The leaders who win the next decade aren\'t the ones who adopt AI fastest — they\'re the ones who know how to lead with it.',
+      'Leadership has changed. 50% is human, 50% is AI. The leaders who win the next decade are not the ones who adopt AI fastest. They are the ones who know how to lead with it.',
     color: '#1A2B5A',
     accent: '#287BE8',
     tag: 'Available Now',

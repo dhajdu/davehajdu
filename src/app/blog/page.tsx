@@ -122,7 +122,7 @@ export default function BlogIndex() {
             className="text-white/55 leading-relaxed font-normal"
             style={{ fontSize: 'clamp(16px, 1.8vw, 19px)', maxWidth: 480 }}
           >
-            Real stories, practical frameworks, and honest takes on building businesses with AI — from someone doing it in real time.
+            Real stories, practical frameworks, and honest takes on building businesses with AI, from someone doing it in real time.
           </p>
         </div>
       </section>
@@ -132,7 +132,7 @@ export default function BlogIndex() {
         <div className="max-w-[800px] mx-auto px-8 max-md:px-5 py-8 text-center text-[15px] text-[#2A3044] leading-relaxed">
           Most AI content teaches you what AI can do.{' '}
           <strong className="text-[#04102D]">
-            These posts teach you what to do with AI — as a founder, a leader, and a business builder.
+            These posts teach you what to do with AI, as a founder, a leader, and a business builder.
           </strong>{' '}
           Tested in the real world, not the lab.
         </div>

@@ -2,7 +2,7 @@ export default function StatStrip() {
   const stats = [
     {
       number: '$9.5M',
-      label: 'Raised — led by Baseline Ventures',
+      label: 'Raised, led by Baseline Ventures',
     },
     {
       number: '5+',

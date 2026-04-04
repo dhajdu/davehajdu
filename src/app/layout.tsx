@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Dave Hajdu — The Other 50%",
+  title: "Dave Hajdu | The Other 50%",
   description:
-    "AI Keynote Speaker, Consultant, and Author. Where business fluency meets technical depth — the rare combination that makes AI actually work inside organizations.",
+    "AI Keynote Speaker, Consultant, and Author. Where business fluency meets technical depth, the rare combination that makes AI actually work inside organizations.",
 };
 
 export default function RootLayout({

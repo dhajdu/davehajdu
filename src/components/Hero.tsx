@@ -57,7 +57,7 @@ export default function Hero() {
           className="text-white/55 leading-relaxed font-normal mb-12"
           style={{ fontSize: 'clamp(17px, 2vw, 20px)', maxWidth: 500 }}
         >
-          Where business fluency meets technical depth — the rare combination
+          Where business fluency meets technical depth, the rare combination
           that makes AI actually work inside organizations.
         </p>
 

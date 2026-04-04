@@ -6,7 +6,7 @@ const books = [
     title: 'The Four Offices of the Future',
     subtitle: 'A Diagnostic Lens for Mapping AI to Outcomes',
     description:
-      '95% of companies see no ROI from AI. Not because the technology doesn\'t work — because organizations can\'t connect it to outcomes. The Four Offices of the Future is a diagnostic framework that maps every business outcome to one of four offices: Revenue, Talent, Operations, and Innovation. It shows leaders exactly where AI should be creating value, why it currently isn\'t, and what to do about it.',
+      '95% of companies see no ROI from AI. Not because the technology doesn\'t work. Because organizations can\'t connect it to outcomes. The Four Offices of the Future is a diagnostic framework that maps every business outcome to one of four offices: Revenue, Talent, Operations, and Innovation. It shows leaders exactly where AI should be creating value, why it currently isn\'t, and what to do about it.',
     themes: ['AI Strategy', 'Organizational Design', 'ROI Frameworks', 'Leadership'],
     color: '#287BE8',
     accent: '#6FF2C1',
@@ -183,7 +183,7 @@ export default function BooksPage() {
             <span className="text-[#6FF2C1]">in motion.</span>
           </h2>
           <p className="text-white/50 text-[17px] leading-relaxed mb-12 max-w-[460px] mx-auto">
-            Don't wait for the books. Work with Dave directly — or hear the frameworks live at your next event.
+            Don't wait for the books. Work with Dave directly, or hear the frameworks live at your next event.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link href="/#contact" className="inline-block bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors">

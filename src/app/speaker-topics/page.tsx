@@ -6,7 +6,7 @@ const topics = [
     tag: 'AI Strategy',
     title: 'The Four Offices of the Future',
     description:
-      '95% of companies see no ROI from AI — not because the technology doesn\'t work, but because they can\'t connect it to outcomes. This talk reframes how organizations think about AI deployment across four core business functions.',
+      '95% of companies see no ROI from AI, not because the technology doesn\'t work, but because they can\'t connect it to outcomes. This talk reframes how organizations think about AI deployment across four core business functions.',
     accent: '#287BE8',
   },
   {
@@ -20,7 +20,7 @@ const topics = [
     tag: 'Productivity',
     title: '88 Days of AI: What Daily Practice Teaches You',
     description:
-      'Dave documented 88 consecutive days of AI experiments in public. This talk shares the most surprising lessons — what compounded, what failed, and what it revealed about how humans and AI actually work together.',
+      'Dave documented 88 consecutive days of AI experiments in public. This talk shares the most surprising lessons: what compounded, what failed, and what it revealed about how humans and AI actually work together.',
     accent: '#287BE8',
   },
   {
@@ -34,7 +34,7 @@ const topics = [
     tag: 'Vietnam & Emerging Markets',
     title: 'Building in the World\'s Toughest Markets',
     description:
-      'From Vietnam to Malaysia to the Middle East — Dave has built businesses where infrastructure, trust, and rules work differently. This talk covers the entrepreneurial lessons that only come from operating at the edge.',
+      'From Vietnam to Malaysia to the Middle East. Dave has built businesses where infrastructure, trust, and rules work differently. This talk covers the entrepreneurial lessons that only come from operating at the edge.',
     accent: '#287BE8',
   },
   {

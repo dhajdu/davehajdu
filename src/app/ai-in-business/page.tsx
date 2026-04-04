@@ -5,14 +5,14 @@ const offices = [
   {
     tag: 'Revenue',
     title: 'Connect AI to the customer outcomes that drive growth.',
-    body: 'Everything that brings in new business and keeps it. But it only works when someone owns the whole pipeline — not just marketing, not just sales, the whole thing. When it\'s siloed, AI optimizes pieces that don\'t connect.',
+    body: 'Everything that brings in new business and keeps it. But it only works when someone owns the whole pipeline. Not just marketing, not just sales, the whole thing. When it\'s siloed, AI optimizes pieces that don\'t connect.',
     aiUse: 'Sales pipeline optimization, customer journey automation, retention systems',
     accent: '#287BE8',
   },
   {
     tag: 'Talent',
     title: 'Treat your people processes as a product, not a process.',
-    body: 'The full lifecycle of your people — hiring, onboarding, development, culture. Most organizations discover their entire onboarding process lives in one person\'s head. If that person leaves, the process leaves with them.',
+    body: 'The full lifecycle of your people: hiring, onboarding, development, culture. Most organizations discover their entire onboarding process lives in one person\'s head. If that person leaves, the process leaves with them.',
     aiUse: 'Talent matching, onboarding automation, performance development',
     accent: '#6FF2C1',
   },
@@ -26,7 +26,7 @@ const offices = [
   {
     tag: 'Innovation',
     title: 'Give your teams the space and tools to build what\'s next.',
-    body: 'The lens on the future of your business. Innovation doesn\'t die from lack of ideas — it dies from lack of bandwidth. AI gives your best thinkers time back to use it.',
+    body: 'The lens on the future of your business. Innovation doesn\'t die from lack of ideas. It dies from lack of bandwidth. AI gives your best thinkers time back to use it.',
     aiUse: 'Rapid prototyping, market intelligence, scenario planning',
     accent: '#6FF2C1',
   },
@@ -39,7 +39,7 @@ const auditDimensions = [
   },
   {
     label: 'Workflows',
-    description: 'Which processes are ready for AI and which change too often to automate. Not every workflow should be automated — we identify which ones should be built to last.',
+    description: 'Which processes are ready for AI and which change too often to automate. Not every workflow should be automated. We identify which ones should be built to last.',
   },
   {
     label: 'Tools',
@@ -47,7 +47,7 @@ const auditDimensions = [
   },
   {
     label: 'People',
-    description: 'Where your team is stretched and who is doing work below their skill level. This is where AI creates the fastest ROI — freeing your best people to do their best work.',
+    description: 'Where your team is stretched and who is doing work below their skill level. This is where AI creates the fastest ROI, freeing your best people to do their best work.',
   },
 ];
 
@@ -67,7 +67,7 @@ const auditDeliverables = [
 ];
 
 const stats = [
-  { value: '$9.5M', label: 'Raised — led by Baseline Ventures' },
+  { value: '$9.5M', label: 'Raised, led by Baseline Ventures' },
   { value: '25+', label: 'Years in business & technology' },
   { value: '15+', label: 'Countries worked in' },
   { value: '500+', label: 'Leaders trained in AI' },
@@ -115,7 +115,7 @@ export default function AIInBusinessPage() {
             className="text-white/55 leading-relaxed font-normal mb-12"
             style={{ fontSize: 'clamp(16px, 1.8vw, 19px)', maxWidth: 480 }}
           >
-            Most companies experiment with AI. Dave helps founders and leadership teams deploy it — with real workflows, real results, and no fluff.
+            Most companies experiment with AI. Dave helps founders and leadership teams deploy it, with real workflows, real results, and no fluff.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/#contact" className="inline-block bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors">
@@ -172,7 +172,7 @@ export default function AIInBusinessPage() {
               <span className="text-[#287BE8]">AI to outcomes.</span>
             </h2>
             <p className="text-[#04102D]/50 text-[17px] leading-[1.7] max-w-[560px]">
-              Every outcome your business cares about maps to one of four offices. This isn't a new org chart — it's a diagnostic. A way to look at your business and ask: where should AI be creating value, and why isn't it?
+              Every outcome your business cares about maps to one of four offices. This isn't a new org chart. It's a diagnostic. A way to look at your business and ask: where should AI be creating value, and why isn't it?
             </p>
           </div>
 
@@ -226,7 +226,7 @@ export default function AIInBusinessPage() {
                 Most organizations come to me after they've already spent money on AI and gotten nothing back. The problem is almost never the tools. It's that nobody scored the risk before they started building.
               </p>
               <p className="text-[#04102D]/55 text-[16px] leading-[1.75] mb-8">
-                As your CAIO, I run a structured audit across four dimensions — stakeholder interviews, team surveys, and process mapping — then score your readiness and risk before recommending a single dollar of spend.
+                As your CAIO, I run a structured audit across four dimensions: stakeholder interviews, team surveys, and process mapping, then score your readiness and risk before recommending a single dollar of spend.
               </p>
 
               {/* Audit dimensions */}
@@ -271,7 +271,7 @@ export default function AIInBusinessPage() {
               <div className="border border-[#04102D]/[0.06] rounded-xl p-8 mb-6">
                 <p className="text-[#04102D] text-[14px] font-bold mb-2">Risk is scored before anything is recommended.</p>
                 <p className="text-[#04102D]/50 text-[13px] leading-[1.65]">
-                  Regulatory compliance, data confidentiality, process volatility, vendor lock-in, and change readiness. Every recommendation is filtered through your specific risk profile — not a generic template.
+                  Regulatory compliance, data confidentiality, process volatility, vendor lock-in, and change readiness. Every recommendation is filtered through your specific risk profile, not a generic template.
                 </p>
               </div>
 
@@ -313,7 +313,7 @@ export default function AIInBusinessPage() {
               {
                 step: '02',
                 title: 'Deploy',
-                body: 'Build and implement AI solutions that fit your actual business — not generic templates. Real tools, real integrations, real results.',
+                body: 'Build and implement AI solutions that fit your actual business, not generic templates. Real tools, real integrations, real results.',
               },
               {
                 step: '03',
