@@ -8,8 +8,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: 'AI in Business', href: '/#expertise' },
-    { label: 'Speaking', href: '/#speaking' },
+    { label: 'AI in Business', href: '/ai-in-business' },
+    { label: 'Speaker Topics', href: '/speaker-topics' },
     { label: 'Blog', href: '/blog' },
     { label: 'Community', href: '/#community' },
   ];
