@@ -3,9 +3,6 @@ export default function BlogLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="max-w-[880px] mx-auto px-8 max-md:px-5 py-16 md:py-24">
-      {children}
-    </div>
-  );
+  // Full-width layout — each section within blog pages handles its own container
+  return <>{children}</>;
 }

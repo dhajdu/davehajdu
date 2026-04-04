@@ -30,6 +30,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Hide scrollbar for filter pills */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Scroll reveal animation */
 .reveal {
   opacity: 0;
