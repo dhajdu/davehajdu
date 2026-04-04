@@ -8,10 +8,10 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: 'AI in Business', href: '/ai-in-business' },
-    { label: 'Speaker Topics', href: '/speaker-topics' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Community', href: '/#community' },
+    { label: 'AI in Business', href: '/ai-in-business', external: false },
+    { label: 'Speaker Topics', href: '/speaker-topics', external: false },
+    { label: 'Blog', href: '/blog', external: false },
+    { label: 'Community', href: 'https://www.ai-officer.com/', external: true },
   ];
 
   return (
@@ -29,6 +29,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className="text-sm text-[#2A3044] hover:text-[#287BE8] transition-colors"
+              {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               {link.label}
             </Link>
@@ -64,6 +65,7 @@ export default function Navbar() {
                 href={link.href}
                 className="text-sm text-[#2A3044] hover:text-[#287BE8] transition-colors"
                 onClick={() => setIsOpen(false)}
+                {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >
                 {link.label}
               </Link>
