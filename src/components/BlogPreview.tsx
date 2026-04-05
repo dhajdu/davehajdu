@@ -1,28 +1,13 @@
 import Link from 'next/link';
+import { POSTS } from '@/lib/posts-data';
 
-const posts = [
-  {
-    date: 'Feb 2026',
-    tag: 'AI Leadership',
-    title: "You Don't Have an AI Problem. You Have an AI Leadership Problem.",
-    excerpt: "95% of organizations investing in AI are getting zero return. The villain isn't the technology.",
-    slug: 'fire-horse-2026',
-  },
-  {
-    date: 'Feb 2026',
-    tag: 'The Other 50%',
-    title: 'Why Being Half of Two Things Makes You More Valuable Than All of One',
-    excerpt: 'The leaders who will define the next decade refused to specialize themselves out of the conversation.',
-    slug: 'entrepreneurial-learnings',
-  },
-  {
-    date: 'Nov 2025',
-    tag: 'Strategy',
-    title: 'Problem First. AI Second. ROI Always.',
-    excerpt: 'The three-word framework that separates the AI Officers from the AI hobbyists.',
-    slug: 'ai-avatar-digital-twin',
-  },
-];
+const posts = POSTS.slice(0, 3).map((p) => ({
+  date: p.date,
+  tag: p.category,
+  title: p.title,
+  excerpt: p.excerpt,
+  slug: p.slug,
+}));
 
 export default function BlogPreview() {
   return (
