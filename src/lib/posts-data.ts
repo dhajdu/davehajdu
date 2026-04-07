@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'leading-humans-and-ai',
+    title: 'Leading Humans and AI: The 50/50 Era of Leadership',
+    excerpt:
+      'Leading humans and AI is the new job for founders. Before you buy another tool, build the foundation. A letter on workflow design, data, and real AI ROI.',
+    date: 'Apr 7, 2026',
+    readTime: '6 min',
+    category: 'High Performance Culture',
+    tags: ['high-performance-culture', 'ai-in-business'],
+    featured: true,
+    image: '/images/the-other-50.webp',
+  },
+  {
     slug: 'fire-horse-2026',
     title: 'Year of the Fire Horse 2026: Week One Already Has Me By the Throat',
     excerpt:
@@ -23,7 +35,6 @@ export const POSTS: Post[] = [
     readTime: '5 min',
     category: 'High Performance Culture',
     tags: ['high-performance-culture'],
-    featured: true,
     image: '/images/dave-keynote.webp',
   },
   {
@@ -239,6 +250,35 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'leading-humans-and-ai': [
+    { tag: 'p', text: 'Hey friend,' },
+    { tag: 'p', text: 'I want you to do something counterintuitive this week. Stop spending money on AI. Stop buying new tools. Stop collecting prompt packs. Close the tabs.' },
+    { tag: 'p', text: 'Because the real job in 2026 is not finding a better chatbot. The real job is leading humans and AI, at the same time, inside the same company, with the same clarity you used to reserve for your team. That is the shift nobody is preparing you for, and it is the shift I cannot stop thinking about.' },
+    { tag: 'p', text: "Welcome to the 50/50 era of leadership. For your entire career, leadership meant leading humans. That was the whole job. Now, half of what you lead is still human, and the other half is AI. Agents, workflows, systems that make decisions, tools that take actions. If you're a founder or an operator in 2026 and you're not thinking about it this way, you're leading with one hand tied behind your back." },
+    { tag: 'h2', text: 'The Three Foundational Skills Nobody Is Teaching' },
+    { tag: 'p', text: 'The skills that make you good at the AI half are not the skills everyone is out there teaching. Nobody gets ahead in this era by memorizing better prompts. The people who are going to pull away are the ones who quietly got good at three things.' },
+    { tag: 'p', text: 'Workflow design. Can you actually break a job down into steps clean enough that a mix of humans and AI can run it? Data organization. Is your information structured well enough that an AI can do something useful with it, or is it a swamp of PDFs and Slack threads? Clear decision logic and instructions. Can you write down what good looks like, what the edge cases are, when to escalate, and when to ship?' },
+    { tag: 'p', text: "That's the job now. That's the foundation. Everything else is decoration on top of it. And if you skip it, no amount of tool-buying will save you. You'll just have a more expensive version of the same mess." },
+    { tag: 'h2', text: 'How I Stopped Paying for AI and Started Getting Paid' },
+    { tag: 'p', text: 'Once you do have that foundation, something really interesting starts happening. You stop paying for AI and AI starts paying you. Let me give you a live example from my own life, because this is the part that made me want to write to you.' },
+    { tag: 'p', text: "I pay $200 a month for Claude. For a long time, that felt expensive. I'd catch myself squinting at the bill and wondering if I really needed the max tier. Then two things happened in the same month." },
+    { tag: 'h3', text: 'I Killed My CMS' },
+    { tag: 'p', text: 'I used to believe running a website required a database, a fancy editor, drag-and-drop builders, plugins stacked on plugins, and after all of that, the output still looked subpar. So I changed the mental model. Claude is the CMS. I write posts and pages the way a developer ships code, and each page can have its own layout because there is no template cage.' },
+    { tag: 'p', text: "Important caveat: the reason this works is that I also hired a UX designer to build me a real design system and component library first. Garbage foundation, garbage output. Great foundation, and suddenly Claude ships work that looks like a studio did it. This is the workflow design and clear instructions thing I was just talking about, in the wild." },
+    { tag: 'h3', text: 'I Started Moving Websites' },
+    { tag: 'p', text: 'Between me, my companies, and a few friends, I run about 15 sites. That was roughly $500 a month bleeding out in subscriptions. Today I moved davehajdu.com off Wix. I moved the AI Officer Institute site off Framer. Edge8 is next, coming off Wix. Each move only takes me a few hours of actual work, and honestly most of those hours are spent cataloguing the content, because platforms like Wix and Framer are not exactly thrilled when you try to take your content with you. Once it is out, it is out, and the site is mine forever.' },
+    { tag: 'p', text: "So the math on that $200 Claude bill? It already saves me $300 a month in hard subscription costs, the design quality went up, I own the stack, and I ship faster. That's not a productivity story. That's a P&L story. That's personal ROI." },
+    { tag: 'p', text: 'And this is the part I want you to sit with. None of that was possible because I found a better prompt. It was possible because I spent the time learning to design workflows, organize my assets, and write clear instructions. The tool was never the unlock. The foundation was.' },
+    { tag: 'h2', text: 'The Infinite Leverage Blueprint' },
+    { tag: 'p', text: "One last thing, because it ties all of this together. I'm running my first Founders Retreat soon. Three days, two nights, a small group, and the whole thing is built around what I'm calling the Infinite Leverage Blueprint. The North Star is the single-person company. Not because everyone should be one, but because the moment you point yourself in that direction, you're forced to ask the only question that matters right now. What should AI do, and what should humans do? That question reshapes your org chart, your P&L, and your calendar in about a week." },
+    { tag: 'p', text: "So don't hear any of this as AI is firing everyone. It isn't. Your job as a founder has always been to remove low performers and replace them with higher ones. What's new is that the higher performer isn't always a human anymore. Sometimes it's a person. Sometimes it's a better process powered by AI. You pick based on the work, not the ideology." },
+    { tag: 'h2', text: 'Before You Buy One More Tool' },
+    { tag: 'p', text: "Please, before you buy one more tool, sit down and ask yourself whether you've actually built the foundation to use the tools you already have. If the answer is no, that's where your next month goes. I promise you the ROI is waiting on the other side of it." },
+    { tag: 'p', text: "Leading humans and AI is not a future job. It is the job, right now, today. Start with the foundation. Everything else follows." },
+    { tag: 'p', text: "I'll be here when you're ready to compare notes." },
+    { tag: 'p', text: 'Your friend,' },
+    { tag: 'p', text: 'Dave' },
+  ],
   'fire-horse-2026': [
     { tag: 'p', text: "The Year of the Fire Horse 2026 started on February 17th. By the end of the first week, I'd already lived through a revenue high that made my chest tight, the single worst product failure in my career as a founder, and a perfect score in a leadership class on communicating with impact." },
     { tag: 'p', text: 'Three massive swings in seven days. And apparently, that\'s exactly how this year is supposed to go.' },
