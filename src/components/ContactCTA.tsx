@@ -38,7 +38,7 @@ export default function ContactCTA() {
       });
 
       if (response.ok) {
-        setSubmitMessage("Thanks for reaching out! We'll be in touch soon.");
+        setSubmitMessage('success');
         setFormData({ name: '', email: '', company: '', message: '' });
       } else {
         setSubmitMessage('Something went wrong. Please try again.');
@@ -134,11 +134,26 @@ export default function ContactCTA() {
             {isSubmitting ? 'Sending...' : 'Send Message'}
           </button>
 
-          {submitMessage && (
+          {submitMessage === 'success' ? (
+            <div className="text-center mt-4 text-sm text-[#D1458B]">
+              <p>Thanks for reaching out, We&apos;ll be in touch within the day</p>
+              <p className="mt-1">
+                Add me on WhatsApp |{' '}
+                <a
+                  href="https://wa.me/84909958581"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:no-underline"
+                >
+                  +84 90 995 8581
+                </a>
+              </p>
+            </div>
+          ) : submitMessage ? (
             <p className="text-center mt-4 text-sm text-[#287BE8]">
               {submitMessage}
             </p>
-          )}
+          ) : null}
         </form>
       </div>
     </section>
