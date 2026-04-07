@@ -14,36 +14,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if Supabase is configured
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      // Supabase not configured, just log to console
-      console.log('New lead submission (Supabase not configured):', {
-        name,
-        email,
-        company,
-        message,
-        timestamp: new Date().toISOString(),
-      });
-
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SECRET_KEY) {
+      console.error('Supabase env vars not configured');
       return NextResponse.json(
-        { success: true, message: 'Lead received' },
-        { status: 200 }
+        { error: 'Server not configured' },
+        { status: 500 }
       );
     }
 
-    // Insert into Supabase
-    const { data, error } = await supabase.from('leads').insert([
-      {
-        name,
-        email,
-        company: company || null,
-        message: message || null,
-        created_at: new Date().toISOString(),
-      },
-    ]);
+    // Insert into Supabase (server-side, secret key bypasses RLS)
+    const { data, error } = await supabase
+      .from('leads')
+      .insert([
+        {
+          name,
+          email,
+          company: company || null,
+          message: message || null,
+        },
+      ])
+      .select();
 
     if (error) {
       console.error('Supabase error:', error);
