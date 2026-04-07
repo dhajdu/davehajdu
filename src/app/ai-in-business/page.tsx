@@ -81,7 +81,7 @@ export default function AIInBusinessPage() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-[#04102D] via-[#04102D]/85 to-[#04102D]/30 z-10" />
           <Image
-            src="/images/dave-panel.jpeg"
+            src="/images/dave-panel.webp"
             alt="Dave Hajdu AI workshop panel"
             fill
             className="object-cover object-center opacity-55"

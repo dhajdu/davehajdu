@@ -24,7 +24,7 @@ export const POSTS: Post[] = [
     category: 'High Performance Culture',
     tags: ['high-performance-culture'],
     featured: true,
-    image: '/images/dave-speaking.jpg',
+    image: '/images/dave-keynote.webp',
   },
   {
     slug: 'entrepreneurial-learnings',
@@ -35,7 +35,7 @@ export const POSTS: Post[] = [
     readTime: '6 min',
     category: 'High Performance Culture',
     tags: ['high-performance-culture', 'doing-business-in-vietnam'],
-    image: '/images/speaking-podium.jpg',
+    image: '/images/speaking-podium.webp',
   },
   {
     slug: 'ai-officer-mindset',
@@ -46,7 +46,7 @@ export const POSTS: Post[] = [
     readTime: '4 min',
     category: 'AI In Business',
     tags: ['ai-in-business'],
-    image: '/images/dave-workshop.jpg',
+    image: '/images/dave-workshop.webp',
   },
   {
     slug: 'ai-avatar-digital-twin',

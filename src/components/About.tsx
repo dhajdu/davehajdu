@@ -45,7 +45,7 @@ export default function About() {
             {/* Coaching photo */}
             <div className="relative rounded-xl overflow-hidden" style={{ height: 220 }}>
               <Image
-                src="/images/dave-coaching.jpeg"
+                src="/images/dave-coaching.webp"
                 alt="Dave coaching a client"
                 fill
                 className="object-cover"

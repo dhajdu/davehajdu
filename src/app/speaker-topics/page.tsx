@@ -61,7 +61,7 @@ export default function SpeakerTopicsPage() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-[#04102D] via-[#04102D]/80 to-[#04102D]/30 z-10" />
           <Image
-            src="/images/dave-speaking.jpeg"
+            src="/images/dave-speaking.webp"
             alt="Dave Hajdu speaking"
             fill
             className="object-cover object-center opacity-55"
