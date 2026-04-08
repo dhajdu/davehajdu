@@ -12,16 +12,29 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = POSTS.find((p) => p.slug === slug);
   if (!post) return {};
+  const ogImage = post.image ? [post.image] : undefined;
   return {
     title: `${post.title} | Dave Hajdu`,
     description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      url: `/blog/${post.slug}`,
+      images: ogImage,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: ogImage,
+    },
   };
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
   'High Performance Culture': 'bg-[#287BE8]/15 text-[#287BE8]',
   'AI In Business': 'bg-[#D1458B]/15 text-[#D1458B]',
-  '88 Days of AI': 'bg-[#6FF2C1]/20 text-[#1A9E74]',
   'Branding with AI': 'bg-purple-100 text-purple-700',
 };
 

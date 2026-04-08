@@ -9,7 +9,6 @@ const FILTERS = [
   { label: 'All Posts', value: 'all' },
   { label: 'High Performance Culture', value: 'high-performance-culture' },
   { label: 'AI In Business', value: 'ai-in-business' },
-  { label: '88 Days of AI', value: '88-days-of-ai' },
   { label: 'Doing Business in Vietnam', value: 'doing-business-in-vietnam' },
   { label: 'Branding with AI', value: 'branding-with-ai' },
 ];
@@ -17,7 +16,6 @@ const FILTERS = [
 const CATEGORY_COLORS: Record<string, string> = {
   'High Performance Culture': 'bg-[#287BE8]/15 text-[#287BE8]',
   'AI In Business': 'bg-[#D1458B]/15 text-[#D1458B]',
-  '88 Days of AI': 'bg-[#6FF2C1]/20 text-[#1A9E74]',
   'Branding with AI': 'bg-purple-100 text-purple-700',
 };
 
@@ -101,7 +99,7 @@ export default function BlogIndex() {
 
         <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
-            {['AI in Business', 'High Performance Culture', '88 Days of AI'].map((label, i) => (
+            {['AI in Business', 'High Performance Culture'].map((label, i) => (
               <span key={i} className="flex items-center gap-5">
                 {i > 0 && <span className="w-1 h-1 rounded-full bg-[#6FF2C1]/40 inline-block" />}
                 <span className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase">

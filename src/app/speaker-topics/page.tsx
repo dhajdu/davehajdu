@@ -9,48 +9,12 @@ const topics = [
       '95% of companies see no ROI from AI, not because the technology doesn\'t work, but because they can\'t connect it to outcomes. This talk reframes how organizations think about AI deployment across four core business functions.',
     accent: '#287BE8',
   },
-  {
-    tag: 'Leadership',
-    title: 'Leading AI, Not Just Using It',
-    description:
-      'There\'s a massive difference between using AI tools and leading AI transformation. This session teaches founders and executives the mindset shift, the frameworks, and the daily habits that separate AI leaders from AI users.',
-    accent: '#6FF2C1',
-  },
-  {
-    tag: 'Productivity',
-    title: '88 Days of AI: What Daily Practice Teaches You',
-    description:
-      'Dave documented 88 consecutive days of AI experiments in public. This talk shares the most surprising lessons: what compounded, what failed, and what it revealed about how humans and AI actually work together.',
-    accent: '#287BE8',
-  },
-  {
-    tag: 'Business Growth',
-    title: 'Problem First. AI Second. ROI Always.',
-    description:
-      'The most common AI mistake is starting with the tool instead of the problem. This practical framework shows how to identify your highest-leverage AI opportunities, prioritize ruthlessly, and measure what actually matters.',
-    accent: '#6FF2C1',
-  },
-  {
-    tag: 'Vietnam & Emerging Markets',
-    title: 'Building in the World\'s Toughest Markets',
-    description:
-      'From Vietnam to Malaysia to the Middle East. Dave has built businesses where infrastructure, trust, and rules work differently. This talk covers the entrepreneurial lessons that only come from operating at the edge.',
-    accent: '#287BE8',
-  },
-  {
-    tag: 'Branding',
-    title: 'Your AI Avatar Is Your Digital Twin',
-    description:
-      'AI avatars, digital twins, and always-on brand presence are no longer science fiction. This hands-on session shows how founders and executives can build an AI-powered personal brand that works while they sleep.',
-    accent: '#6FF2C1',
-  },
 ];
 
 const eventTypes = [
-  { label: 'Keynote', detail: '45–60 min' },
-  { label: 'Workshop', detail: 'Half or full day' },
-  { label: 'Executive Briefing', detail: 'Private session' },
-  { label: 'Panel', detail: 'Moderator or speaker' },
+  { label: '2 Hour Session', detail: 'Keynote + Q&A' },
+  { label: '4 Hour Session', detail: 'Keynote + workshop' },
+  { label: 'All Day Session', detail: 'Deep-dive immersion' },
 ];
 
 export default function SpeakerTopicsPage() {
@@ -152,19 +116,19 @@ export default function SpeakerTopicsPage() {
         <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
           <div className="mb-16">
             <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
-              Speaking Topics
+              Signature Keynote
             </div>
             <h2
               className="text-[#04102D] font-black tracking-tight leading-[1.1]"
               style={{ fontSize: 'clamp(28px, 3.5vw, 42px)' }}
             >
-              Six talks. All built
+              One signature talk.
               <br />
-              <span className="text-[#287BE8]">from real experience.</span>
+              <span className="text-[#287BE8]">Built from real experience.</span>
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid gap-6 max-w-[720px] mx-auto">
             {topics.map((topic) => (
               <div
                 key={topic.title}
