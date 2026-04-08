@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { POSTS, BLOCKS_BY_SLUG, type Block } from '@/lib/posts-data';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -110,20 +109,8 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className={`relative overflow-hidden min-h-[340px] flex items-end ${post.image ? 'bg-[#04102D]' : `bg-gradient-to-br ${gradient}`}`}>
-        {post.image && (
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#04102D] via-[#04102D]/70 to-[#04102D]/30 z-10" />
-            <Image
-              src={post.image}
-              alt={post.title}
-              fill
-              className="object-cover object-center opacity-50"
-              priority
-            />
-          </div>
-        )}
-        {!post.image && post.dayNumber && (
+      <section className={`relative overflow-hidden min-h-[340px] flex items-end bg-gradient-to-br ${gradient}`}>
+        {post.dayNumber && (
           <div className="absolute inset-0 flex items-center justify-center select-none">
             <div className="text-[180px] font-black text-white/5 leading-none">{post.dayNumber}</div>
           </div>
