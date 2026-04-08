@@ -64,13 +64,13 @@ export default function Hero() {
         {/* CTAs */}
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/speaker-topics"
+            href="/book-keynote"
             className="inline-block bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors"
           >
             Book a Keynote
           </Link>
           <Link
-            href="/ai-in-business"
+            href="/schedule-consultation"
             className="inline-block border border-white/25 text-white px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:border-white/50 hover:bg-white/5 transition-all"
           >
             Schedule a Consultation

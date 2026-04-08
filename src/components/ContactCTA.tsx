@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function ContactCTA() {
@@ -29,12 +30,15 @@ export default function ContactCTA() {
     setSubmitMessage('');
 
     try {
-      const response = await fetch('/api/leads', {
+      const response = await fetch('/api/inquiries', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          inquiry_type: 'general',
+        }),
       });
 
       if (response.ok) {
@@ -77,12 +81,18 @@ export default function ContactCTA() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-16">
-          <button className="bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors w-full sm:w-auto">
+          <Link
+            href="/book-keynote"
+            className="bg-[#6FF2C1] text-[#04102D] px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:bg-[#5de8b3] transition-colors w-full sm:w-auto text-center"
+          >
             Book a Keynote
-          </button>
-          <button className="border border-white/25 text-white px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:border-white/50 hover:bg-white/5 transition-all w-full sm:w-auto">
+          </Link>
+          <Link
+            href="/schedule-consultation"
+            className="border border-white/25 text-white px-8 py-4 rounded-[7px] text-[13px] font-bold tracking-[0.06em] uppercase hover:border-white/50 hover:bg-white/5 transition-all w-full sm:w-auto text-center"
+          >
             Schedule a Consultation
-          </button>
+          </Link>
         </div>
 
         {/* Form */}
