@@ -75,7 +75,7 @@ export const POSTS: Post[] = [
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
   'supabase-for-non-technical-founders': [
-    { tag: 'p', text: 'Hey friend,' },
+    { tag: 'p', text: 'Hey Buddy,' },
     { tag: 'p', text: "Most of you reading this are tech-forward founders. You read a lot, you're sharp, and you're comfortable using AI, but you've never actually built anything technical. That used to be a wall. It is not a wall anymore. Yesterday I sat down to learn Supabase for non-technical founders alongside my own site, and one hour later three different contact forms on davehajdu.com were quietly saving every inquiry to a real database. No backend service. No monthly form-tool subscription. No engineer on retainer. If I can do it in one hour, you can too. Here is exactly what happened." },
 
     { tag: 'h2', text: 'The Problem In One Sentence' },
@@ -123,7 +123,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'p', text: 'Dave' },
   ],
   'leading-humans-and-ai': [
-    { tag: 'p', text: 'Hey friend,' },
+    { tag: 'p', text: 'Hey Buddy,' },
     { tag: 'p', text: 'I want you to do something counterintuitive this week. Stop spending money on AI. Stop buying new tools. Stop collecting prompt packs. Close the tabs.' },
     { tag: 'p', text: 'Because the real job in 2026 is not finding a better chatbot. The real job is leading humans and AI, at the same time, inside the same company, with the same clarity you used to reserve for your team. That is the shift nobody is preparing you for, and it is the shift I cannot stop thinking about.' },
     { tag: 'p', text: "Welcome to the 50/50 era of leadership. For your entire career, leadership meant leading humans. That was the whole job. Now, half of what you lead is still human, and the other half is AI. Agents, workflows, systems that make decisions, tools that take actions. If you're a founder or an operator in 2026 and you're not thinking about it this way, you're leading with one hand tied behind your back." },

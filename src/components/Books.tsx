@@ -43,7 +43,7 @@ export default function Books() {
           >
             The frameworks,
             <br />
-            in your hands.
+            in your hands
           </h2>
         </div>
 

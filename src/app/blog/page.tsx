@@ -112,9 +112,9 @@ export default function BlogIndex() {
             className="text-white font-black leading-[1.0] tracking-[-0.04em] mb-7"
             style={{ fontSize: 'clamp(44px, 7vw, 80px)', maxWidth: 680 }}
           >
-            AI + Business
+            Insights for
             <br />
-            <span className="text-[#6FF2C1]">Insights.</span>
+            <span className="text-[#6FF2C1]">The Other 50%</span>
           </h1>
           <p
             className="text-white/55 leading-relaxed font-normal"
