@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'claude-routines-changed-everything',
+    title: 'Claude Routines Changed Everything: A Letter to My Friends',
+    excerpt:
+      'Claude Routines replaces Zapier, Make, and N8N inside the AI layer. The speed is not creating leverage. It is exposing who did the prep work. What founders should do this week.',
+    date: 'Apr 15, 2026',
+    readTime: '4 min',
+    category: 'AI In Business',
+    tags: ['ai-in-business', 'high-performance-culture'],
+    featured: true,
+    image: '/images/claude-routines-get-to-work.webp',
+  },
+  {
     slug: 'supabase-for-non-technical-founders',
     title: 'Supabase for Non-Technical Founders: How I Shipped a Real Database in an Hour',
     excerpt:
@@ -74,6 +86,42 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'claude-routines-changed-everything': [
+    { tag: 'p', text: "It's 5:30 AM. My phone lights up. Claude just shipped Routines." },
+    { tag: 'p', text: "I sat up in bed. Then I got out of bed. I'm writing this to you before coffee because I can't sit on it." },
+    { tag: 'p', text: "Yesterday I was euphoric. Lark CLI dropped and I burned four hours I didn't have wiring up notifications from every website I own, pulling my meeting notes out automatically, getting my calendar to behave. I was in the class I was teaching saying \"this is the moment, this changes how we work.\"" },
+    { tag: 'p', text: "That was yesterday." },
+    { tag: 'p', text: "This morning Routines landed and Lark CLI is already a footnote in my own brain." },
+    { tag: 'p', text: "That is the pace now. A \"game changer\" has a 24-hour shelf life." },
+
+    { tag: 'h2', text: 'What Claude Routines actually is' },
+    { tag: 'p', text: 'Native automation inside the AI layer. Schedules, webhooks, API calls, all stitched together where the reasoning lives. Claude Routines does the job that Zapier, Make, and N8N have been doing for a decade, now happening one layer down, next to the model. Connectors are early. They won\'t be for long.' },
+    { tag: 'p', text: "That's all you need from me on the product. The real story is not Routines." },
+
+    { tag: 'h2', text: 'The real story: speed is exposing us' },
+    { tag: 'p', text: 'The speed of AI is not creating leverage from nothing. It is amplifying whatever clarity you already had.' },
+    { tag: 'p', text: 'If you documented your processes last year, you are about to pull away. Hard. You already know what your business does, how a ticket moves, how a lead becomes a client, what happens on day one, day seven, day thirty. You can hand that to a Routine this week and it will just run.' },
+    { tag: 'p', text: "If you didn't, you are about to feel it." },
+    { tag: 'blockquote', text: 'Here is the honest test. If you cannot write down how your business actually runs on one page, you do not have a business. You have a job that happens to employ you.' },
+    { tag: 'p', text: 'And that job is about to get extremely expensive to hold onto, because the founders around you are turning their pages into routines while you are still trying to remember what you do on Wednesdays.' },
+    { tag: 'p', text: 'This is what the speed is exposing. Not who has the best AI strategy. Who did the boring prep work.' },
+
+    { tag: 'h2', text: 'What to do, two reads' },
+    { tag: 'h3', text: 'If you are a founder reading this on your phone between meetings' },
+    { tag: 'p', text: 'Stop treating AI as a side experiment that lives on your Friday afternoons. You need an actual AI program. And you need a person who owns it. Not a consultant on retainer, not "we all pitch in," not you at 11 PM. A dedicated human whose job title has AI in it, whose week is organized around this, whose only question on Monday morning is what did we automate last week and what are we automating next.' },
+    { tag: 'p', text: 'If nobody owns it, nothing compounds. And if nothing compounds, you lose.' },
+    { tag: 'h3', text: 'If you are in transition, in between roles, or job-hunting right now' },
+    { tag: 'p', text: 'Spend eight hours a day on this. Everything you\'ve got. Treat it like the most important job you will ever take, because it is. Ninety days of full-time immersion and your value multiplies eight times against your peers. That is not hype. That is math. Most of your peers are still arguing in Slack about whether to use AI. You are going to be the person who already shipped something.' },
+    { tag: 'p', text: 'This window does not stay open. It is open right now.' },
+
+    { tag: 'h2', text: 'Close' },
+    { tag: 'p', text: "I'm publishing this before I finish reading the Routines docs. That is intentional. If I wait until I have the polished take, the next thing will have already shipped." },
+    { tag: 'p', text: 'So get out of bed. Open the docs. Build one small thing today.' },
+    { tag: 'p', text: 'And if you are a founder and you already know you need a real AI engineer inside your company, one who works for you and sits inside mine so they have a team around them, DM me. I am not trying to sell you. I am trying to save you. There is a version of the next 12 months where you look up and realize you waited too long. I would rather we have the conversation now.' },
+    { tag: 'blockquote', text: 'The people who move this week own next year.' },
+    { tag: 'p', text: 'Dave.' },
+    { tag: 'p', text: 'P.S. I\'m writing a follow-up this weekend: "The native AI layer is eating automation." I\'ll go deeper on what that means for your stack, your team, and your P&L. Stay close.' },
+  ],
   'supabase-for-non-technical-founders': [
     { tag: 'p', text: 'Hey Buddy,' },
     { tag: 'p', text: "Most of you reading this are tech-forward founders. You read a lot, you're sharp, and you're comfortable using AI, but you've never actually built anything technical. That used to be a wall. It is not a wall anymore. Yesterday I sat down to learn Supabase for non-technical founders alongside my own site, and one hour later three different contact forms on davehajdu.com were quietly saving every inquiry to a real database. No backend service. No monthly form-tool subscription. No engineer on retainer. If I can do it in one hour, you can too. Here is exactly what happened." },
