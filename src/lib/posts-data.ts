@@ -35,7 +35,6 @@ export const POSTS: Post[] = [
     readTime: '5 min',
     category: 'AI In Business',
     tags: ['ai-in-business', 'high-performance-culture'],
-    featured: true,
     image: '/images/supabase-in-one-hour.webp',
   },
   {
