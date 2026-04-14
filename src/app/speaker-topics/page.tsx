@@ -1,5 +1,12 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: 'Speaker Topics: AI Keynotes for Leaders | Dave Hajdu',
+  description:
+    'Signature keynotes and workshops on AI for leaders — 2-hour, 4-hour, and full-day formats. The Four Offices of the Future framework applied to executive audiences.',
+};
 
 const topics = [
   {

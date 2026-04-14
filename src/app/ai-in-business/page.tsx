@@ -1,5 +1,12 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: 'AI in Business: The Four Offices Framework | Dave Hajdu',
+  description:
+    'The Four Offices of the Future — a diagnostic lens mapping AI to Revenue, Talent, Operations, and Innovation. Why 95% of companies see no ROI from AI, and what actually moves the needle.',
+};
 
 const offices = [
   {

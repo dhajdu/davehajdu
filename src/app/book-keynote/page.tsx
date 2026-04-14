@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import InquiryForm, { type InquiryField } from '@/components/InquiryForm';
 
 export const metadata: Metadata = {
-  title: 'Book a Keynote | Dave Hajdu',
+  title: 'Book Dave Hajdu — AI Keynote Speaker for Leaders & Executives',
   description:
     'Book Dave Hajdu to speak at your event. Keynotes that change how leaders think about AI. $1,000–$4,000 based on duration and travel. EO chapter discounts available.',
 };

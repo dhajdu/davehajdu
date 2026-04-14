@@ -4,6 +4,37 @@ import { supabase } from '@/lib/supabase';
 const ALLOWED_TYPES = ['general', 'keynote', 'consultation'] as const;
 type InquiryType = (typeof ALLOWED_TYPES)[number];
 
+const LARK_WEBHOOK_URL =
+  'https://open.larksuite.com/open-apis/bot/v2/hook/6d88f4dc-7cda-4d06-9a99-03bc8f6a3f74';
+
+async function notifyLark(inquiry_type: InquiryType, payload: Record<string, string | null>) {
+  const lines = Object.entries(payload)
+    .filter(([k]) => k !== 'inquiry_type')
+    .map(([k, v]) => `**${k}:** ${v}`)
+    .join('\n');
+
+  const card = {
+    msg_type: 'interactive',
+    card: {
+      header: {
+        template: inquiry_type === 'keynote' ? 'green' : inquiry_type === 'consultation' ? 'blue' : 'grey',
+        title: { tag: 'plain_text', content: `New ${inquiry_type} inquiry — davehajdu.com` },
+      },
+      elements: [{ tag: 'markdown', content: lines || '_no details_' }],
+    },
+  };
+
+  try {
+    await fetch(LARK_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(card),
+    });
+  } catch (err) {
+    console.error('Lark notify failed:', err);
+  }
+}
+
 // Whitelist of columns we accept from the body. Anything else is dropped.
 const ALLOWED_FIELDS = [
   'name',
@@ -76,6 +107,8 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    await notifyLark(inquiry_type, payload);
 
     return NextResponse.json(
       { success: true, message: 'Inquiry saved successfully', data },

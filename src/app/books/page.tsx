@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Books by Dave Hajdu — The Four Offices & The Other 50%',
+  description:
+    'Two books from Dave Hajdu. The Four Offices of the Future: a diagnostic lens for mapping AI to outcomes. The Other 50%: leading when half the work is done by machines.',
+};
 
 const books = [
   {

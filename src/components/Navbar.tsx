@@ -59,7 +59,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <Link
-          href="/book-keynote"
+          href="/book-keynote#inquiry-form"
           className="hidden md:inline-block bg-[#6FF2C1] text-[#04102D] px-5 py-2.5 rounded-[6px] text-[11px] font-bold tracking-[0.07em] uppercase hover:bg-[#5de8b3] transition-colors"
         >
           Book a Keynote
@@ -94,7 +94,7 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              href="/book-keynote"
+              href="/book-keynote#inquiry-form"
               className="bg-[#6FF2C1] text-[#04102D] px-5 py-3 rounded-md text-xs font-bold tracking-[0.07em] uppercase text-center"
               onClick={() => setIsOpen(false)}
             >

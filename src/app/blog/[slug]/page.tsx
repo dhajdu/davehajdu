@@ -8,13 +8,22 @@ export async function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }));
 }
 
+// SEO-optimized shorter titles for posts whose full display title exceeds 60 chars
+const SEO_TITLE_OVERRIDES: Record<string, string> = {
+  'ai-officer-mindset': 'AI Officer Mindset: Learning to Results in 12 Hours',
+  'entrepreneurial-learnings': '18 Entrepreneurial Learnings from Tough Markets',
+  'fire-horse-2026': 'Year of the Fire Horse 2026: Week One Lessons',
+  'supabase-for-non-technical-founders': 'Supabase for Non-Technical Founders',
+};
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = POSTS.find((p) => p.slug === slug);
   if (!post) return {};
   const ogImage = post.image ? [post.image] : undefined;
+  const seoTitleBase = SEO_TITLE_OVERRIDES[slug] || post.title;
   return {
-    title: `${post.title} | Dave Hajdu`,
+    title: `${seoTitleBase} | Dave Hajdu`,
     description: post.excerpt,
     openGraph: {
       title: post.title,

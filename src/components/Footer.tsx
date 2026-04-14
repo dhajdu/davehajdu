@@ -14,13 +14,18 @@ export default function Footer() {
 
         {/* Nav */}
         <div className="flex items-center gap-8">
-          {['Blog', 'Keynotes', 'Consultation', 'Books'].map((link) => (
+          {[
+            { label: 'Blog', href: '/blog' },
+            { label: 'Keynotes', href: '/book-keynote' },
+            { label: 'Consultation', href: '/schedule-consultation' },
+            { label: 'Books', href: '/books' },
+          ].map((link) => (
             <Link
-              key={link}
-              href={`/${link.toLowerCase()}`}
+              key={link.href}
+              href={link.href}
               className="text-white/30 text-[12px] font-medium hover:text-white/60 transition-colors"
             >
-              {link}
+              {link.label}
             </Link>
           ))}
         </div>
