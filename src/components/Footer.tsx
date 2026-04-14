@@ -5,7 +5,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#020C1E]">
-      <div className="max-w-[1080px] mx-auto px-8 sm:px-5 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="max-w-[1080px] mx-auto px-8 sm:px-10 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
 
         {/* Wordmark */}
         <span className="text-white/35 text-[13px] font-semibold tracking-tight">

@@ -128,7 +128,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="text-[180px] font-black text-white/5 leading-none">{post.dayNumber}</div>
           </div>
         )}
-        <div className="relative z-20 max-w-[800px] mx-auto px-8 max-md:px-5 py-14 w-full">
+        <div className="relative z-20 max-w-[800px] mx-auto px-8 max-md:px-6 py-14 w-full">
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-white/60 text-[12px] font-medium hover:text-white transition-colors mb-6"
@@ -157,7 +157,7 @@ export default async function BlogPostPage({ params }: Props) {
       </section>
 
       {/* ── Article Body ─────────────────────────────────────── */}
-      <div className="max-w-[800px] mx-auto px-8 max-md:px-5 py-12">
+      <div className="max-w-[800px] mx-auto px-8 max-md:px-6 py-12">
         {/* Excerpt lead */}
         <p className="text-[17px] md:text-[18px] font-medium text-[#2A3044] leading-relaxed border-l-4 border-[#6FF2C1] pl-5 mb-10 bg-[#F8F9FC] py-4 pr-4 rounded-r-lg">
           {post.excerpt}
@@ -186,7 +186,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* ── Next / Prev ───────────────────────────────────────── */}
       {(prevPost || nextPost) && (
         <div className="border-t border-[#D4D9E0] bg-[#F8F9FC]">
-          <div className="max-w-[800px] mx-auto px-8 max-md:px-5 py-10 grid md:grid-cols-2 gap-6">
+          <div className="max-w-[800px] mx-auto px-8 max-md:px-6 py-10 grid md:grid-cols-2 gap-6">
             {prevPost && (
               <Link href={`/blog/${prevPost.slug}`} className="group flex flex-col gap-1">
                 <span className="text-[11px] font-bold uppercase tracking-widest text-[#6B7280]">← Older post</span>
@@ -209,7 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="bg-[#04102D] py-14">
-        <div className="max-w-[640px] mx-auto px-8 max-md:px-5 text-center">
+        <div className="max-w-[640px] mx-auto px-8 max-md:px-6 text-center">
           <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#6FF2C1] mb-3">
             Let's Work Together
           </p>

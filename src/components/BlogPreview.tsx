@@ -12,7 +12,7 @@ const posts = POSTS.slice(0, 3).map((p) => ({
 export default function BlogPreview() {
   return (
     <section className="bg-white py-24 md:py-32">
-      <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+      <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
 
         {/* Header row */}
         <div className="flex items-end justify-between mb-16">

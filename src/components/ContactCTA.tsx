@@ -57,7 +57,7 @@ export default function ContactCTA() {
 
   return (
     <section className="bg-[#04102D] w-full py-16 md:py-24">
-      <div className="max-w-[880px] mx-auto px-8 sm:px-5">
+      <div className="max-w-[880px] mx-auto px-8 sm:px-10">
         {/* Label */}
         <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-5 text-center">
           Let&apos;s Work Together

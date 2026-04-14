@@ -45,7 +45,7 @@ export default function BooksPage() {
           50
         </div>
 
-        <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+        <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-10 pt-32 pb-24 w-full">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
             {['Author', 'AI Keynote Speaker', 'Consultant'].map((label, i) => (
               <span key={i} className="flex items-center gap-5">
@@ -73,7 +73,7 @@ export default function BooksPage() {
 
       {/* ── Books ────────────────────────────────────────────── */}
       <section className="bg-white py-24 md:py-32">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="flex flex-col gap-12">
             {books.map((book, index) => (
               <div
@@ -170,7 +170,7 @@ export default function BooksPage() {
           className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 100%, rgba(40,123,232,0.12) 0%, transparent 65%)' }}
         />
-        <div className="relative z-10 max-w-[640px] mx-auto px-8 sm:px-5 text-center">
+        <div className="relative z-10 max-w-[640px] mx-auto px-8 sm:px-10 text-center">
           <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-5">
             While You Wait
           </div>

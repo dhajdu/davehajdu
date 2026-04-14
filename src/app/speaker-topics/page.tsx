@@ -41,7 +41,7 @@ export default function SpeakerTopicsPage() {
           }}
         />
 
-        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-10 pt-32 pb-24 w-full">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
             {['AI Keynote Speaker', 'Workshops', 'Executive Briefings'].map((label, i) => (
               <span key={i} className="flex items-center gap-5">
@@ -85,7 +85,7 @@ export default function SpeakerTopicsPage() {
 
       {/* ── Social Proof Band ────────────────────────────────── */}
       <div className="bg-white border-b border-[#04102D]/[0.06]">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5 py-8 text-center">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10 py-8 text-center">
           <p className="text-[#04102D]/70 text-[16px] leading-relaxed">
             <strong className="text-[#04102D]">95% of attendees report actionable insights they implement immediately.</strong>{' '}
             Dave speaks at conferences, leadership summits, corporate offsites, and university programs across Asia, the Middle East, and North America.
@@ -95,7 +95,7 @@ export default function SpeakerTopicsPage() {
 
       {/* ── Event Types ──────────────────────────────────────── */}
       <section className="bg-white py-14">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="flex flex-wrap gap-3 justify-center">
             {eventTypes.map((e) => (
               <div
@@ -113,7 +113,7 @@ export default function SpeakerTopicsPage() {
 
       {/* ── Topics ───────────────────────────────────────────── */}
       <section className="bg-[#F7F9FC] py-24 md:py-32">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="mb-16">
             <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
               Signature Keynote
@@ -157,7 +157,7 @@ export default function SpeakerTopicsPage() {
 
       {/* ── Past Audiences ───────────────────────────────────── */}
       <section className="bg-white py-24 md:py-32">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="mb-16">
             <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
               Who Dave Speaks To
@@ -201,7 +201,7 @@ export default function SpeakerTopicsPage() {
             background: 'radial-gradient(ellipse 70% 60% at 50% 100%, rgba(40,123,232,0.12) 0%, transparent 65%)',
           }}
         />
-        <div className="relative z-10 max-w-[640px] mx-auto px-8 sm:px-5 text-center">
+        <div className="relative z-10 max-w-[640px] mx-auto px-8 sm:px-10 text-center">
           <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-5">
             Invite Dave to Speak
           </div>

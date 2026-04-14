@@ -33,7 +33,7 @@ const services = [
 export default function Speaking() {
   return (
     <section id="speaking" className="bg-[#F7F9FC] py-24 md:py-32">
-      <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+      <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
 
         {/* Section header */}
         <div className="text-center mb-16">

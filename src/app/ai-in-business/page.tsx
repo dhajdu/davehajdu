@@ -94,7 +94,7 @@ export default function AIInBusinessPage() {
             background: 'radial-gradient(ellipse 60% 70% at 15% 55%, rgba(40,123,232,0.12) 0%, transparent 65%)',
           }}
         />
-        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-10 pt-32 pb-24 w-full">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
             {['AI Consultant', 'Strategist', 'Operator'].map((label, i) => (
               <span key={i} className="flex items-center gap-5">
@@ -130,7 +130,7 @@ export default function AIInBusinessPage() {
 
       {/* ── Intro Band ───────────────────────────────────────── */}
       <div className="bg-white border-b border-[#04102D]/[0.06]">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5 py-8 text-center">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10 py-8 text-center">
           <p className="text-[#04102D]/70 text-[16px] leading-relaxed">
             Problem first. AI second. ROI always.{' '}
             <strong className="text-[#04102D]">
@@ -142,7 +142,7 @@ export default function AIInBusinessPage() {
 
       {/* ── Stats ────────────────────────────────────────────── */}
       <section className="bg-white py-16 border-b border-[#04102D]/[0.06]">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
@@ -158,7 +158,7 @@ export default function AIInBusinessPage() {
 
       {/* ── Four Offices ─────────────────────────────────────── */}
       <section className="bg-[#F7F9FC] py-24 md:py-32">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="mb-16">
             <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
               The Four Offices of the Future
@@ -206,7 +206,7 @@ export default function AIInBusinessPage() {
 
       {/* ── AI Capabilities Audit ────────────────────────────── */}
       <section className="bg-white py-24 md:py-32">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
 
             {/* Left: Intro */}
@@ -289,7 +289,7 @@ export default function AIInBusinessPage() {
 
       {/* ── How It Works ─────────────────────────────────────── */}
       <section className="bg-[#F7F9FC] py-24 md:py-32">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="mb-16">
             <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
               How Dave Works
@@ -341,7 +341,7 @@ export default function AIInBusinessPage() {
           className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 100%, rgba(40,123,232,0.12) 0%, transparent 65%)' }}
         />
-        <div className="relative z-10 max-w-[640px] mx-auto px-8 sm:px-5 text-center">
+        <div className="relative z-10 max-w-[640px] mx-auto px-8 sm:px-10 text-center">
           <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-5">
             Let's Talk
           </div>

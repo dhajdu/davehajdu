@@ -24,7 +24,7 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+      <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-10 pt-32 pb-24 w-full">
 
         {/* Eyebrow */}
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">

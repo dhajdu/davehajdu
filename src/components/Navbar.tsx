@@ -29,7 +29,7 @@ export default function Navbar() {
           : 'bg-transparent border-b border-transparent'
       }`}
     >
-      <div className="max-w-[1080px] mx-auto px-8 sm:px-5 h-16 flex items-center justify-between">
+      <div className="max-w-[1080px] mx-auto px-8 sm:px-10 h-16 flex items-center justify-between">
         {/* Wordmark */}
         <Link
           href="/"

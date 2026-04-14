@@ -97,7 +97,7 @@ export default function BlogIndex() {
           }}
         />
 
-        <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-24 w-full">
+        <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-10 pt-32 pb-24 w-full">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
             {['AI in Business', 'High Performance Culture'].map((label, i) => (
               <span key={i} className="flex items-center gap-5">
@@ -127,7 +127,7 @@ export default function BlogIndex() {
 
       {/* ── Intro Band ───────────────────────────────────────── */}
       <div className="bg-white border-b border-[#04102D]/[0.06]">
-        <div className="max-w-[800px] mx-auto px-8 max-md:px-5 py-8 text-center text-[15px] text-[#2A3044] leading-relaxed">
+        <div className="max-w-[800px] mx-auto px-8 max-md:px-6 py-8 text-center text-[15px] text-[#2A3044] leading-relaxed">
           Most AI content teaches you what AI can do.{' '}
           <strong className="text-[#04102D]">
             These posts teach you what to do with AI, as a founder, a leader, and a business builder.
@@ -138,7 +138,7 @@ export default function BlogIndex() {
 
       {/* ── Featured Post ────────────────────────────────────── */}
       <section className="py-14">
-        <div className="max-w-[1100px] mx-auto px-8 max-md:px-5">
+        <div className="max-w-[1100px] mx-auto px-8 max-md:px-6">
           <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#287BE8] mb-5">Featured</p>
 
           <article className="relative rounded-2xl overflow-hidden bg-[#04102D] min-h-[280px] flex items-end">
@@ -181,7 +181,7 @@ export default function BlogIndex() {
 
       {/* ── Filter Bar ───────────────────────────────────────── */}
       <section className="sticky top-[57px] z-30 bg-white border-y border-[#D4D9E0] shadow-sm">
-        <div className="max-w-[1100px] mx-auto px-8 max-md:px-5">
+        <div className="max-w-[1100px] mx-auto px-8 max-md:px-6">
           <div className="flex items-center gap-2 overflow-x-auto py-3 no-scrollbar">
             {FILTERS.map((f) => (
               <button
@@ -202,7 +202,7 @@ export default function BlogIndex() {
 
       {/* ── All Posts Grid ───────────────────────────────────── */}
       <section className="py-14">
-        <div className="max-w-[1100px] mx-auto px-8 max-md:px-5">
+        <div className="max-w-[1100px] mx-auto px-8 max-md:px-6">
           <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#6B7280] mb-8">
             {activeTag === 'all'
               ? `All Posts — ${POSTS.length}`
@@ -223,7 +223,7 @@ export default function BlogIndex() {
 
       {/* ── CTA Band ─────────────────────────────────────────── */}
       <section className="bg-[#04102D] py-14">
-        <div className="max-w-[640px] mx-auto px-8 max-md:px-5 text-center">
+        <div className="max-w-[640px] mx-auto px-8 max-md:px-6 text-center">
           <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#6FF2C1] mb-3">Work with Dave</p>
           <h2 className="text-[28px] font-black text-white mb-4 leading-snug">
             Ready to bring AI into your business — not just your conversations?

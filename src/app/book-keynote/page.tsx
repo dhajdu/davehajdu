@@ -94,7 +94,7 @@ export default function BookKeynotePage() {
               'radial-gradient(ellipse 60% 70% at 15% 55%, rgba(40,123,232,0.12) 0%, transparent 65%)',
           }}
         />
-        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-20 w-full">
+        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-10 pt-32 pb-20 w-full">
           <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-6">
             Book a Keynote
           </div>
@@ -135,7 +135,7 @@ export default function BookKeynotePage() {
 
       {/* ── Pricing strip ────────────────────────────────────── */}
       <div className="bg-white border-b border-[#04102D]/[0.06]">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5 py-8 text-center">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10 py-8 text-center">
           <p className="text-[#04102D]/70 text-[16px] leading-relaxed">
             <strong className="text-[#04102D]">$1,000–$4,000</strong> based on
             duration and travel. Discounts available for EO chapters.
@@ -145,7 +145,7 @@ export default function BookKeynotePage() {
 
       {/* ── Signature talk ───────────────────────────────────── */}
       <section className="bg-white py-20">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
             Signature Keynote
           </div>
@@ -196,7 +196,7 @@ export default function BookKeynotePage() {
 
       {/* ── Social proof ─────────────────────────────────────── */}
       <section className="bg-[#F7F8FA] py-16">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="grid md:grid-cols-3 gap-8 text-center">
             {[
               { stat: '9.3 / 10', label: 'Mean session rating across 66 attendees' },
@@ -218,7 +218,7 @@ export default function BookKeynotePage() {
 
       {/* ── Who this is for ──────────────────────────────────── */}
       <section className="bg-white py-20">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <h2 className="text-[#04102D] font-black leading-tight mb-10 text-[clamp(28px,3.5vw,42px)]">
             Who this is for
           </h2>
@@ -242,7 +242,7 @@ export default function BookKeynotePage() {
 
       {/* ── Inquiry form ─────────────────────────────────────── */}
       <section id="inquiry-form" className="bg-[#04102D] py-20">
-        <div className="max-w-[760px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[760px] mx-auto px-8 sm:px-10">
           <div className="text-center mb-10">
             <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
               Send Details

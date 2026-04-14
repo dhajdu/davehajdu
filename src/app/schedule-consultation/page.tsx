@@ -66,7 +66,7 @@ export default function ScheduleConsultationPage() {
               'radial-gradient(ellipse 60% 70% at 15% 55%, rgba(40,123,232,0.12) 0%, transparent 65%)',
           }}
         />
-        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-5 pt-32 pb-20 w-full">
+        <div className="relative z-20 max-w-[1080px] mx-auto px-8 sm:px-10 pt-32 pb-20 w-full">
           <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-6">
             Schedule a Consultation
           </div>
@@ -107,7 +107,7 @@ export default function ScheduleConsultationPage() {
 
       {/* ── What this covers ─────────────────────────────────── */}
       <section className="bg-white py-20">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <div className="text-[#287BE8] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
             What this conversation covers
           </div>
@@ -134,7 +134,7 @@ export default function ScheduleConsultationPage() {
 
       {/* ── Who should fill this out ─────────────────────────── */}
       <section className="bg-[#F7F8FA] py-20">
-        <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
           <h2 className="text-[#04102D] font-black leading-tight mb-10 text-[clamp(28px,3.5vw,42px)]">
             Who should book this
           </h2>
@@ -175,7 +175,7 @@ export default function ScheduleConsultationPage() {
 
       {/* ── Inquiry form ─────────────────────────────────────── */}
       <section id="inquiry-form" className="bg-[#04102D] py-20">
-        <div className="max-w-[760px] mx-auto px-8 sm:px-5">
+        <div className="max-w-[760px] mx-auto px-8 sm:px-10">
           <div className="text-center mb-10">
             <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">
               Send Details

@@ -49,7 +49,7 @@ export default function Testimonials() {
 
   return (
     <section className="py-16 md:py-24">
-      <div className="max-w-[880px] mx-auto px-8 sm:px-5">
+      <div className="max-w-[880px] mx-auto px-8 sm:px-10">
         {/* Section Label */}
         <div className="text-[#287BE8] text-[10px] font-bold tracking-[0.12em] uppercase mb-4">
           Testimonials

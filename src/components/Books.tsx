@@ -31,7 +31,7 @@ export default function Books() {
         }}
       />
 
-      <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-5">
+      <div className="relative z-10 max-w-[1080px] mx-auto px-8 sm:px-10">
         {/* Header */}
         <div className="mb-16">
           <div className="text-[#6FF2C1] text-[11px] font-bold tracking-[0.13em] uppercase mb-4">

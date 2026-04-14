@@ -3,7 +3,7 @@ import Image from 'next/image';
 export default function About() {
   return (
     <section className="bg-white py-24 md:py-32">
-      <div className="max-w-[1080px] mx-auto px-8 sm:px-5">
+      <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
 
         {/* Header — full width above the grid */}
         <div className="mb-10">

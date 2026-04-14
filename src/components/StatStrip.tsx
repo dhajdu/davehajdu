@@ -20,7 +20,7 @@ export default function StatStrip() {
 
   return (
     <div className="border-t border-b border-[#D4D9E0]">
-      <div className="max-w-[1000px] mx-auto px-8 sm:px-5 py-12">
+      <div className="max-w-[1000px] mx-auto px-8 sm:px-10 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
