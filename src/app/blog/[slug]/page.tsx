@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { POSTS, BLOCKS_BY_SLUG, type Block } from '@/lib/posts-data';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -100,6 +101,32 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#287BE8] flex-shrink-0 mt-2" />
                 <p className="text-[15px] text-[#2A3044] leading-relaxed">{block.text}</p>
               </div>
+            );
+          case 'gallery':
+            return (
+              <figure key={i} className="my-10 not-prose">
+                <div className="grid grid-cols-2 gap-3">
+                  {(block.images ?? []).map((src, j) => (
+                    <div
+                      key={j}
+                      className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[#F0F2F5]"
+                    >
+                      <Image
+                        src={src}
+                        alt={`${block.caption ?? 'Photo'} ${j + 1}`}
+                        fill
+                        sizes="(min-width: 768px) 360px, 50vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+                {block.caption && (
+                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
+                    {block.caption}
+                  </figcaption>
+                )}
+              </figure>
             );
           case 'p':
           default:

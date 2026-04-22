@@ -1,4 +1,4 @@
-export type Block = { tag: string; text: string };
+export type Block = { tag: string; text?: string; images?: string[]; caption?: string };
 
 export type Post = {
   slug: string;
@@ -14,6 +14,17 @@ export type Post = {
 };
 
 export const POSTS: Post[] = [
+  {
+    slug: 'the-room-was-crying',
+    title: 'The Room Was Crying',
+    excerpt:
+      'A Vietnamese film premiere, a father, two daughters, and the leadership lesson every founder needs about consistency.',
+    date: 'Apr 22, 2026',
+    readTime: '4 min',
+    category: 'High Performance Culture',
+    tags: ['high-performance-culture', 'doing-business-in-vietnam'],
+    image: '/images/the-room-was-crying.webp',
+  },
   {
     slug: 'claude-routines-changed-everything',
     title: 'Claude Routines Changed Everything: A Letter to My Friends',
@@ -85,6 +96,55 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'the-room-was-crying': [
+    { tag: 'p', text: "The end credits rolled on Anh Hung and strangers around me were wiping their faces. My friend Tim Bui, the director, had described the film to me as \"heartfelt.\" That word was too small for what had just happened in the room." },
+
+    { tag: 'h2', text: 'A father. Two daughters.' },
+    { tag: 'p', text: "The premise is simple. A father trying to do right by his family. Two daughters - one who believes in him, one who doesn't. No cape. No rescue mission. No breakthrough moment. Just an everyday hero story told with enough craft that a room full of Vietnamese strangers wept together on a Monday night." },
+
+    { tag: 'h2', text: "The thing I couldn't stop thinking about" },
+    { tag: 'p', text: 'I watched it as a leadership advisor, whether I wanted to or not.' },
+    { tag: 'p', text: "Because here's what landed: the father in the film isn't heroic because of a single scene. He's heroic because of a thousand small ones the camera mostly doesn't show." },
+    { tag: 'p', text: "The youngest daughter saw the reps. The way he showed up every day, whether anyone was watching or not. The careful, unglamorous work of a man trying. The oldest daughter saw the failures - the times he missed, the moments he came up short, the promises that arrived late. Same father. Different lens. Both, in their own way, real." },
+    { tag: 'p', text: "That's the math your team is doing on you right now." },
+
+    { tag: 'h2', text: 'The founder trap in Vietnam' },
+    { tag: 'p', text: "If you're running a company here, you're probably chasing the launch. The next round. The market expansion. The breakthrough that'll finally justify the last eighteen months of pushing." },
+    { tag: 'p', text: 'And your team is watching something else entirely.' },
+    { tag: 'p', text: "They're watching whether the Monday call happens when you're travelling. Whether the investor update goes out on the first of the month or the twelfth. Whether the 1-1 you promised your ops lead actually happens, or gets eaten again by a customer emergency. Whether the commitment you made in December still holds in April when things got hard." },
+    { tag: 'p', text: "You think of those as the boring stuff between the highlights. They are the highlights. Your team just doesn't applaud them." },
+
+    { tag: 'h2', text: 'Consistency is the craft' },
+    { tag: 'p', text: "The founders I work with who have the most loyal teams aren't the most charismatic. They aren't the most brilliant strategists. They aren't even the most successful, measured from the outside." },
+    { tag: 'p', text: "They're the most consistent." },
+    { tag: 'p', text: "They show up the same way on the bad days as the good ones. They keep the small promises. The 9 AM stand-up happens. The Friday wrap email goes out. The quarterly offsite hits the calendar six months in advance and doesn't move when a deal threatens to slip." },
+    { tag: 'blockquote', text: 'None of this is glamorous. None of it makes a highlight reel. But over a year, over three years, it becomes the story your team tells about you. And the story your team tells about you is your leadership, whether you meant it to be or not.' },
+    { tag: 'p', text: "Every team has believers and doubters. The film got this right. You don't convert the doubters with a single heroic moment. You convert them slowly, over months, by doing what you said you'd do when no one was keeping score." },
+
+    { tag: 'h2', text: 'What to do with this' },
+    { tag: 'p', text: "Pick one thing. One cadence. One commitment you'll deliver every week, regardless of mood, energy, travel schedule, or what's on fire." },
+    { tag: 'p', text: 'It could be:' },
+    { tag: 'li', text: "A Friday written update to your leadership team. Three bullets: what worked, what didn't, what's next." },
+    { tag: 'li', text: 'A standing 1-1 with each direct report that never gets cancelled, only rescheduled.' },
+    { tag: 'li', text: 'A monthly all-hands where you tell the team the truth about the numbers.' },
+    { tag: 'p', text: "Pick the one you can actually sustain for twelve months. Not the most ambitious. The most sustainable. The one you'll still be doing next April when you're tired and the market is ugly." },
+    { tag: 'p', text: "That's your hero work. That's what the believers will point to three years from now when someone asks them why they stayed. And it's what the doubters eventually can't argue with." },
+    { tag: 'blockquote', text: "Don't measure your leadership in moments of brilliance. Measure it in months of consistency." },
+
+    { tag: 'h2', text: 'Go see Anh Hung' },
+    { tag: 'p', text: "This is a personal blog, so I'll say it plainly: if you're in Vietnam this weekend and you're looking for something to do, go watch Anh Hung. Tim Bui made something real. The lead actor is phenomenal. The story earns every tear in that room." },
+    {
+      tag: 'gallery',
+      caption: 'From the premiere.',
+      images: [
+        '/images/the-room-was-crying-1.webp',
+        '/images/the-room-was-crying-2.webp',
+        '/images/the-room-was-crying-3.webp',
+        '/images/the-room-was-crying-4.webp',
+      ],
+    },
+    { tag: 'p', text: "And the rest of us got a leadership lesson we didn't pay for." },
+  ],
   'claude-routines-changed-everything': [
     { tag: 'p', text: "It's 5:30 AM. My phone lights up. Claude just shipped Routines." },
     { tag: 'p', text: "I sat up in bed. Then I got out of bed. I'm writing this to you before coffee because I can't sit on it." },
