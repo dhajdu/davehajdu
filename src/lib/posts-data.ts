@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'the-long-way-to-georgetown',
+    title: 'The Long Way to Georgetown',
+    excerpt:
+      "Never in my wildest dreams did I imagine I'd be teaching Georgetown Executive MBA students. The story of how Leadership in the AI Era came to be: a phone call, a coffee in Saigon, and thirty years of coaching.",
+    date: 'May 3, 2026',
+    readTime: '5 min',
+    category: 'High Performance Culture',
+    tags: ['high-performance-culture', 'ai-in-business', 'doing-business-in-vietnam'],
+    featured: true,
+    image: '/images/the-long-way-to-georgetown.webp',
+  },
+  {
     slug: 'the-room-was-crying',
     title: 'The Room Was Crying',
     excerpt:
@@ -96,6 +108,54 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'the-long-way-to-georgetown': [
+    { tag: 'p', text: "Never in my wildest dreams did I imagine I'd be teaching Georgetown Executive MBA students. The school where my father took his PhD coursework. The school whose Hoyas I idolized." },
+    { tag: 'p', text: "And yet, this July, that's exactly what's happening." },
+    { tag: 'p', text: 'I want to share how it came to be, because none of it was planned. It was a series of phone calls, friendships, and one good question at the right moment.' },
+
+    { tag: 'h2', text: 'A call from my old professor' },
+    { tag: 'p', text: 'A couple of years ago, my negotiations professor from the University of Washington called me. He was a PhD student then in the late 90s and I was an undergrad. Years later I looked him up. He was at Georgetown, the same campus where my father had done his PhD coursework. My dad and I made a trip out to DC together to visit him. When I started TINYpulse a while later, he joined us as an advisor. By then he had become one of the most cited authors in the world on employee retention.' },
+    { tag: 'p', text: 'He was bringing a group of his Georgetown Executive MBA students to Vietnam, and he wanted me to speak to them about negotiating internationally as an expat in Asia. We had trust, so I said yes immediately.' },
+
+    { tag: 'h2', text: 'Vietnam' },
+    { tag: 'p', text: 'I was not the right person to do that alone. So I brought in my friend Dao Nguyen, who is regularly recognised as one of the top 50 lawyers in Asia. She and I co-taught the session, and it was one of the best teaching experiences I have had.' },
+    { tag: 'p', text: 'Over coffee that visit, I asked him a question that turned out to be the hinge of this whole story.' },
+    { tag: 'blockquote', text: 'What is academia actually doing on AI right now?' },
+    { tag: 'p', text: 'His honest answer at the time was, not much yet.' },
+
+    { tag: 'h2', text: 'The call back' },
+    { tag: 'p', text: 'That gap stuck with me.' },
+    { tag: 'p', text: 'A few months later, I was working with some EO friends, trying to design a great key executive program. I had been watching what Janki, the President of EO Perth, had built with her AI program. It was working. Founders loved it. I kept asking myself, what if we did something similar, but for leadership?' },
+    { tag: 'p', text: 'So I called Dr Holtom back.' },
+
+    { tag: 'h2', text: 'Building Leadership in the AI Era' },
+    { tag: 'p', text: 'We were not trying to build another AI leadership program for executives. We were trying to build the one that was missing.' },
+    { tag: 'p', text: 'Georgetown had the academic rigor. We had the AI experience. Neither of us could build the program alone.' },
+    { tag: 'p', text: 'So my partner David Nilssen, Dr Holtom, and I started building it under the AI Officer Institute. We took the Georgetown Executive MBA leadership concept and layered in what we call the AI angle.' },
+    { tag: 'p', text: 'Three series, three deliverables:' },
+    { tag: 'li', text: 'Leading yourself, you walk out with an AI Communications Coach' },
+    { tag: 'li', text: 'Leading others, you walk out with an AI Coaching Assistant' },
+    { tag: 'li', text: 'Leading the organization, you walk out with a blueprint, a roadmap, and a vibe-coded prototype' },
+    { tag: 'p', text: "The data sets that drive the AI are grounded in Georgetown's research. The application is grounded in our experience as operators. That combination is what makes this AI leadership program for executives different." },
+
+    { tag: 'h2', text: 'Then it kept going' },
+    { tag: 'p', text: 'I delivered the first session in Perth. It hit a 77 NPS with a 60% response rate on the survey. People told me it was the best AI workshop they had ever attended.' },
+    { tag: 'p', text: 'Then Dr Holtom decided to bring the program into his Georgetown Executive MBA teaching.' },
+    { tag: 'p', text: 'Then he invited me to join him in Dubai, alongside David Nilssen, to add the AI angle and the entrepreneur angle to the EMBA experience there.' },
+    { tag: 'p', text: 'Then in July, the same program will run over two days at Georgetown University in Washington, DC.' },
+
+    { tag: 'h2', text: 'Full circle' },
+    { tag: 'p', text: 'The kid who watched Hoya basketball games. The son of a man who took his PhD coursework on that campus. Walking back as a co-instructor.' },
+    { tag: 'p', text: 'I do not have a tidy moral for this. Just gratitude.' },
+    { tag: 'p', text: 'To Janki, for showing me what was possible. To Nhan, the President of EO Vietnam, for helping me pilot the program in my home chapter. To my professor, for picking up the phone, and for keeping the conversation going long after the class ended. To David Nilssen and Dr Holtom, for building it with me. To the 200+ students that have already taken the courses.' },
+    { tag: 'p', text: 'And to Rich Pham, Harley Trung, and Ray Chou, who helped me teach, helped me learn, and helped me refine the work session after session. The polish that lets us deliver this to a university ranked top 5 in the world in international relations and top 25 in the US in business did not come from one room. It came from many rooms, with patient friends willing to sit through the rough versions.' },
+
+    { tag: 'h2', text: 'Want to experience it?' },
+    { tag: 'p', text: 'This Wednesday at Vulcan Labs in Vietnam, we are running the negotiations module for EO Vietnam. It is open to non-members.' },
+    { tag: 'p', text: 'If you want a taste of the AI leadership program for executives we have been refining for over a year, this Wednesday is the easiest way in. If that is too soon, send me a DM. I will keep you in the loop on the next full cohort.' },
+    { tag: 'p', text: 'A small note on the program: 5% of sales are donated back to EO Vietnam, the chapter that helped me pilot it. And to be clear, participants in our program do not earn Georgetown credits. Dr Holtom is bringing the content into his Georgetown EMBA teaching; this is not an institutional adoption by the university. That distinction matters, so I want to be upfront about it.' },
+  ],
+
   'the-room-was-crying': [
     { tag: 'p', text: "The end credits rolled on Anh Hung and strangers around me were wiping their faces. My friend Tim Bui, the director, had described the film to me as \"heartfelt.\" That word was too small for what had just happened in the room." },
 
