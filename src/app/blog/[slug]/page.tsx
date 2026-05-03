@@ -56,6 +56,10 @@ const DAY_GRADIENTS = [
   'from-[#0d1e3e] to-[#163a6e]',
 ];
 
+function H({ html }: { html?: string }) {
+  return <span dangerouslySetInnerHTML={{ __html: html ?? '' }} />;
+}
+
 function BlockRenderer({ blocks }: { blocks: Block[] }) {
   return (
     <div className="prose-custom">
@@ -64,26 +68,26 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
           case 'h1':
             return (
               <h1 key={i} className="text-[28px] md:text-[34px] font-black text-[#04102D] mt-10 mb-4 leading-snug">
-                {block.text}
+                <H html={block.text} />
               </h1>
             );
           case 'h2':
             return (
               <h2 key={i} className="text-[22px] md:text-[26px] font-bold text-[#04102D] mt-8 mb-3 leading-snug">
-                {block.text}
+                <H html={block.text} />
               </h2>
             );
           case 'h3':
             return (
               <h3 key={i} className="text-[18px] font-bold text-[#04102D] mt-7 mb-2 leading-snug">
-                {block.text}
+                <H html={block.text} />
               </h3>
             );
           case 'h4':
           case 'h5':
             return (
               <h4 key={i} className="text-[15px] font-bold text-[#04102D] mt-6 mb-2 uppercase tracking-wide">
-                {block.text}
+                <H html={block.text} />
               </h4>
             );
           case 'blockquote':
@@ -92,14 +96,16 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
                 key={i}
                 className="border-l-4 border-[#287BE8] pl-5 my-6 text-[15px] italic text-[#2A3044] bg-[#F8F9FC] py-3 pr-4 rounded-r-lg"
               >
-                {block.text}
+                <H html={block.text} />
               </blockquote>
             );
           case 'li':
             return (
               <div key={i} className="flex gap-3 my-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#287BE8] flex-shrink-0 mt-2" />
-                <p className="text-[15px] text-[#2A3044] leading-relaxed">{block.text}</p>
+                <p className="text-[15px] text-[#2A3044] leading-relaxed">
+                  <H html={block.text} />
+                </p>
               </div>
             );
           case 'gallery':
@@ -132,7 +138,7 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
           default:
             return (
               <p key={i} className="text-[15px] md:text-[16px] text-[#2A3044] leading-relaxed my-4">
-                {block.text}
+                <H html={block.text} />
               </p>
             );
         }
