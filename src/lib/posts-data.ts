@@ -123,8 +123,8 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'h2', text: 'Vietnam' },
     { tag: 'p', text: 'I was not the right person to do that alone. So I brought in my friend <a href="https://www.daonguyenlegal.com/" target="_blank" rel="noopener noreferrer">Dao Nguyen</a>, who is regularly recognised as one of the top 50 lawyers in Asia. She and I co-taught the session, and it was one of the best teaching experiences I have had.' },
     { tag: 'gallery', images: ['/images/dao-nguyen-speaking.webp', '/images/dave-speaking-vietnam.webp'], caption: 'Dao and me co-teaching the Georgetown EMBA cohort in Vietnam.' },
-    { tag: 'p', text: 'Over coffee that visit, I asked him a question that turned out to be the hinge of this whole story.' },
-    { tag: 'gallery', images: ['/images/dr-holtom-dave-dao.webp'], caption: 'Coffee with Dr Holtom and Dao. The conversation that became Leadership in the AI Era.' },
+    { tag: 'gallery', images: ['/images/dr-holtom-dave-dao.webp'], caption: 'With Dao and Dr Holtom in front of the Georgetown EMBA students after the negotiations session.' },
+    { tag: 'p', text: 'Later that visit, over dinner at <a href="https://solkitchenbar.com/" target="_blank" rel="noopener noreferrer">SOL Kitchen</a>, Dr Holtom and I kept talking long after the plates were cleared. I asked him a question that turned out to be the hinge of this whole story.' },
     { tag: 'blockquote', text: 'What is academia actually doing on AI right now?' },
     { tag: 'p', text: 'His honest answer at the time was, not much yet.' },
 
