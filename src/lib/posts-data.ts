@@ -114,12 +114,17 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'p', text: 'I want to share how it came to be, because none of it was planned. It was a series of phone calls, friendships, and one good question at the right moment.' },
 
     { tag: 'h2', text: 'A call from my old professor' },
-    { tag: 'p', text: 'A couple of years ago, my negotiations professor from the University of Washington called me. He was a PhD student then in the late 90s and I was an undergrad. Years later I looked him up. He was at Georgetown, the same campus where my father had done his PhD coursework. My dad and I made a trip out to DC together to visit him. When I started TINYpulse a while later, he joined us as an advisor. By then he had become one of the most cited authors in the world on employee retention.' },
+    { tag: 'p', text: 'A couple of years ago, my negotiations professor from the University of Washington called me. He was a PhD student then in the late 90s and I was an undergrad. Years later I looked him up. He was at Georgetown, the same campus where my father had done his PhD coursework. My dad and I made a trip out to DC together to visit him.' },
+    { tag: 'gallery', images: ['/images/dad-dave-georgetown.webp'], caption: 'My dad and me at Georgetown, on the trip that started this whole thread.' },
+    { tag: 'p', text: 'When I started TINYpulse a while later, he joined us as an advisor. By then he had become one of the most cited authors in the world on employee retention.' },
+    { tag: 'gallery', images: ['/images/dr-holtom-tinypulse.webp'], caption: 'Dr Holtom in the TINYpulse era. Advisor, sounding board, friend.' },
     { tag: 'p', text: 'He was bringing a group of his Georgetown Executive MBA students to Vietnam, and he wanted me to speak to them about negotiating internationally as an expat in Asia. We had trust, so I said yes immediately.' },
 
     { tag: 'h2', text: 'Vietnam' },
     { tag: 'p', text: 'I was not the right person to do that alone. So I brought in my friend Dao Nguyen, who is regularly recognised as one of the top 50 lawyers in Asia. She and I co-taught the session, and it was one of the best teaching experiences I have had.' },
+    { tag: 'gallery', images: ['/images/dao-nguyen-speaking.webp', '/images/dave-speaking-vietnam.webp'], caption: 'Dao and me co-teaching the Georgetown EMBA cohort in Vietnam.' },
     { tag: 'p', text: 'Over coffee that visit, I asked him a question that turned out to be the hinge of this whole story.' },
+    { tag: 'gallery', images: ['/images/dr-holtom-dave-dao.webp'], caption: 'Coffee with Dr Holtom and Dao. The conversation that became Leadership in the AI Era.' },
     { tag: 'blockquote', text: 'What is academia actually doing on AI right now?' },
     { tag: 'p', text: 'His honest answer at the time was, not much yet.' },
 
@@ -140,6 +145,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 
     { tag: 'h2', text: 'Then it kept going' },
     { tag: 'p', text: 'I delivered the first session in Perth. It hit a 77 NPS with a 60% response rate on the survey. People told me it was the best AI workshop they had ever attended.' },
+    { tag: 'gallery', images: ['/images/selfie-georgetown-emba.webp'], caption: 'With the Georgetown EMBA cohort in Vietnam.' },
     { tag: 'p', text: 'Then Dr Holtom decided to bring the program into his Georgetown Executive MBA teaching.' },
     { tag: 'p', text: 'Then he invited me to join him in Dubai, alongside David Nilssen, to add the AI angle and the entrepreneur angle to the EMBA experience there.' },
     { tag: 'p', text: 'Then in July, the same program will run over two days at Georgetown University in Washington, DC.' },
