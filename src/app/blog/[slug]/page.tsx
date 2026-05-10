@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { POSTS, BLOCKS_BY_SLUG, type Block } from '@/lib/posts-data';
+import { POSTS, BLOCKS_BY_SLUG, FAQS_BY_SLUG, type Block } from '@/lib/posts-data';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -15,6 +15,13 @@ const SEO_TITLE_OVERRIDES: Record<string, string> = {
   'entrepreneurial-learnings': '18 Entrepreneurial Learnings from Tough Markets',
   'fire-horse-2026': 'Year of the Fire Horse 2026: Week One Lessons',
   'supabase-for-non-technical-founders': 'Supabase for Non-Technical Founders',
+  'leverage-yourself-first': 'How Founders Should Use AI: The Infinite Leverage Math',
+};
+
+// Per-post meta description overrides (when seo.md specifies a different one than the excerpt)
+const META_DESCRIPTION_OVERRIDES: Record<string, string> = {
+  'leverage-yourself-first':
+    "How founders should use AI: the math most people get wrong. AI multiplies the version of you running it. Here's the 90-day proof.",
 };
 
 export async function generateMetadata({ params }: Props) {
@@ -23,12 +30,13 @@ export async function generateMetadata({ params }: Props) {
   if (!post) return {};
   const ogImage = post.image ? [post.image] : undefined;
   const seoTitleBase = SEO_TITLE_OVERRIDES[slug] || post.title;
+  const description = META_DESCRIPTION_OVERRIDES[slug] || post.excerpt;
   return {
     title: `${seoTitleBase} | Dave Hajdu`,
-    description: post.excerpt,
+    description,
     openGraph: {
       title: post.title,
-      description: post.excerpt,
+      description,
       type: "article",
       url: `/blog/${post.slug}`,
       images: ogImage,
@@ -36,7 +44,7 @@ export async function generateMetadata({ params }: Props) {
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
+      description,
       images: ogImage,
     },
   };
@@ -153,6 +161,7 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   const blocks = BLOCKS_BY_SLUG[slug] ?? [];
+  const faqs = FAQS_BY_SLUG[slug];
   const gradient = DAY_GRADIENTS[(post.dayNumber ?? 0) % DAY_GRADIENTS.length];
   const categoryColor = CATEGORY_COLORS[post.category] ?? 'bg-gray-100 text-gray-600';
 
@@ -163,6 +172,25 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
+      {faqs && faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: faqs.map((f) => ({
+                '@type': 'Question',
+                name: f.q,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: f.a,
+                },
+              })),
+            }),
+          }}
+        />
+      )}
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className={`relative overflow-hidden min-h-[340px] flex items-end bg-gradient-to-br ${gradient}`}>
         {post.dayNumber && (

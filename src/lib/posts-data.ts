@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'leverage-yourself-first',
+    title: '"You look better." 90 days, 7 kilos, and the part that actually matters.',
+    excerpt:
+      'Most founders chasing AI are stacking it on top of a 0.5x version of themselves. The 90-day experiment that took me from 1x to 2x, and what it means for your AI stack.',
+    date: 'May 10, 2026',
+    readTime: '6 min',
+    category: 'AI In Business',
+    tags: ['ai-in-business', 'high-performance-culture'],
+    featured: true,
+    image: '/images/leverage-amplified-average.webp',
+  },
+  {
     slug: 'the-long-way-to-georgetown',
     title: 'The Long Way to Georgetown',
     excerpt:
@@ -108,6 +120,68 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'leverage-yourself-first': [
+    { tag: 'p', text: 'I went on a date last night with an old friend. Halfway through dinner she said, "You look better."' },
+    { tag: 'p', text: "I do. Ninety days ago I weighed seven kilograms more. Today I don't. But this isn't a weight loss post. The seven kilos are evidence. The story is about leverage, and what I think most founders chasing AI right now are getting backwards." },
+
+    { tag: 'h2', text: 'The math problem most founders are missing' },
+    { tag: 'p', text: "I run a company. I'm building a concept I call <strong>Infinite Leverage</strong>: get up, plan, multi-delegate work to AI agents who can execute while you move on to the next thing. It's the operating model I think every founder should be running by the end of this year." },
+    { tag: 'p', text: 'There is a math problem buried inside it that most people are missing.' },
+    { tag: 'p', text: 'AI is a multiplier. It does not produce. It multiplies whatever version of you is running it.' },
+    { tag: 'p', text: '<strong>0.5x me, leveraged 8x = 4x output.<br/>2x me, leveraged 8x = 16x output.</strong>' },
+    { tag: 'p', text: 'Same agents. Same stack. Same prompts. <strong>Four times the difference</strong>, based entirely on the version of you that woke up that morning.' },
+    { tag: 'p', text: 'Most founders I talk to (including the <a href="/blog/the-long-way-to-georgetown">Georgetown EMBA cohorts I teach</a>) are stacking AI on top of a depleted, distracted, slightly-sick version of themselves and wondering why the output is mediocre. They are compounding mediocrity with leverage. That isn\'t infinite. That\'s just amplified average.' },
+    { tag: 'p', text: 'So 90 days ago I decided to fix the multiplier before I stacked anything else on top of it.' },
+
+    { tag: 'h2', text: 'Availability beats willpower' },
+    { tag: 'p', text: 'The principle I built the experiment around came from my friend Dr. James Murray, with reinforcement from my mobility coach, Tuan: <strong>availability</strong>. If the good thing is easy to reach and the bad thing is hard, you\'ll do the good thing. Willpower is fragile. Environment design is durable. (Far beyond the 21-day-habit cliché in <a href="https://jamesclear.com/atomic-habits" target="_blank" rel="noopener noreferrer">Atomic Habits</a>.)' },
+    { tag: 'p', text: "So I cleared my fridge until the bad food was hard and the good food was on autopilot. I built a fifteen-minute home routine I couldn't talk myself out of. I added periodic fasts as a reset. (The full stack is at the bottom of this post, if you want it.)" },
+    { tag: 'p', text: 'The result is what my date saw last night. Sharper at 9pm than I used to be at 11am. Clearer head. More energy. Closer to a 2x version of me. The seven kilos came along for the ride.' },
+    { tag: 'p', text: "But the actual unlock wasn't physical. It was the meta-skill. I'd just spent 90 days proving I could engineer my environment to produce a specific outcome. That same skill applies directly to the work." },
+
+    { tag: 'h2', text: 'The morning journal: same principle, different system' },
+    { tag: 'p', text: "The other half of Infinite Leverage isn't about your body. It's about your work." },
+    { tag: 'p', text: "AI agents will do exactly what you tell them. And without pressure, they return to the average. The average answer. The average code. The average product. It is super easy to vibe-code something that ships and doesn't actually work. It is super easy to launch a product that no one wants. (See my earlier letter on <a href=\"/blog/claude-routines-changed-everything\">the AI agent operating model</a>.)" },
+    { tag: 'p', text: 'The morning journal is to my AI work what the empty fridge is to my body.' },
+    { tag: 'p', text: 'This is how founders should use AI: with intentional environment design, not by stacking agents on top of a depleted version of themselves and hoping the output is good.' },
+    { tag: 'p', text: 'It is the environment design that makes the good output the easy output. Plan the day. Decide what each agent is working on. Define what "good" looks like before you start. Push past the first answer. Refuse to ship the average.' },
+    { tag: 'p', text: 'Without that planning, your AI stack will produce a tremendous volume of beautifully formatted nothing.' },
+    { tag: 'gallery', images: ['/images/leverage-journal-in-notion.webp'], caption: 'My actual morning journal in Notion. The same environment-design discipline I use on my body, applied to my AI work.' },
+    { tag: 'p', text: 'I needed an upgraded body to do an upgraded version of that planning. Same discipline, same principle, two different systems.' },
+
+    { tag: 'h2', text: 'The actual takeaway' },
+    { tag: 'p', text: "The seven kilos isn't the win. The win is that the same brain that can clear a fridge can clear a calendar, brief an agent, and refuse to ship something average." },
+    { tag: 'p', text: "Engineering the environment is the meta-skill behind Infinite Leverage. Once you've practiced it on one system, you can apply it to anything." },
+    { tag: 'p', text: "So here is the question I'd leave you with:" },
+    { tag: 'blockquote', text: "What's one environment in your life or work where you're relying on willpower instead of design?" },
+    { tag: 'p', text: "Pick that one. Engineer it this week. Make the good thing easy and the bad thing hard. Don't add a habit. Remove a friction." },
+    { tag: 'p', text: 'Then come back in 90 days and tell me what changed.' },
+    { tag: 'p', text: 'Dave.' },
+
+    { tag: 'h2', text: 'The 90-day stack (for the curious)' },
+    { tag: 'p', text: 'For anyone who wants to know what I actually did.' },
+    { tag: 'h3', text: 'Habit 1. Six single-ingredient foods, every morning, in that order.' },
+    { tag: 'p', text: "Salmon, avocado, spinach, three eggs, Greek yogurt with no sugar, blueberries. Always those six, always first. Variety is friction. Cutting it was the breakthrough. Then I stopped buying anything else for the house. If I wanted spaghetti, I had to leave to go get it. I still ate spaghetti at night. Just less of it, because I wasn't starting from hungry." },
+    { tag: 'gallery', images: ['/images/leverage-1st-meal-after-12.webp'], caption: 'My first meal of the day, after the morning fast. Same six ingredients, every day.' },
+    { tag: 'h3', text: 'Habit 2. Fifteen minutes, eight exercises, daily.' },
+    { tag: 'p', text: "Built with my mobility coach Tuan. No equipment. I do it in my house in the morning. It doesn't burn many calories. The point is I never miss it, because I can't talk myself out of fifteen minutes. Tennis, pickleball, and a real gym session are bonus, not the bar." },
+    { tag: 'h3', text: 'Habit 3. Occasional fasting.' },
+    { tag: 'p', text: 'Two 48-hour fasts and roughly eight one-meal days over the 90. Organs rest, body burns stored fat, and a process called <a href="https://www.nih.gov/news-events/nih-research-matters/autophagy-process-cleans-out-cells" target="_blank" rel="noopener noreferrer">autophagy</a> clears cells that aren\'t working. The first 16 hours are uncomfortable. After that, your body adapts.' },
+    { tag: 'p', text: 'Three habits. Designed to be hard to skip and easy to repeat.' },
+
+    { tag: 'h2', text: 'Things people ask me about this' },
+    { tag: 'h3', text: 'What is Infinite Leverage?' },
+    { tag: 'p', text: 'Infinite Leverage is an operating model for founders. You get up, plan, and multi-delegate work to AI agents who execute while you move on to the next thing. Output equals personal capability multiplied by the number of agents leveraged. The version of you running the system determines the size of the multiplier.' },
+    { tag: 'h3', text: 'Why do most founders fail with AI?' },
+    { tag: 'p', text: 'Most founders stack AI agents on top of a depleted, distracted version of themselves. AI is a multiplier, not a producer. A 0.5x version of you leveraged 8x produces 4x output. A 2x version of you leveraged 8x produces 16x output. Same agents, four times the difference, based entirely on the version of you running them.' },
+    { tag: 'h3', text: 'What is the availability principle?' },
+    { tag: 'p', text: 'The availability principle says behavior follows environment design. If the desired action is easy to reach and the undesired action is hard, you will do the desired action. Willpower is fragile. Environment design is durable.' },
+    { tag: 'h3', text: 'What habits did you use to lose 7 kilograms in 90 days?' },
+    { tag: 'p', text: 'Three habits. (1) Six single-ingredient foods every morning before anything else, plus an empty fridge. (2) A fifteen-minute eight-exercise home routine done daily. (3) Periodic fasting, including two 48-hour fasts and roughly eight one-meal days over the 90.' },
+    { tag: 'h3', text: 'What does a morning journal have to do with AI work?' },
+    { tag: 'p', text: 'A morning journal is environment design for AI work. AI agents do exactly what you tell them and return to the average without pressure. Planning the day, defining what "good" looks like, and pushing past the first answer prevents your AI stack from producing a high volume of beautifully formatted nothing.' },
+  ],
+
   'the-long-way-to-georgetown': [
     { tag: 'p', text: "Never in my wildest dreams did I imagine I'd be teaching Georgetown Executive MBA students. The school where my father took his PhD coursework. The school whose Hoyas I idolized." },
     { tag: 'p', text: "And yet, this July, that's exactly what's happening." },
@@ -338,5 +412,32 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
   ],
   'ai-officer-mindset': [
     { tag: 'p', text: "Most people think transformation takes months. But the AI Officer Mindset doesn't require years of training. It requires clarity, focus, and the right framework." },
+  ],
+};
+
+// FAQ schema content keyed by slug. Used to render FAQPage JSON-LD on posts that have FAQ content.
+// Keep these aligned with the visible "Things people ask me about this" h3/p blocks above.
+export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
+  'leverage-yourself-first': [
+    {
+      q: 'What is Infinite Leverage?',
+      a: 'Infinite Leverage is an operating model for founders. You get up, plan, and multi-delegate work to AI agents who execute while you move on to the next thing. Output equals personal capability multiplied by the number of agents leveraged. The version of you running the system determines the size of the multiplier.',
+    },
+    {
+      q: 'Why do most founders fail with AI?',
+      a: 'Most founders stack AI agents on top of a depleted, distracted version of themselves. AI is a multiplier, not a producer. A 0.5x version of you leveraged 8x produces 4x output. A 2x version of you leveraged 8x produces 16x output. Same agents, four times the difference, based entirely on the version of you running them.',
+    },
+    {
+      q: 'What is the availability principle?',
+      a: 'The availability principle says behavior follows environment design. If the desired action is easy to reach and the undesired action is hard, you will do the desired action. Willpower is fragile. Environment design is durable.',
+    },
+    {
+      q: 'What habits did you use to lose 7 kilograms in 90 days?',
+      a: 'Three habits. (1) Six single-ingredient foods every morning before anything else, plus an empty fridge. (2) A fifteen-minute eight-exercise home routine done daily. (3) Periodic fasting, including two 48-hour fasts and roughly eight one-meal days over the 90.',
+    },
+    {
+      q: 'What does a morning journal have to do with AI work?',
+      a: 'A morning journal is environment design for AI work. AI agents do exactly what you tell them and return to the average without pressure. Planning the day, defining what "good" looks like, and pushing past the first answer prevents your AI stack from producing a high volume of beautifully formatted nothing.',
+    },
   ],
 };
