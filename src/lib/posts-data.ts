@@ -130,7 +130,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'p', text: 'AI is a multiplier. It does not produce. It multiplies whatever version of you is running it.' },
     { tag: 'p', text: '<strong>0.5x me, leveraged 8x = 4x output.<br/>2x me, leveraged 8x = 16x output.</strong>' },
     { tag: 'p', text: 'Same agents. Same stack. Same prompts. <strong>Four times the difference</strong>, based entirely on the version of you that woke up that morning.' },
-    { tag: 'p', text: 'Most founders I talk to (including the <a href="/blog/the-long-way-to-georgetown">Georgetown EMBA cohorts I teach</a>) are stacking AI on top of a depleted, distracted, slightly-sick version of themselves and wondering why the output is mediocre. They are compounding mediocrity with leverage. That isn\'t infinite. That\'s just amplified average.' },
+    { tag: 'p', text: 'Most founders I talk to (including the <a href="/blog/the-long-way-to-georgetown">EO Vietnam and EO Perth cohorts I teach</a>) are stacking AI on top of a depleted, distracted, slightly-sick version of themselves and wondering why the output is mediocre. They are compounding mediocrity with leverage. That isn\'t infinite. That\'s just amplified average.' },
     { tag: 'p', text: 'So 90 days ago I decided to fix the multiplier before I stacked anything else on top of it.' },
 
     { tag: 'h2', text: 'Availability beats willpower' },
