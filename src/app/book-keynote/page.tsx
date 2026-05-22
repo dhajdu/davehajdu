@@ -174,8 +174,8 @@ export default function BookKeynotePage() {
                 body: 'In the workshop format, every participant builds a vibe-coded prototype that runs the workflow.',
               },
               {
-                title: 'Repeatable Pattern',
-                body: 'A pattern you and your team can run on the next workflow, and the one after that.',
+                title: 'Path to Production',
+                body: 'Learn the developer superpower that allows you to take your prototype to production.',
               },
             ].map((item) => (
               <div
