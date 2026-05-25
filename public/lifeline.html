@@ -122,6 +122,12 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
   .tip.show { opacity: 1; }
+  .tip-img {
+    display: none; width: calc(100% + 40px); height: 132px;
+    margin: -16px -20px 12px; object-fit: cover;
+    border-radius: 8px 8px 0 0;
+  }
+  .tip-img.show { display: block; }
   .tip-date { font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
   .tip-label { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
@@ -356,6 +362,7 @@
 
 <!-- TOOLTIP -->
 <div class="tip" id="tip">
+  <img class="tip-img" id="tipImg" alt="">
   <div class="tip-date" id="tipDate"></div>
   <div class="tip-label" id="tipLabel"></div>
   <div class="tip-desc" id="tipDesc"></div>
@@ -375,11 +382,11 @@ function switchTab(name) {
 
 // ─── LIFELINE DATA ───
 const points = [
-  { year:2026, q:1, type:'high', label:'Georgetown Goes Live', desc:'The curriculum officially adopted. You walk into rooms and let the credential speak before you do. Something unlocks in how you sell yourself.' },
+  { year:2026, q:1, type:'high', label:'Georgetown Goes Live', img:'images/lifeline/georgetown-goes-live.webp', desc:'The curriculum officially adopted. You walk into rooms and let the credential speak before you do. Something unlocks in how you sell yourself.' },
   { year:2026, q:2, type:'high', label:'$120k Month + 300 Students', desc:'Product market fit confirmed across three streams. The bet on yourself starts paying off in a way you can no longer ignore.' },
   { year:2026, q:3, type:'low',  label:'The Pattern Negotiates', desc:'Success brings late nights and old habits. The gap between who you are at 6am and who you are at midnight gets tested.' },
-  { year:2026, q:4, type:'high', label:"Dad's First $10k Month", desc:'MahjongTarot hits its stride. You watch your father make real money doing what he loves. Means more than any deal you\'ve closed.' },
-  { year:2026, q:4, type:'high', label:'Debt Cleared', desc:'The shame that lived in your chest for years finally has a number on it — then it doesn\'t. You feel lighter in a way that surprises you.' },
+  { year:2026, q:4, type:'high', label:"Dad's First $10k Month", img:'images/lifeline/dad-first-10k-month.webp', desc:'MahjongTarot hits its stride. You watch your father make real money doing what he loves. Means more than any deal you\'ve closed.' },
+  { year:2026, q:4, type:'high', label:'Debt Cleared', img:'images/lifeline/debt-cleared.webp', desc:'The shame that lived in your chest for years finally has a number on it — then it doesn\'t. You feel lighter in a way that surprises you.' },
   { year:2027, q:1, type:'high', label:'Thought Leadership Peak', desc:'A book, a keynote, a moment — something cements you as the person who saw AI + business frameworks before the market caught up.' },
   { year:2027, q:2, type:'high', label:'AIOfficer Breaks Through', desc:'ASB deal closes. Partner activates his network. 1,000 certified AI Officers. The credential becomes a real market standard.' },
   { year:2027, q:3, type:'low',  label:'Big Deal Falls Through', desc:'A deal you built your Q3 around collapses. It hurts differently because this company is you. The test is whether you absorb it or spiral.' },
@@ -390,7 +397,7 @@ const points = [
   { year:2029, q:1, type:'low',  label:'Na Passes', desc:'Your dog. 14 years. She\'s been in every apartment, every low point, every early morning. This one hits harder than you expect.' },
   { year:2029, q:2, type:'high', label:'The Relationship Question', desc:'Someone comes along who makes you want to answer it. For the first time you\'re not running.' },
   { year:2029, q:3, type:'low',  label:'Company Crossroads', desc:'AIOfficer needs to evolve or plateau. A hard strategic decision - probably about team, probably about your own role.' },
-  { year:2029, q:4, type:'high', label:'Staffing Acquisition', desc:'First real liquidity event. Someone pays for what you\'ve built. The staffing business finds a buyer. You hold the check.' },
+  { year:2029, q:4, type:'high', label:'Staffing Acquisition', img:'images/lifeline/staffing-acquisition.webp', desc:'First real liquidity event. Someone pays for what you\'ve built. The staffing business finds a buyer. You hold the check.' },
   { year:2030, q:2, type:'high', label:'Father Turns 83', desc:'He\'s still here. Still sharp. MahjongTarot is part of his daily life. The guilt from 20 years ago has fully dissolved.' },
   { year:2030, q:4, type:'low',  label:'Friends Drift', desc:'You look around and realize the circle has changed again. The EO friends you invested in are still there. The ones you didn\'t aren\'t.' },
   { year:2031, q:1, type:'high', label:'$10M Revenue', desc:'The goal. Achieved through diversified streams, not one big bet. Licensing, retreats, community, staffing. All firing.' },
@@ -401,7 +408,7 @@ const points = [
   { year:2033, q:4, type:'high', label:'Day 3000 of Routine', desc:'The streak continues. Not because of discipline alone - because this is who you are now. The man who shows up every day.' },
   { year:2034, q:1, type:'low',  label:"Father's Health", desc:"He'll be 87. His side lives long but the body tells the truth. You'll be present in a way you might not have been ten years ago." },
   { year:2034, q:3, type:'high', label:'What Comes Next', desc:'A new idea. A new chapter. At 62 you\'re not winding down - you\'re asking: what do I want to build that isn\'t about proving anything?' },
-  { year:2035, q:2, type:'high', label:'Free', desc:'The word you used in your 2027 vision. It arrived. Not how you pictured it - better. Because you earned every piece of it.' },
+  { year:2035, q:2, type:'high', label:'Free', img:'images/lifeline/free-2035.webp', desc:'The word you used in your 2027 vision. It arrived. Not how you pictured it - better. Because you earned every piece of it.' },
 ];
 
 const years = [2026,2027,2028,2029,2030,2031,2032,2033,2034,2035];
@@ -462,6 +469,9 @@ function renderLifeline() {
     c.style.cursor = 'pointer';
 
     c.addEventListener('mouseenter', e => {
+      const img = document.getElementById('tipImg');
+      if (p.img) { img.src = p.img; img.classList.add('show'); }
+      else { img.classList.remove('show'); img.removeAttribute('src'); }
       document.getElementById('tipDate').textContent  = `${p.year} · Q${p.q}`;
       document.getElementById('tipLabel').textContent = p.label;
       document.getElementById('tipLabel').className   = `tip-label ${p.type}`;
