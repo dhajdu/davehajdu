@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Hajdu — The Next Ten Years</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #04102D;
+    --blue:   #287BE8;
+    --mint:   #6FF2C1;
+    --magenta:#D1458B;
+    --orange: #FF6B35;
+    --lgray:  #EAEEF2;
+    --white:  #FFFFFF;
+    --body:   #2A3044;
+    --muted:  #6B7280;
+    --border: #D4D9E0;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 48px 32px 0;
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .header .label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 40px; font-weight: 700; color: var(--white); margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 16px; color: rgba(255,255,255,0.5); margin-bottom: 40px;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex; justify-content: center; gap: 4px;
+    max-width: 880px; margin: 0 auto 0;
+    padding: 0 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .tab {
+    padding: 12px 28px; font-family: 'Inter', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; background: transparent;
+    border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); cursor: pointer; transition: all 0.2s;
+    margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--white); }
+  .tab.active { color: var(--mint); border-bottom-color: var(--mint); }
+
+  /* ── Panels ── */
+  .panel { display: none; max-width: 880px; margin: 0 auto; padding: 48px 32px 80px; }
+  .panel.active { display: block; }
+
+  /* ═══════════════════════════════
+     TAB 1 — LIFELINE
+  ═══════════════════════════════ */
+  .lifeline-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 32px;
+  }
+  .legend { display: flex; gap: 24px; }
+  .legend-item { display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .leg-dot.high { background: var(--mint); }
+  .leg-dot.low  { background: var(--magenta); }
+
+  .chart-wrap { position: relative; }
+  .y-labels {
+    position: absolute; left: 0; top: 0; height: 300px; width: 48px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    align-items: flex-end; padding-right: 10px;
+  }
+  .y-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.2); }
+  .chart-inner {
+    margin-left: 48px; position: relative; height: 300px;
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .center-line {
+    position: absolute; top: 50%; width: 100%;
+    border-top: 1px dashed rgba(255,255,255,0.06);
+  }
+  .chart-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; }
+
+  .x-labels {
+    margin-left: 48px; display: flex; margin-top: 10px;
+  }
+  .x-yr {
+    flex: 1; text-align: center; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; color: rgba(255,255,255,0.25);
+  }
+
+  .chart-instruction {
+    text-align: center; margin-top: 20px;
+    font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 0.05em;
+  }
+
+  /* Tooltip */
+  .tip {
+    position: fixed; background: var(--white); border-radius: 8px;
+    padding: 16px 20px; max-width: 260px; pointer-events: none;
+    opacity: 0; transition: opacity 0.15s; z-index: 200;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .tip.show { opacity: 1; }
+  .tip-date { font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .tip-label { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .tip-label.high { color: #059669; }
+  .tip-label.low  { color: var(--magenta); }
+  .tip-desc { font-size: 12px; line-height: 1.6; color: var(--body); }
+
+  /* ═══════════════════════════════
+     TAB 2 — KPI PROJECTIONS
+  ═══════════════════════════════ */
+  .mode-toggle {
+    display: flex; gap: 4px; margin-bottom: 36px;
+  }
+  .mode-btn {
+    padding: 10px 24px; font-family: 'Inter', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; border: 1px solid rgba(255,255,255,0.12);
+    background: transparent; color: var(--muted); cursor: pointer;
+    border-radius: 4px; transition: all 0.2s;
+  }
+  .mode-btn.active { background: var(--mint); color: var(--navy); border-color: var(--mint); }
+
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+  .kpi-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 24px; position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .kpi-card.c-blue::before   { background: var(--blue); }
+  .kpi-card.c-mint::before   { background: var(--mint); }
+  .kpi-card.c-magenta::before{ background: var(--magenta); }
+  .kpi-card.c-orange::before { background: var(--orange); }
+
+  .kpi-card .kpi-lbl {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .kpi-card .kpi-now {
+    font-size: 11px; color: rgba(255,255,255,0.25); margin-bottom: 20px;
+  }
+  .yr-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .yr-tag { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.3); width: 32px; flex-shrink: 0; }
+  .bar-bg { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width 0.7s cubic-bezier(.22,1,.36,1); }
+  .bar-fill.c-blue    { background: var(--blue); }
+  .bar-fill.c-mint    { background: var(--mint); }
+  .bar-fill.c-magenta { background: var(--magenta); }
+  .bar-fill.c-orange  { background: var(--orange); }
+  .yr-val { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); text-align: right; min-width: 72px; }
+  .kpi-note {
+    font-size: 10px; color: rgba(255,255,255,0.2); margin-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; line-height: 1.5;
+  }
+
+  /* Acquisition strip */
+  .acq-strip {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 24px; margin-bottom: 24px;
+  }
+  .acq-strip .strip-lbl {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 20px;
+  }
+  .acq-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .acq-item { text-align: center; }
+  .acq-yr { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.3); margin-bottom: 6px; letter-spacing: 0.08em; }
+  .acq-val { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .acq-val.realistic  { color: var(--orange); }
+  .acq-val.ambitious  { color: var(--mint); }
+  .acq-desc { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.5; }
+
+  /* Honest box */
+  .honest-box {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 24px;
+  }
+  .honest-box .box-lbl {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+  }
+  .honest-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+  .h-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue);
+    margin-top: 7px; flex-shrink: 0; }
+  .h-text { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+  .h-text strong { color: rgba(255,255,255,0.7); }
+
+  /* ═══════════════════════════════
+     TAB 3 — WHERE I'VE BEEN
+  ═══════════════════════════════ */
+  .journey-section { margin-bottom: 48px; }
+  .js-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+  }
+  .js-heading {
+    font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 16px; max-width: 560px;
+  }
+  .js-body {
+    font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.8; max-width: 680px;
+  }
+  .js-body + .js-body { margin-top: 12px; }
+
+  .quote-block {
+    background: rgba(255,255,255,0.04); border-left: 3px solid var(--blue);
+    padding: 20px 24px; margin: 24px 0; border-radius: 0 6px 6px 0;
+  }
+  .quote-block p {
+    font-size: 15px; font-style: italic; color: rgba(255,255,255,0.65);
+    line-height: 1.7; font-weight: 500;
+  }
+
+  .horizon-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 24px; }
+  .horizon-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px; padding: 20px;
+  }
+  .hc-num { font-size: 28px; font-weight: 700; color: var(--mint); margin-bottom: 6px; }
+  .hc-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+  .hc-desc { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+
+  .divider {
+    border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 40px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="label">David Hajdu</div>
+  <h1>The Next Ten Years</h1>
+  <p>Built from 5 years of daily journaling. Day 100.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('lifeline')">Lifeline</button>
+  <button class="tab" onclick="switchTab('kpi')">KPI Projections</button>
+  <button class="tab" onclick="switchTab('journey')">Where I've Been</button>
+</div>
+
+<!-- ═══ TAB 1: LIFELINE ═══ -->
+<div class="panel active" id="panel-lifeline">
+  <div class="lifeline-header">
+    <div class="legend">
+      <div class="legend-item"><div class="leg-dot high"></div><span style="color:rgba(255,255,255,0.4)">High</span></div>
+      <div class="legend-item"><div class="leg-dot low"></div><span style="color:rgba(255,255,255,0.4)">Low</span></div>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.2);">Hover any point</div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="y-labels">
+      <span class="y-lbl">High</span>
+      <span class="y-lbl"></span>
+      <span class="y-lbl">Low</span>
+    </div>
+    <div class="chart-inner" id="chartInner">
+      <div class="center-line"></div>
+      <svg class="chart-svg" id="chartSvg"></svg>
+    </div>
+    <div class="x-labels" id="xLabels"></div>
+  </div>
+  <p class="chart-instruction">Each point represents a significant High or Low</p>
+</div>
+
+<!-- ═══ TAB 2: KPI ═══ -->
+<div class="panel" id="panel-kpi">
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="setMode('realistic')">Realistic</button>
+    <button class="mode-btn" onclick="setMode('ambitious')">Ambitious</button>
+  </div>
+  <div class="kpi-grid" id="kpiGrid"></div>
+  <div class="acq-strip">
+    <div class="strip-lbl">Staffing Business Acquisition Scenario</div>
+    <div class="acq-grid" id="acqGrid"></div>
+  </div>
+  <div class="honest-box">
+    <div class="box-lbl">The honest assumptions</div>
+    <div id="honestList"></div>
+  </div>
+</div>
+
+<!-- ═══ TAB 3: JOURNEY ═══ -->
+<div class="panel" id="panel-journey">
+  <div class="journey-section">
+    <div class="js-label">The Last Five Years</div>
+    <div class="js-heading">A man who kept going when he had every reason not to.</div>
+    <p class="js-body">It started at a genuine low. A woman left and told you exactly why: you couldn't be trusted, you had a mean streak, you were selfish, and you were physically falling apart. You wrote it all down without flinching. That honesty is the thread that runs through everything that followed.</p>
+    <p class="js-body">For the next two years you cycled - moments of clarity, followed by nights that cost you money, health, and self-respect. You woke up stressed about checks. You missed forum retreats. You borrowed against contracts to make payroll. You started AIOfficer from scratch, alone, in the middle of all of it.</p>
+    <p class="js-body">The shame was real. The debt was real. And you kept going anyway - journaling every day, building curriculum, flying to Malaysia, Perth, Georgetown. You refused to stop even when you got sick.</p>
+  </div>
+
+  <div class="quote-block">
+    <p>"I always believed I could. I just had to get out of my own way long enough to show it."</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="journey-section">
+    <div class="js-label">The Next Ten Years</div>
+    <div class="js-heading">Three things this decade is answering.</div>
+
+    <div class="horizon-grid">
+      <div class="horizon-card">
+        <div class="hc-num">01</div>
+        <div class="hc-title">Taking care of people you love</div>
+        <div class="hc-desc">Starting with your dad. Then whoever comes next. The loneliness thread runs through five years of journals. It doesn't go away - it transforms into wanting to build something for others.</div>
+      </div>
+      <div class="horizon-card">
+        <div class="hc-num">02</div>
+        <div class="hc-title">Being recognized without having to ask</div>
+        <div class="hc-desc">Georgetown was the first real taste. The world-renowned thought leader in your vision isn't ego. It's the kid who grew up feeling like he had to prove himself, finally getting the proof.</div>
+      </div>
+      <div class="horizon-card">
+        <div class="hc-num">03</div>
+        <div class="hc-title">Becoming free</div>
+        <div class="hc-desc">Free of debt, free of the shame spiral, free of the pattern that shows up every time things get good. Day 100 is the furthest you've been from that version of yourself. You know it.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="journey-section">
+    <div class="js-label">The Question</div>
+    <div class="js-heading">Can you stay this alive without it costing you your health?</div>
+    <p class="js-body">The next ten years asks one thing of you more than anything else: can you build something that lasts without burning the builder? The business is working. The body is coming back. The pattern is known. What happens when all three stay in alignment for a decade is something you haven't seen yet.</p>
+  </div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="tip" id="tip">
+  <div class="tip-date" id="tipDate"></div>
+  <div class="tip-label" id="tipLabel"></div>
+  <div class="tip-desc" id="tipDesc"></div>
+</div>
+
+<script>
+// ─── TAB SWITCHING ───
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const names = ['lifeline','kpi','journey'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if (name === 'lifeline') renderLifeline();
+}
+
+// ─── LIFELINE DATA ───
+const points = [
+  { year:2026, q:1, type:'high', label:'Georgetown Goes Live', desc:'The curriculum officially adopted. You walk into rooms and let the credential speak before you do. Something unlocks in how you sell yourself.' },
+  { year:2026, q:2, type:'high', label:'$120k Month + 300 Students', desc:'Product market fit confirmed across three streams. The bet on yourself starts paying off in a way you can no longer ignore.' },
+  { year:2026, q:3, type:'low',  label:'The Pattern Negotiates', desc:'Success brings late nights and old habits. The gap between who you are at 6am and who you are at midnight gets tested.' },
+  { year:2026, q:4, type:'high', label:"Dad's First $10k Month", desc:'MahjongTarot hits its stride. You watch your father make real money doing what he loves. Means more than any deal you\'ve closed.' },
+  { year:2026, q:4, type:'high', label:'Debt Cleared', desc:'The shame that lived in your chest for years finally has a number on it — then it doesn\'t. You feel lighter in a way that surprises you.' },
+  { year:2027, q:1, type:'high', label:'Thought Leadership Peak', desc:'A book, a keynote, a moment — something cements you as the person who saw AI + business frameworks before the market caught up.' },
+  { year:2027, q:2, type:'high', label:'AIOfficer Breaks Through', desc:'ASB deal closes. Partner activates his network. 1,000 certified AI Officers. The credential becomes a real market standard.' },
+  { year:2027, q:3, type:'low',  label:'Big Deal Falls Through', desc:'A deal you built your Q3 around collapses. It hurts differently because this company is you. The test is whether you absorb it or spiral.' },
+  { year:2027, q:4, type:'high', label:'$1M Cash in the Bank', desc:'Not net worth — liquid. The number you carried in your head since the lowest point, sitting there. The kind of safety you didn\'t grow up with.' },
+  { year:2028, q:1, type:'high', label:'80kg Done', desc:'You hit the number. But more than the number, you\'re the person who did it. That identity shift matters more than the weight.' },
+  { year:2028, q:2, type:'low',  label:'Health Warning', desc:'Your body sends a signal you can\'t ignore. The 4-hour nights and 14-hour days have a bill. How you respond defines the next five years physically.' },
+  { year:2028, q:4, type:'high', label:'EO APAC Recognition', desc:'The leadership work inside EO reaches a new level. You\'re no longer just a member - you\'re someone they point to.' },
+  { year:2029, q:1, type:'low',  label:'Na Passes', desc:'Your dog. 14 years. She\'s been in every apartment, every low point, every early morning. This one hits harder than you expect.' },
+  { year:2029, q:2, type:'high', label:'The Relationship Question', desc:'Someone comes along who makes you want to answer it. For the first time you\'re not running.' },
+  { year:2029, q:3, type:'low',  label:'Company Crossroads', desc:'AIOfficer needs to evolve or plateau. A hard strategic decision - probably about team, probably about your own role.' },
+  { year:2029, q:4, type:'high', label:'Staffing Acquisition', desc:'First real liquidity event. Someone pays for what you\'ve built. The staffing business finds a buyer. You hold the check.' },
+  { year:2030, q:2, type:'high', label:'Father Turns 83', desc:'He\'s still here. Still sharp. MahjongTarot is part of his daily life. The guilt from 20 years ago has fully dissolved.' },
+  { year:2030, q:4, type:'low',  label:'Friends Drift', desc:'You look around and realize the circle has changed again. The EO friends you invested in are still there. The ones you didn\'t aren\'t.' },
+  { year:2031, q:1, type:'high', label:'$10M Revenue', desc:'The goal. Achieved through diversified streams, not one big bet. Licensing, retreats, community, staffing. All firing.' },
+  { year:2031, q:3, type:'low',  label:'Turning 59', desc:'Age stops being abstract. The window for some things feels real. You sit with it. The question isn\'t what you haven\'t done - it\'s what you still want.' },
+  { year:2032, q:2, type:'high', label:'Financial Freedom', desc:'The number you\'ve carried since the rock bottom - it\'s there. Not rich-famous. Free. No debt, no fear, options.' },
+  { year:2032, q:4, type:'low',  label:'A Loss', desc:'Someone from your world is gone. At this stage of life it starts happening. You learn again that time is the only thing that doesn\'t scale.' },
+  { year:2033, q:2, type:'high', label:'Legacy Becomes Clear', desc:'You look at what you\'ve built - the curriculum, the students, the businesses, your dad\'s life - and recognize it as enough.' },
+  { year:2033, q:4, type:'high', label:'Day 3000 of Routine', desc:'The streak continues. Not because of discipline alone - because this is who you are now. The man who shows up every day.' },
+  { year:2034, q:1, type:'low',  label:"Father's Health", desc:"He'll be 87. His side lives long but the body tells the truth. You'll be present in a way you might not have been ten years ago." },
+  { year:2034, q:3, type:'high', label:'What Comes Next', desc:'A new idea. A new chapter. At 62 you\'re not winding down - you\'re asking: what do I want to build that isn\'t about proving anything?' },
+  { year:2035, q:2, type:'high', label:'Free', desc:'The word you used in your 2027 vision. It arrived. Not how you pictured it - better. Because you earned every piece of it.' },
+];
+
+const years = [2026,2027,2028,2029,2030,2031,2032,2033,2034,2035];
+
+function renderLifeline() {
+  const inner = document.getElementById('chartInner');
+  const svg   = document.getElementById('chartSvg');
+  const xLbls = document.getElementById('xLabels');
+  svg.innerHTML = '';
+  xLbls.innerHTML = '';
+
+  years.forEach(y => {
+    const el = document.createElement('div');
+    el.className = 'x-yr'; el.textContent = y;
+    xLbls.appendChild(el);
+  });
+
+  const W = inner.offsetWidth || 780;
+  const H = 300;
+
+  function getX(year, q) {
+    const total = years.length * 4;
+    const idx = years.indexOf(year) * 4 + (q - 1);
+    return (idx + 0.5) / total * W;
+  }
+
+  // Stable Y with small per-point jitter baked in
+  const jitters = [8,-6,5,-9,7,-4,11,-8,6,-5,9,-7,4,-10,8,-5,7,-9,5,-8,6,-4,9,-6,7,-5];
+  points.forEach((p, i) => {
+    const base = p.type === 'high' ? 18 : 68;
+    p.x = getX(p.year, p.q);
+    p.y = (base + (jitters[i % jitters.length])) / 100 * H;
+  });
+
+  // Path
+  const sorted = [...points].sort((a,b) => a.x - b.x);
+  let d = '';
+  sorted.forEach((p, i) => {
+    if (i === 0) { d += `M ${p.x} ${p.y}`; return; }
+    const prev = sorted[i-1];
+    const cx = (prev.x + p.x) / 2;
+    d += ` C ${cx} ${prev.y}, ${cx} ${p.y}, ${p.x} ${p.y}`;
+  });
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d', d);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke','rgba(255,255,255,0.08)');
+  path.setAttribute('stroke-width','1.5');
+  svg.appendChild(path);
+
+  const tip = document.getElementById('tip');
+
+  points.forEach(p => {
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', p.x); c.setAttribute('cy', p.y); c.setAttribute('r', 5);
+    c.setAttribute('fill', p.type === 'high' ? '#6FF2C1' : '#D1458B');
+    c.setAttribute('stroke', '#04102D'); c.setAttribute('stroke-width','2');
+    c.style.cursor = 'pointer';
+
+    c.addEventListener('mouseenter', e => {
+      document.getElementById('tipDate').textContent  = `${p.year} · Q${p.q}`;
+      document.getElementById('tipLabel').textContent = p.label;
+      document.getElementById('tipLabel').className   = `tip-label ${p.type}`;
+      document.getElementById('tipDesc').textContent  = p.desc;
+      tip.classList.add('show');
+      c.setAttribute('r','8');
+    });
+    c.addEventListener('mousemove', e => {
+      tip.style.left = (e.clientX + 16) + 'px';
+      tip.style.top  = (e.clientY - 10) + 'px';
+    });
+    c.addEventListener('mouseleave', () => {
+      tip.classList.remove('show');
+      c.setAttribute('r','5');
+    });
+    svg.appendChild(c);
+  });
+}
+
+// ─── KPI DATA ───
+const kpiData = {
+  realistic: {
+    kpis: [
+      { label:'Revenue', color:'c-blue', now:'~$40k MRR',
+        rows:[
+          {year:2026,val:'$800k',pct:8,  note:'Partner converts 10% of 200 clients. IL retreats scale to 20 events.'},
+          {year:2027,val:'$1.8M',pct:18, note:'ASB + Australia license. Recurring model kicks in.'},
+          {year:2028,val:'$3.5M',pct:35, note:'4-5 country partners. Community passive revenue starts.'},
+          {year:2029,val:'$5.5M',pct:55, note:'Staffing arm scaling. Licensing fees compound.'},
+          {year:2030,val:'$10M', pct:100,note:'The goal. Diversified streams, not one big bet.'},
+        ], note:'10% partner conversion, 2 new country licenses/year, IL retreats at $15k avg.'
+      },
+      { label:'Certified AI Officers', color:'c-mint', now:'0 certified · 300 tasting',
+        rows:[
+          {year:2026,val:'180',   pct:18,  note:'60% of 300 tasting convert. Partner adds 100 from network.'},
+          {year:2027,val:'500',   pct:50,  note:'ASB cohort + Australia. Certification becomes a credential.'},
+          {year:2028,val:'1,000', pct:100, note:'The 2026 goal hit in 2028 - still ahead of most.'},
+          {year:2029,val:'2,200', pct:100, note:'Country partners each drive 200-400 certified per year.'},
+          {year:2030,val:'5,000', pct:100, note:'Network effects. Officers recruit their teams.'},
+        ], note:'1,000 by end 2026 is possible if partner + ASB close Q3. More likely mid-2027.'
+      },
+      { label:'Country License Partners', color:'c-magenta', now:'2 partners today',
+        rows:[
+          {year:2026,val:'4', pct:40, note:'Australia confirmed + 1 more (Singapore most likely).'},
+          {year:2027,val:'6', pct:60, note:'Middle East entry. EO network opens doors.'},
+          {year:2028,val:'8', pct:80, note:'Europe or US regional. Georgetown connection helps.'},
+          {year:2029,val:'10',pct:100,note:'Each partner self-sustaining. Model proven.'},
+          {year:2030,val:'12+',pct:100,note:'5 was the goal. 12 is what happens when it works.'},
+        ], note:'1-2 new partners per year. Each needs 6-9 months to close and onboard.'
+      },
+      { label:'Infinite Leverage Retreats', color:'c-orange', now:'$31k in May - proof of concept',
+        rows:[
+          {year:2026,val:'12',  pct:12, note:'1/month. Tracy + James independent. $180k revenue.'},
+          {year:2027,val:'30',  pct:30, note:'Multiple facilitators. EO as primary channel.'},
+          {year:2028,val:'60',  pct:60, note:'Licensed facilitator model. You step back from delivery.'},
+          {year:2029,val:'80',  pct:80, note:'Corporate retreats added to consumer.'},
+          {year:2030,val:'100', pct:100,note:'The goal. At $15k avg = $1.5M stream.'},
+        ], note:'Depends on Tracy + James execution and licensing the facilitator model in 2027.'
+      },
+    ],
+    acq:[
+      {year:'2027',     val:'$500k-$1M',  cls:'realistic', desc:'Early offer. Too soon. You\'re still building.'},
+      {year:'2028-29',  val:'$1.5M-$2M',  cls:'realistic', desc:'The real window. 600-1,200 engineers placed.'},
+      {year:'2030+',    val:'$3M-$5M',    cls:'realistic', desc:'If you hold and keep scaling with partner.'},
+    ],
+    honest:[
+      {text:'<strong>1,000 certified by 2026</strong> - possible if ASB + partner close before Q3. More likely Q1 2027. Still extraordinary.'},
+      {text:'<strong>$10M revenue</strong> - realistic by 2030. Path is clear: licensing + retreats + staffing + community.'},
+      {text:'<strong>The acquisition</strong> - your staffing business is worth real money if AI Engineer model scales. $1-2M is the window.'},
+      {text:'<strong>The constraint isn\'t demand</strong> - it\'s your ability to deliver quality at scale. The team you build in 2026 determines everything.'},
+      {text:'<strong>Australia is the unlock</strong> - one strong country partner who executes creates the template every market follows.'},
+    ]
+  },
+  ambitious: {
+    kpis: [
+      { label:'Revenue', color:'c-blue', now:'~$40k MRR',
+        rows:[
+          {year:2026,val:'$1.5M',pct:15, note:'ASB closes Q2. Partner converts 15%. IL hits 20 events.'},
+          {year:2027,val:'$3.5M',pct:35, note:'Australia + 2 more countries live. Staffing generating $500k.'},
+          {year:2028,val:'$6M',  pct:60, note:'Community passive revenue. 8 country partners.'},
+          {year:2029,val:'$8.5M',pct:85, note:'Acquisition adds lump sum. Licensing fees compound.'},
+          {year:2030,val:'$10M+',pct:100,note:'Crossed a year early. Now the question is what\'s next.'},
+        ], note:'ASB closes fast, partner executes, IL becomes a licensed product. All three fire simultaneously.'
+      },
+      { label:'Certified AI Officers', color:'c-mint', now:'0 certified · 300 tasting',
+        rows:[
+          {year:2026,val:'1,000', pct:100,note:'The goal. Requires ASB + partner + pipeline all converting by Q4.'},
+          {year:2027,val:'3,000', pct:100,note:'Country partners running cohorts. Certification a market standard.'},
+          {year:2028,val:'7,000', pct:100,note:'Network effect. Certified officers certify their teams.'},
+          {year:2029,val:'15,000',pct:100,note:'Southeast Asia dominant. Middle East opening.'},
+          {year:2030,val:'30,000',pct:100,note:'AIO certification is what PMP is to project management.'},
+        ], note:'1,000 by Dec 2026 requires everything to align. Miss it at 700 and you\'re still winning.'
+      },
+      { label:'Country License Partners', color:'c-magenta', now:'2 partners today',
+        rows:[
+          {year:2026,val:'5', pct:50, note:'Australia + Singapore + Philippines all close in 2026.'},
+          {year:2027,val:'8', pct:80, note:'UAE + India. EO APAC connection accelerates.'},
+          {year:2028,val:'12',pct:100,note:'Europe entry. US regional partner.'},
+          {year:2029,val:'16',pct:100,note:'Inbound interest from markets you haven\'t targeted.'},
+          {year:2030,val:'20+',pct:100,note:'Global. The original 5 goal looks modest from here.'},
+        ], note:'Requires dedicated biz dev - probably a hire in 2026 whose only job is partner pipeline.'
+      },
+      { label:'Infinite Leverage Retreats', color:'c-orange', now:'$31k in May - proof of concept',
+        rows:[
+          {year:2026,val:'20', pct:20, note:'2/month by Q4. Tracy + James fully operational.'},
+          {year:2027,val:'50', pct:50, note:'Licensed facilitator model. 5 certified facilitators.'},
+          {year:2028,val:'80', pct:80, note:'Corporate contracts. Retreats become enterprise product.'},
+          {year:2029,val:'100',pct:100,note:'Goal hit a year early. $1.5M stream running without you.'},
+          {year:2030,val:'150+',pct:100,note:'Franchise model. You show up for keynotes, not delivery.'},
+        ], note:'Hinges on Tracy + James running independently by Q3 2026 and licensing aggressively.'
+      },
+    ],
+    acq:[
+      {year:'2027',    val:'$1M-$1.5M', cls:'ambitious', desc:'First serious offer. Market is hot. You could take it.'},
+      {year:'2028',    val:'$2M-$3M',   cls:'ambitious', desc:'The sweet spot. Cash millionaire. First time.'},
+      {year:'2029+',   val:'$4M-$6M',   cls:'ambitious', desc:'If you hold and scale to 3,000 engineers.'},
+    ],
+    honest:[
+      {text:'<strong>1,000 certified by end 2026</strong> - genuinely possible if ASB signs by June and partner activates Q3. Worth betting on.'},
+      {text:'<strong>5 country partners by end 2026</strong> - hard. Australia is confirmed. Singapore and Philippines need active pursuit now.'},
+      {text:'<strong>The staffing acquisition</strong> - in the ambitious scenario this happens in 2028-29 at $2M+. First real liquidity event.'},
+      {text:'<strong>$10M by 2029</strong> - possible if all streams fire. The model is there. Execution and team are the variables.'},
+      {text:'<strong>The real risk</strong> - you try to do all of this solo. The ambitious scenario requires a COO or GM in 2026. That one hire is the difference.'},
+    ]
+  }
+};
+
+let kpiMode = 'realistic';
+
+function setMode(m) {
+  kpiMode = m;
+  document.querySelectorAll('.mode-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0&&m==='realistic')||(i===1&&m==='ambitious'));
+  });
+  renderKPI();
+}
+
+function renderKPI() {
+  const d = kpiData[kpiMode];
+  const grid = document.getElementById('kpiGrid');
+  grid.innerHTML = '';
+
+  d.kpis.forEach(k => {
+    const card = document.createElement('div');
+    card.className = `kpi-card ${k.color}`;
+    card.innerHTML = `
+      <div class="kpi-lbl">${k.label}</div>
+      <div class="kpi-now">Now: ${k.now}</div>
+      ${k.rows.map(r => `
+        <div class="yr-row" title="${r.note}">
+          <div class="yr-tag">${r.year}</div>
+          <div class="bar-bg"><div class="bar-fill ${k.color}" style="width:${r.pct}%"></div></div>
+          <div class="yr-val">${r.val}</div>
+        </div>
+      `).join('')}
+      <div class="kpi-note"><strong style="color:rgba(255,255,255,0.35)">Assumption:</strong> ${k.note}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  const acqGrid = document.getElementById('acqGrid');
+  acqGrid.innerHTML = d.acq.map(a => `
+    <div class="acq-item">
+      <div class="acq-yr">${a.year}</div>
+      <div class="acq-val ${a.cls}">${a.val}</div>
+      <div class="acq-desc">${a.desc}</div>
+    </div>
+  `).join('');
+
+  const honestList = document.getElementById('honestList');
+  honestList.innerHTML = d.honest.map(h => `
+    <div class="honest-row">
+      <div class="h-dot"></div>
+      <div class="h-text">${h.text}</div>
+    </div>
+  `).join('');
+}
+
+// ─── INIT ───
+window.addEventListener('load', () => {
+  renderLifeline();
+  renderKPI();
+});
+window.addEventListener('resize', () => {
+  if (document.getElementById('panel-lifeline').classList.contains('active')) renderLifeline();
+});
+</script>
+</body>
+</html>
