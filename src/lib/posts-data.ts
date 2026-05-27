@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'tore-up-my-website',
+    title: 'I Tore Up My Website in a Manila Hotel Room',
+    excerpt:
+      'Most founders track AI tools, not AI outcomes. One Verne Harnish talk in Manila ended a conference, rewrote my homepage, and gave me the four AI metrics I now rebuild engagements around.',
+    date: 'May 27, 2026',
+    readTime: '8 min',
+    category: 'AI In Business',
+    tags: ['ai-in-business', 'high-performance-culture'],
+    featured: true,
+    image: '/images/tore-up-website-hero.webp',
+  },
+  {
     slug: 'leverage-yourself-first',
     title: '"You look better." 90 days, 7 kilos, and the part that actually matters.',
     excerpt:
@@ -120,6 +132,145 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'tore-up-my-website': [
+    { tag: 'p', text: "It was almost midnight. I was sitting on a hotel bed with my laptop open, rewriting the homepage of my company. The conference wasn't even over yet." },
+    { tag: 'p', text: 'I was rebuilding it because of a story about a woman who sold balloon rides in Australia.' },
+
+    { tag: 'h2', text: 'The story that ended my conference' },
+    { tag: 'p', text: 'Verne Harnish, the author of <a href="https://scalingup.com/" target="_blank" rel="noopener noreferrer"><em>Scaling Up</em></a>, spent the morning in Manila talking to a room full of founders about brand promises. Most of what he said landed somewhere in the back of my notebook. The Naomi Simpson story landed in the front of my brain and stayed there.' },
+    { tag: 'gallery', images: ['/images/tore-up-website-verne-stage.webp'], caption: 'Verne Harnish in Manila. The morning that ended my conference.' },
+    { tag: 'p', text: 'Naomi ran an experience company. She was ex-Apple, ex-IBM, sharp on marketing. She had three brand promises, and she could recite them in her sleep. Red branding. On-site service. A great website. Everything you would expect from someone who had been in the chair at the best brand companies in the world.' },
+    { tag: 'p', text: "The phone wasn't ringing." },
+    { tag: 'p', text: 'She had a friend who loved her brand, talked about her brand, and still bought experiences from a competitor. So she asked the friend why. The friend said, "I assumed you would cost more, going through you."' },
+    { tag: 'p', text: 'That was the actual problem. Not the branding. Not the service. Not the website. The market was quietly assuming that buying through her was more expensive than buying direct, and her three perfectly polished brand promises were doing nothing about it.' },
+    { tag: 'p', text: 'She built a new promise: you pay no more buying through us than going direct. She branded it the <strong>Pleasure Guarantee</strong> and put it on everything. The Australian press picked it up for free. Over the next 36 months her company went from 7,500 experiences sold to almost 400,000.' },
+    { tag: 'p', text: "Verne's one line about all of this is the line I keep coming back to:" },
+    { tag: 'blockquote', text: "If the phone isn't ringing, you're not communicating the right promise." },
+
+    { tag: 'h2', text: 'The mirror' },
+    { tag: 'p', text: 'I started running my own business through that filter on the spot.' },
+    { tag: 'p', text: 'The phone is ringing. Founders are calling me. They are calling me because they have heard I work with companies on AI. They are not calling me for AI. They are calling me because they want a business they can be proud of running again, and somewhere in the conversation they have started to suspect that AI is the lever.' },
+    { tag: 'p', text: 'But that was not what my old homepage was promising. My old homepage was promising the category. AI capabilities, AI programs, AI leadership, AI agents. Everything about the technology. Almost nothing about the outcome.' },
+    { tag: 'p', text: 'Verne had another line that connected to this one, lifted from Clay Christensen and used by every founder who has ever tried to scale: only if I understand the job am I able to prove it, improve it, innovate it.' },
+    { tag: 'p', text: "I wasn't promising the job. I was promising the tool." },
+
+    { tag: 'h2', text: 'What I wrote that night' },
+    { tag: 'p', text: 'I closed every tab. I opened a new document. I wrote one sentence at the top.' },
+    { tag: 'p', text: '<strong>We Empower Founders to Lead AI.</strong>' },
+    { tag: 'p', text: 'Then I asked myself what would have to be true on a Friday afternoon for a founder to believe that we delivered on it. Not what the marketing team would say. What I could put in a spreadsheet and send to a CFO.' },
+    { tag: 'p', text: 'I came up with four numbers.' },
+
+    { tag: 'h2', text: 'The four metrics' },
+    { tag: 'gallery', images: ['/images/tore-up-website-four-metrics.webp'], caption: 'The four numbers every founder should track to prove they are leading AI.' },
+    { tag: 'p', text: 'Every Friday, every client, every engagement, I want to know we moved these four numbers.' },
+    { tag: 'p', text: "<strong>Revenue.</strong> The umbrella. If the program doesn't bend this curve, nothing else mattered. Founders don't hire us to install software. They hire us to grow a business. Pricing power, as Verne put it, is the number one driver of valuation, and innovation drives pricing power. That's the loop. Revenue is the final exam." },
+    { tag: 'gallery', images: ['/images/tore-up-website-verne-pricing.webp'], caption: "Verne's slide from Manila: pricing power is the number one driver of valuation." },
+    { tag: 'p', text: "<strong>Agents Deployed.</strong> Proof that AI is doing real work, not living inside slide decks. Verne's first commandment about technology is this: get rid of the dumb first. Then apply AI where you need speed. A client of his cut their proposal process from 200 hours to 20 minutes. That's an agent, doing the dumb part, on repeat, while the humans do the part only humans can do. As of today <a href=\"/ai-in-business\">my team has 182 of these running across our client base</a>. That's the proof." },
+    { tag: 'p', text: "<strong>Employees Certified.</strong> Proof that the founder is building a team that <em>leads</em> AI, not just one that uses it. This is the part most leadership teams underweight. Managing humans is one skill. Orchestrating humans and AI agents is a different one, and the gap between them is the most valuable real estate in your org chart right now. Verne has a line about this that should be tattooed on the wall of every executive team: sixteen-year-olds with AI will displace you the same way you displaced others. Twelve leadership teams are now certified through our <a href=\"https://www.ai-officer.com/leadership-training\" target=\"_blank\" rel=\"noopener noreferrer\">AI Officer Certification</a>. That's the proof." },
+    { tag: 'p', text: "<strong>Innovation Shipped.</strong> Proof that the business is becoming the kind of business that ships, not just one that talks. This is where most companies die a quiet death. They have the meetings. They have the strategy decks. They never get to the prototype. Verne pointed to John Deere sensors collecting farm data across thousands of farms for free, Netflix knowing exactly what women with golden retrievers want to watch, the smart data advantage that comes from a culture that ships instruments and learns from them. Twenty-nine new revenue streams have launched from seven of our clients in the last three months. That's the proof." },
+    { tag: 'p', text: 'Revenue is the umbrella. The other three are the leading indicators that bend it.' },
+
+    { tag: 'h2', text: 'What this looks like inside an engagement' },
+    { tag: 'p', text: 'The promise rewrote the operations, not just the homepage.' },
+    { tag: 'p', text: 'Every Friday a client sees three numbers. Pull requests shipped (every change we pushed to their codebase). Claude tokens used (the exact AI compute consumed on their work). Human tokens spent (the exact hours their team paid for).' },
+    { tag: 'p', text: 'No mystery invoices. No surprise bills. The same transparency we ask of our AI agents we hold ourselves to.' },
+    { tag: 'p', text: 'This was already how we were running engagements. What changed in Manila is that the homepage now reflects it, and we can defend it on a Friday afternoon without a slide deck. The metric showed up first inside the work. The hotel-room rewrite just made it visible to the world.' },
+
+    { tag: 'h2', text: "What I'd ask you to do" },
+    { tag: 'p', text: "I'm not writing this so you'll book a conversation with us, though if you want to run your own business through this same filter the link is at the bottom. I'm writing it because there is a single afternoon's worth of work that every founder reading this should consider doing." },
+    { tag: 'p', text: 'Three steps.' },
+    { tag: 'p', text: "<strong>Pick one promise.</strong> Not three. Not five. The reason most founders carry three or four promises is the same reason most founders carry three or four positioning statements: they couldn't commit. Commit." },
+    { tag: 'p', text: '<strong>Pick the smallest set of numbers that proves you kept it.</strong> Friday-defensible. Numbers a CFO would not laugh at. Numbers that move when the business gets better and don\'t move when it doesn\'t.' },
+    { tag: 'p', text: '<strong>Be willing to tear up the website tonight.</strong> Speed beats polish when the clarity is real. The reason my homepage was the wrong homepage for a year was that I was waiting for permission to change it. There is no permission. There is only the founder who has decided, and the founder who hasn\'t.' },
+    { tag: 'p', text: "The hardest part of this exercise is the question underneath it: if your phone is not ringing for the thing you most want to be hired for, you are not promising it yet. Some founders read that and immediately know what they're going to do tomorrow morning. Some founders read it and feel a knot in their stomach. Both reactions are useful." },
+    { tag: 'p', text: 'I had both, in a Manila hotel room, somewhere around 11pm. The website was live before I boarded my flight home.' },
+    { tag: 'p', text: 'If you want help running your own business through the same filter, <a href="/schedule-consultation">book a conversation with us</a>. We\'ll talk through your business and how AI will give you the leverage you need to 8x. Otherwise, take an afternoon, write your promise on one page, and ask what number proves you kept it.' },
+
+    { tag: 'h2', text: "Appendix: Verne Harnish's full session in Manila" },
+    { tag: 'p', text: 'For the reader who wants the source material. These are the working notes I came home with, grouped by theme. The Naomi Simpson story and the four-metric exercise in the post above came from this morning. So did everything below.' },
+    { tag: 'gallery', images: ['/images/tore-up-website-verne-books.webp'], caption: "The full reading list Verne handed the room. <a href=\"https://danheath.com/about-reset/\" target=\"_blank\" rel=\"noopener noreferrer\">Reset by Dan Heath</a> at the top." },
+
+    { tag: 'h3', text: 'On Brand and Promise' },
+    { tag: 'li', text: 'This is what we are promising: brand, brand, brand. Be precise.' },
+    { tag: 'li', text: "Put metrics around three things. Don't promise what's obvious." },
+    { tag: 'li', text: 'Broad market, small niche. The seven-seventy rule.' },
+    { tag: 'li', text: "If the phone isn't ringing, you're not communicating the right promise." },
+    { tag: 'li', text: 'The Naomi Simpson case: the real promise was the Pleasure Guarantee, not the branding she thought she was selling.' },
+    { tag: 'li', text: "If customers aren't calling, go sit with them. Don't guess." },
+
+    { tag: 'h3', text: 'On the Job to Be Done (Clay Christensen)' },
+    { tag: 'li', text: 'Only if you understand the job can you prove it, improve it, innovate it.' },
+    { tag: 'li', text: "Don't think you're in the business of making milkshakes. Understand what job your customer is hiring you to do." },
+    { tag: 'li', text: 'McDonald\'s milkshake story: half were sold before 8am, always alone, always drove off. The job was "keep me busy and not hungry on a long boring commute." Viscosity and straw size mattered more than flavor.' },
+    { tag: 'li', text: 'IKEA listened to customers who asked for easier, built small stores, and destroyed their own value proposition.' },
+    { tag: 'li', text: 'Whitefield MBA: "Our job is to help every graduate get the right first job that propels their career." Fastest-growing MBA program in India followed.' },
+    { tag: 'li', text: '3M: 65,000 products, one job. Science. Applied to Life.' },
+
+    { tag: 'h3', text: 'On Customers and Market Intel' },
+    { tag: "li", text: "Are customers calling you, or are you chasing customers? That's your strategy KPI." },
+    { tag: 'li', text: 'Your Moneyball stat as a founder: hours of face time with your best customers.' },
+    { tag: 'li', text: 'Most weekly and quarterly meetings are guessathons. Go see the work.' },
+    { tag: 'li', text: 'Intuit sends someone to a customer site 500 times a year, twice a day, just to watch.' },
+    { tag: 'li', text: 'Brian Chesky lived in Airbnbs post-pandemic to find the one core problem. Best year ever followed.' },
+    { tag: 'li', text: 'John Deere and Netflix: smart data advantage from instruments collecting data for free.' },
+
+    { tag: 'h3', text: 'On Strategy' },
+    { tag: 'li', text: 'CEO is strategist. COO is composer.' },
+    { tag: 'li', text: "Don't overcomplicate the business. Humans serving humans." },
+    { tag: 'li', text: 'Know the job before you innovate. Bigger straws can destroy your value proposition.' },
+    { tag: 'li', text: 'The riches are in the niches. Local first, then scale.' },
+    { tag: 'li', text: 'Run the company like a professional sports team. Know your Moneyball stat.' },
+
+    { tag: 'h3', text: 'On Execution and Daily Rhythm' },
+    { tag: 'li', text: 'Move faster, pulse faster.' },
+    { tag: 'li', text: 'The daily huddle is the single most important thing you can do. Steve Jobs, SpaceX, Tesla, Airbnb all run daily.' },
+    { tag: 'li', text: 'Six data points to see a trend. Daily means six days. Weekly means six weeks.' },
+    { tag: 'li', text: 'The weekly meeting fixes one thing this week. Not five. One.' },
+    { tag: 'li', text: 'Equal talk time is the top KPI of meeting effectiveness (Google Project Aristotle).' },
+    { tag: 'li', text: 'Two weekly meetings: one for execution, one for strategy.' },
+
+    { tag: 'h3', text: 'On People' },
+    { tag: 'li', text: 'Every employee should know they make daily progress toward something meaningful.' },
+    { tag: 'li', text: 'Middle managers are out. Replace with player-coaches.' },
+    { tag: 'li', text: "Deep bench matters. Don't overwork your stars." },
+    { tag: 'li', text: 'Words cast spells. Ritz-Carlton: "Ladies and gentlemen serving ladies and gentlemen."' },
+
+    { tag: 'h3', text: 'On AI and Technology' },
+    { tag: 'li', text: 'Get rid of the dumb first. Apply AI to dumb processes and all you get is speed to dumb.' },
+    { tag: 'li', text: 'Apply AI where you need speed: proposals, hiring (Chipotle\'s "Avocado" system), onboarding.' },
+    { tag: 'li', text: 'Sixteen-year-olds with AI will displace you the same way you displaced others.' },
+    { tag: 'li', text: "The work engine: SpaceX's Raptor went from $2M to $200K per engine, and 200% staff turnover dropped to 18%. Your internal 10x is in your business too. Find it." },
+    { tag: 'li', text: "Elon's method: every week at each company, identify the single biggest problem, fix it. Fifty-two problems solved per company per year." },
+
+    { tag: 'h3', text: 'On Heart and Soul' },
+    { tag: 'li', text: 'Heart is the joyful side. Soul is the painful side.' },
+    { tag: 'li', text: "The founder matters. Don't let anyone convince you to let go of the soul." },
+    { tag: 'li', text: 'When founders sell to PE, the soul usually dies because no one named it.' },
+    { tag: 'li', text: 'Starbucks lost its soul during COVID. Brian Niccol brought it back by naming it: community, connection, craft.' },
+    { tag: 'li', text: "Google's turnaround under Sundar Pichai followed the same playbook: name the soul, clean house, deliver." },
+
+    { tag: 'h3', text: 'On Growth and Cash' },
+    { tag: 'li', text: 'You can survive decent people, decent execution, decent strategy. You cannot survive a day without cash.' },
+    { tag: 'li', text: 'Return on payroll: one metric, want it higher every year.' },
+    { tag: 'li', text: 'Growing broke: revenue growing, margins shrinking. Watch for it.' },
+    { tag: 'li', text: 'Pricing power is the number one driver of valuation. Innovation drives pricing power.' },
+    { tag: 'li', text: 'Stop watching the news. World GDP was $33T in 2000 and is nearly $115T in 2025. The opportunity is there.' },
+
+    { tag: 'p', text: 'That\'s the morning that changed my homepage. The morning my homepage changed me is still in progress.' },
+
+    { tag: 'h2', text: 'Things people ask me about this' },
+    { tag: 'h3', text: 'What AI metrics should founders track?' },
+    { tag: 'p', text: 'Four metrics: Revenue (the umbrella outcome), Agents Deployed (proof AI is doing real work, not living in slide decks), Employees Certified (proof the team is leading AI rather than just using it), and Innovation Shipped (proof the company is shipping prototypes, not just discussing them). Revenue is the headline result; the other three are leading indicators that bend it.' },
+    { tag: 'h3', text: 'What is a brand promise framework for founders?' },
+    { tag: 'p', text: 'One clear promise to your market, plus the smallest set of measurable proofs that you delivered on it. Pick one promise (not three or five), pick the numbers a CFO would not laugh at, and be willing to rewrite your website tonight if the clarity is real.' },
+    { tag: 'h3', text: 'What did Verne Harnish teach about brand promises in Manila?' },
+    { tag: 'p', text: 'That if customers are not calling you, you are not communicating the right promise. Most founders carry three or four polished brand promises that fail to address what is actually keeping customers from buying. The fix is to find the real job customers are hiring you to do, name it as a single promise, and put metrics around it.' },
+    { tag: 'h3', text: 'What is the Naomi Simpson Pleasure Guarantee story?' },
+    { tag: 'p', text: 'Naomi Simpson ran an experience company in Australia with three polished brand promises (red branding, on-site service, great website) but the phone was not ringing. Customers assumed buying through her cost more than going direct. She rebranded around a price guarantee called the Pleasure Guarantee. Her company grew from 7,500 experiences sold to almost 400,000 in 36 months.' },
+    { tag: 'h3', text: 'How do you know if your brand promise is working?' },
+    { tag: 'p', text: 'The strategy KPI is whether customers are calling you, or whether you are chasing customers. If the phone is not ringing for the work you most want to be hired for, your brand promise is not yet doing its job. Go sit with your customers and ask why those who call do call, and what keeps the others away.' },
+  ],
+
   'leverage-yourself-first': [
     { tag: 'p', text: 'I went on a date last night with an old friend. Halfway through dinner she said, "You look better."' },
     { tag: 'p', text: "I do. Ninety days ago I weighed seven kilograms more. Today I don't. But this isn't a weight loss post. The seven kilos are evidence. The story is about leverage, and what I think most founders chasing AI right now are getting backwards." },
@@ -418,6 +569,28 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 // FAQ schema content keyed by slug. Used to render FAQPage JSON-LD on posts that have FAQ content.
 // Keep these aligned with the visible "Things people ask me about this" h3/p blocks above.
 export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
+  'tore-up-my-website': [
+    {
+      q: 'What AI metrics should founders track?',
+      a: 'Four metrics: Revenue (the umbrella outcome), Agents Deployed (proof AI is doing real work, not living in slide decks), Employees Certified (proof the team is leading AI rather than just using it), and Innovation Shipped (proof the company is shipping prototypes, not just discussing them). Revenue is the headline result; the other three are leading indicators that bend it.',
+    },
+    {
+      q: 'What is a brand promise framework for founders?',
+      a: 'One clear promise to your market, plus the smallest set of measurable proofs that you delivered on it. Pick one promise (not three or five), pick the numbers a CFO would not laugh at, and be willing to rewrite your website tonight if the clarity is real.',
+    },
+    {
+      q: 'What did Verne Harnish teach about brand promises in Manila?',
+      a: 'That if customers are not calling you, you are not communicating the right promise. Most founders carry three or four polished brand promises that fail to address what is actually keeping customers from buying. The fix is to find the real job customers are hiring you to do, name it as a single promise, and put metrics around it.',
+    },
+    {
+      q: 'What is the Naomi Simpson Pleasure Guarantee story?',
+      a: 'Naomi Simpson ran an experience company in Australia with three polished brand promises (red branding, on-site service, great website) but the phone was not ringing. Customers assumed buying through her cost more than going direct. She rebranded around a price guarantee called the Pleasure Guarantee. Her company grew from 7,500 experiences sold to almost 400,000 in 36 months.',
+    },
+    {
+      q: 'How do you know if your brand promise is working?',
+      a: 'The strategy KPI is whether customers are calling you, or whether you are chasing customers. If the phone is not ringing for the work you most want to be hired for, your brand promise is not yet doing its job. Go sit with your customers and ask why those who call do call, and what keeps the others away.',
+    },
+  ],
   'leverage-yourself-first': [
     {
       q: 'What is Infinite Leverage?',

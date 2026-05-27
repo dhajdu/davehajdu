@@ -16,12 +16,15 @@ const SEO_TITLE_OVERRIDES: Record<string, string> = {
   'fire-horse-2026': 'Year of the Fire Horse 2026: Week One Lessons',
   'supabase-for-non-technical-founders': 'Supabase for Non-Technical Founders',
   'leverage-yourself-first': 'How Founders Should Use AI: The Infinite Leverage Math',
+  'tore-up-my-website': "Four AI Metrics That Prove You're Leading AI, Not Just Using It",
 };
 
 // Per-post meta description overrides (when seo.md specifies a different one than the excerpt)
 const META_DESCRIPTION_OVERRIDES: Record<string, string> = {
   'leverage-yourself-first':
     "How founders should use AI: the math most people get wrong. AI multiplies the version of you running it. Here's the 90-day proof.",
+  'tore-up-my-website':
+    'Most founders track AI tools, not AI outcomes. Here are the four AI metrics I rebuilt my consulting business around after one Verne Harnish talk in Manila.',
 };
 
 export async function generateMetadata({ params }: Props) {
