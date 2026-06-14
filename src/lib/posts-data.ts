@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'leadership-now-means-leading-ai-and-people',
+    title: 'My Dad Got His PhD at Georgetown. This Week He Texted Me "I\'m Proud of You"',
+    excerpt:
+      'Leading AI and people is the new shape of leadership. A personal story about Georgetown, a father\'s pride, and why the rigor behind AI, not the prompts, is the work.',
+    date: 'Jun 14, 2026',
+    readTime: '6 min',
+    category: 'High Performance Culture',
+    tags: ['high-performance-culture', 'ai-in-business'],
+    featured: true,
+    image: '/images/dad-georgetown-proud.webp',
+  },
+  {
     slug: 'tore-up-my-website',
     title: 'I Tore Up My Website in a Manila Hotel Room',
     excerpt:
@@ -132,6 +144,40 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'leadership-now-means-leading-ai-and-people': [
+    { tag: 'p', text: 'My dad sent me a message this week. Three words, no preamble.' },
+    { tag: 'blockquote', text: "I'm proud of you." },
+    { tag: 'p', text: 'I have to give you the context for why those three words landed the way they did, because on their own they are the most ordinary thing a father says to a son.' },
+    { tag: 'p', text: 'My dad earned his PhD at <a href="https://www.georgetown.edu/" target="_blank" rel="noopener noreferrer">Georgetown University</a>, where he studied government. Georgetown is regularly ranked the number one government program in the world. Harvard likes to argue the point. Before Georgetown there was Cambridge. Before that, his undergrad at the University of Wisconsin. Cambridge, Georgetown, a life built on top of some of the best institutions on earth.' },
+    { tag: 'p', text: 'Here is the part I am a little ashamed of. Growing up, I did not understand any of that. To me he was just Dad. I did not know I was being raised by someone who had walked through a top-five school in the world and studied the thing it does better than anyone. You do not see your father that way as a kid. He is the man at the dinner table, not the résumé.' },
+    { tag: 'p', text: 'This week, <a href="/blog/the-long-way-to-georgetown">the leadership program we built</a> with a Georgetown professor was taught inside Georgetown\'s Executive MBA in Dubai. And my dad, the Georgetown man, texted me that he was proud.' },
+
+    { tag: 'h2', text: 'The moment the pride flipped' },
+    { tag: 'p', text: 'Here is what actually happened in my chest when I read it.' },
+    { tag: 'p', text: 'He said he was proud of me, and in the same instant I realized how proud of him I should have been all along. The institution that shaped him is now teaching something his son helped build. The lineage ran one direction my whole life, from him down to me. This week it ran both ways, and standing in the middle of it I finally saw the size of what he had done.' },
+    { tag: 'p', text: 'That is the strange gift of the message. He meant to tell me something about myself. What it actually did was let me see him clearly, maybe for the first time. Cambridge. Georgetown. The number one government program in the world. The quiet man at the dinner table did all of that, and I spent decades not knowing to be amazed.' },
+
+    { tag: 'h2', text: 'Why it is more than a nice moment' },
+    { tag: 'p', text: 'I could leave it there, a sweet family story, and move on. But that is not the real thing, and I am not in the habit of wasting your time with sentiment.' },
+    { tag: 'p', text: 'The reason this matters is that the program is not a vanity project. It earned its place in that room. Let me show you why, fast, because the why is the part you can actually use.' },
+    { tag: 'p', text: 'The premise is something Dr. Brooks Holtom, a Georgetown professor, opens with: a Formula One pit stop. An old clip, four people and old tools, fifty-seven seconds to change the tires. A modern clip, fifteen-plus people moving as one, about three seconds. Same job. The tools changed, the knowledge changed, the rules changed, and the crew re-organized around all of it.' },
+    { tag: 'p', text: 'That is the world right now. We are living through one of the biggest re-tools in history, and leadership is in the middle of it.' },
+    { tag: 'p', text: 'For a long time leadership meant one thing: leading people. The best programs, Georgetown among them, have taught that beautifully for decades. It is still half the job. But a second half has appeared, and it is leading AI. Not using a chatbot. <a href="/blog/tore-up-my-website">Leading AI, not just using it</a>. Leading the work that AI now does inside a business. The program teaches both halves, leading AI and people, as one job, which is the part that makes it new.' },
+
+    { tag: 'h2', text: 'The proof that it works' },
+    { tag: 'p', text: 'Here is what convinced me this was real and not another deck full of AI buzzwords.' },
+    { tag: 'p', text: 'The exercises each end in a dataset, something true about your leadership, your team, your operation. And the people in the room found the hard part fast. It was never the AI. It was the thinking. Six to twelve hours, sometimes, to build one dataset, because building it forces a clarity most of us avoid.' },
+    { tag: 'p', text: 'And the datasets are not freeform. This is where Dr. Holtom\'s academic rigor does the heavy lifting. Each one is built on a framework that has held up for decades. OCEAN for personality, ADKAR for change, GROW for coaching, <a href="https://hbr.org/2016/09/know-your-customers-jobs-to-be-done" target="_blank" rel="noopener noreferrer">Jobs to Be Done</a> for understanding what people actually want. That is the part everyone wants to skip and nobody can. Prompt frameworks are garbage. Prompt libraries are garbage. There is no magic phrase. You do the hard thinking inside frameworks that already worked, or AI just hands you confident nonsense faster.' },
+    { tag: 'p', text: 'Then the assembly. Four datasets and one set of instructions become a working communication coach. Four more and another set of instructions become an assistant that helps you coach your team. Hours to build. Minutes to assemble.' },
+    { tag: 'p', text: 'In the Lead the Organization session, one participant stopped in the middle of a workflow exercise and said his company had paid Deloitte for something close to what he had just built in an afternoon. He is not an engineer. He learned three skills: how to organize information, how to build a workflow, and how to write instructions a machine can follow. That is the whole game, and it has nothing to do with which app you open.' },
+
+    { tag: 'h2', text: 'What I am actually taking from this' },
+    { tag: 'p', text: 'I have built a lot of things in twenty years. Companies, products, a chapter, a career. Most of them I am quietly proud of and rarely mention.' },
+    { tag: 'p', text: 'This one is different, and it took my dad\'s three words to show me why. The rarest leverage in a life is not money or reach. It is making something the people who built you are proud of, and being awake enough to finally be proud of them back.' },
+    { tag: 'p', text: 'So if you take one thing from a personal story that has no business being a leadership lesson, take two. Build things worth being proud of, and let the people who shaped you see them. And look hard at the people who raised you, while you still can, because you were probably too close to see how remarkable they are.' },
+    { tag: 'p', text: 'If you want to talk through how AI changes what you can build in your own business, <a href="/#contact">book a conversation with us</a>. We will talk through your business and how AI will give you the leverage you need to 8x.' },
+    { tag: 'p', text: 'Thanks, Dad. I see it now.' },
+  ],
   'tore-up-my-website': [
     { tag: 'p', text: "It was almost midnight. I was sitting on a hotel bed with my laptop open, rewriting the homepage of my company. The conference wasn't even over yet." },
     { tag: 'p', text: 'I was rebuilding it because of a story about a woman who sold balloon rides in Australia.' },
@@ -569,6 +615,24 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 // FAQ schema content keyed by slug. Used to render FAQPage JSON-LD on posts that have FAQ content.
 // Keep these aligned with the visible "Things people ask me about this" h3/p blocks above.
 export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
+  'leadership-now-means-leading-ai-and-people': [
+    {
+      q: 'What does it mean to lead AI and people?',
+      a: 'Leadership used to mean leading people. It now also means leading the work AI does inside a business. Modern leadership is both halves taught as one job.',
+    },
+    {
+      q: "Why isn't prompting enough to get value from AI?",
+      a: 'Because the value is in the rigorous thinking you bring, not the prompt. Datasets built on proven frameworks (OCEAN, ADKAR, GROW, Jobs to Be Done) are what make AI perform. Prompt libraries skip the work.',
+    },
+    {
+      q: 'What are the three skills behind leading AI?',
+      a: 'Organizing information, building a workflow, and writing instructions a machine can follow. None of them depend on which app you open.',
+    },
+    {
+      q: 'Has leadership really changed because of AI?',
+      a: 'Yes. Leading people is still half the job, but a second half, leading AI, has appeared. Programs that teach only the first half now cover half the role.',
+    },
+  ],
   'tore-up-my-website': [
     {
       q: 'What AI metrics should founders track?',
