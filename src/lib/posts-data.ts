@@ -16,7 +16,7 @@ export type Post = {
 export const POSTS: Post[] = [
   {
     slug: 'leadership-now-means-leading-ai-and-people',
-    title: 'My Dad Got His PhD at Georgetown. This Week He Texted Me "I\'m Proud of You"',
+    title: 'My Dad Took His PhD Courses at Georgetown. This Week He Texted Me "I\'m Proud of You"',
     excerpt:
       'Leading AI and people is the new shape of leadership. A personal story about Georgetown, a father\'s pride, and why the rigor behind AI, not the prompts, is the work.',
     date: 'Jun 14, 2026',
@@ -148,7 +148,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'p', text: 'My dad sent me a message this week. Three words, no preamble.' },
     { tag: 'blockquote', text: "I'm proud of you." },
     { tag: 'p', text: 'I have to give you the context for why those three words landed the way they did, because on their own they are the most ordinary thing a father says to a son.' },
-    { tag: 'p', text: 'My dad earned his PhD at <a href="https://www.georgetown.edu/" target="_blank" rel="noopener noreferrer">Georgetown University</a>, where he studied government. Georgetown is regularly ranked the number one government program in the world. Harvard likes to argue the point. Before Georgetown there was Cambridge. Before that, his undergrad at the University of Wisconsin. Cambridge, Georgetown, a life built on top of some of the best institutions on earth.' },
+    { tag: 'p', text: 'My dad took his PhD courses at <a href="https://www.georgetown.edu/" target="_blank" rel="noopener noreferrer">Georgetown University</a>, where he studied government. Georgetown is regularly ranked the number one government program in the world. Harvard likes to argue the point. Before Georgetown there was Cambridge. Before that, his undergrad at the University of Wisconsin. Cambridge, Georgetown, a life built on top of some of the best institutions on earth.' },
     { tag: 'p', text: 'Here is the part I am a little ashamed of. Growing up, I did not understand any of that. To me he was just Dad. I did not know I was being raised by someone who had walked through a top-five school in the world and studied the thing it does better than anyone. You do not see your father that way as a kid. He is the man at the dinner table, not the résumé.' },
     { tag: 'p', text: 'This week, <a href="/blog/the-long-way-to-georgetown">the leadership program we built</a> with a Georgetown professor was taught inside Georgetown\'s Executive MBA in Dubai. And my dad, the Georgetown man, texted me that he was proud.' },
 
