@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Georgetown + AI in Action · Ground & Free Time</title>
+<title>Georgetown + AI in Action · Full Itinerary</title>
 <style>
   :root{
     --ink:#1a1d24; --muted:#6b7280; --line:#e5e7eb;
@@ -29,6 +29,10 @@
   .dot{width:10px;height:10px;border-radius:50%}
   .dot.f{background:var(--flight)} .dot.r{background:var(--rail)}
   .dot.e{background:var(--evt)} .dot.g{background:var(--ground)}
+  .dot.t{background:var(--tbd)}
+
+  .phase{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    font-weight:700;margin:26px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
 
   .seg{background:var(--card);border:1px solid var(--line);border-radius:12px;
     padding:14px 16px;margin:0 0 10px;display:flex;gap:14px;align-items:flex-start}
@@ -61,6 +65,12 @@
   .city.tbd{background:var(--tbd-bg);border-color:#fcd34d}
   .city.tbd .where,.city.tbd .window{color:var(--tbd)}
 
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:560px){.options{grid-template-columns:1fr}}
+  .opt{background:var(--tbd-bg);border:1px solid #fcd34d;border-radius:12px;padding:14px 16px}
+  .opt .tag{color:var(--tbd)}
+  .opt .route{font-size:15px;color:var(--ink);margin:2px 0 4px}
+
   footer{font-size:12px;color:var(--muted);margin-top:24px;line-height:1.6}
 </style>
 </head>
@@ -68,12 +78,12 @@
 <div class="wrap">
   <header>
     <h1>Georgetown + AI in Action</h1>
-    <p>Jul 8 to 27, 2026 · flights, the 9-to-5 tour days, and free time · Dave's routing (Indianapolis start, Saigon finish)</p>
+    <p>Jul 3 to 27, 2026 · door to door, Saigon round trip · flights, the 9-to-5 tour days, and free time</p>
   </header>
 
   <div class="summary">
     <h2>The quick read</h2>
-    <p class="big">Roughly <strong>120 hours of free time</strong> across the five mid-tour stops, plus a long <strong>~2 free days</strong> in the Bay Area before Saigon. <strong>Denver</strong> is your single biggest open block (~37 h). The tour event is the same in every city: <strong>AI in Action, 9 AM to 5 PM</strong>, one day per stop.</p>
+    <p class="big">Out from Saigon Jul 3, overnight at Seattle airport, into Indianapolis Jul 4 with a few days' buffer before the tour. Then the six-city tour (<strong>AI in Action, 9 to 5</strong>, one day per city) with roughly <strong>120 hours of free time</strong> across the stops, biggest blocks in <strong>Denver</strong> and the <strong>Bay Area</strong>. Home to Saigon from SF on Jul 27.</p>
   </div>
 
   <div class="legend">
@@ -81,19 +91,69 @@
     <span><i class="dot r"></i>Rail</span>
     <span><i class="dot e"></i>Event (9-5)</span>
     <span><i class="dot g"></i>Ground / free time</span>
+    <span><i class="dot t"></i>To book</span>
   </div>
 
-  <!-- LEG 1: personal -->
+  <!-- ============ GETTING THERE ============ -->
+  <div class="phase">Getting there</div>
+
+  <!-- SGN -> TPE -> SEA on EVA -->
   <div class="seg tbd-seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 8 · your flights</div>
+      <div class="tag">Jul 3 · EVA Air · to book</div>
+      <p class="route">Saigon to Seattle <span style="font-weight:400;color:var(--tbd)">via Taipei</span></p>
+      <p class="times">SGN &rarr; TPE&nbsp; EVA (evening connection, time to confirm)</p>
+      <p class="times">TPE 11:40 PM &rarr; SEA 7:40 PM&nbsp; (BR26, lands same day via date line)</p>
+    </div>
+  </div>
+
+  <!-- Overnight SEA airport -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Overnight · Seattle airport</span>
+      <span class="window">land Jul 3, 7:40 PM → AS500 Jul 4, 9:09 AM · 1 night</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Airport hotel · sleep + reset</span>
+    </div>
+  </div>
+
+  <!-- SEA -> IND on Alaska -->
+  <div class="seg tbd-seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 4 · Alaska 500 · to book</div>
+      <p class="route">Seattle to Indianapolis</p>
+      <p class="times">SEA 9:09 AM PDT &rarr; IND 4:16 PM EDT · nonstop, 4 h 10 m</p>
+    </div>
+  </div>
+
+  <!-- Indianapolis buffer -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Indianapolis</span>
+      <span class="window">Jul 4, 4:16 PM → tour start Jul 8 · pre-tour buffer</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">~3 days to settle before the tour</span>
+    </div>
+  </div>
+
+  <!-- ============ THE TOUR ============ -->
+  <div class="phase">The tour</div>
+
+  <!-- LEG: IND -> DC (tour start) -->
+  <div class="seg tbd-seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 8 · your flights · to book</div>
       <p class="route">Indianapolis (IND) to Washington, DC</p>
       <p class="note">Add your IND departure and DC arrival times.</p>
     </div>
   </div>
 
-  <!-- DC: Georgetown, no AI in Action event -->
+  <!-- DC: Georgetown -->
   <div class="city">
     <div class="top">
       <span class="where">Washington, DC</span>
@@ -235,10 +295,10 @@
   </div>
 
   <!-- Walnut Creek -->
-  <div class="city tbd">
+  <div class="city">
     <div class="top">
       <span class="where">Walnut Creek / SF</span>
-      <span class="window">Jul 23, 1:59 PM → your Saigon departure Jul 27</span>
+      <span class="window">Jul 23, 1:59 PM → SF departure Jul 27</span>
     </div>
     <div class="rows">
       <span class="pill ground">Ground ~3 d 22 h</span>
@@ -247,18 +307,26 @@
     </div>
   </div>
 
-  <!-- LEG: to Saigon -->
-  <div class="seg tbd-seg">
-    <div class="bar"></div>
-    <div class="body">
-      <div class="tag">Jul 27 · your flights</div>
-      <p class="route">Bay Area to Saigon (SGN)</p>
-      <p class="note">Add your departure time to firm up the Bay Area free figure.</p>
+  <!-- ============ GETTING HOME ============ -->
+  <div class="phase">Getting home · Jul 27 · pick one</div>
+
+  <div class="options">
+    <div class="opt">
+      <div class="tag">Option A · nonstop</div>
+      <p class="route">Vietnam Airlines · SFO to Saigon</p>
+      <p class="times">VN99 · 10:50 PM &rarr; 4:50 AM (+2 days) · ~16 h nonstop</p>
+      <p class="note">Easiest ride. Note: VN99 currently runs Wed / Thu / Sat / Sun, and Jul 27 is a Monday, so confirm the date or shift a day.</p>
+    </div>
+    <div class="opt">
+      <div class="tag">Option B · one stop</div>
+      <p class="route">EVA Air · SFO to Saigon</p>
+      <p class="times">SFO &rarr; TPE &rarr; SGN (via Taipei, times to confirm)</p>
+      <p class="note">Keeps you on EVA both directions. Longer with the Taipei connection, daily service.</p>
     </div>
   </div>
 
   <footer>
-    Free time = ground window minus the 8 h event (9-5) minus ~8 h sleep per night. Early-morning flights (Cincinnati 6:09 AM, Dallas 6:30 AM) shorten the last night, so those figures run slightly generous. DC is the Georgetown portion with no AI in Action day. First and last legs depend on your Indianapolis and Saigon flight times.
+    Free time = ground window minus the 8 h event (9-5) minus ~8 h sleep per night; early-morning flights run the figure slightly generous. The Saigon-Seattle journey lands the same calendar day (Jul 3) because it crosses the date line westbound to eastbound. DC is the Georgetown portion with no AI in Action day. Legs marked "to book" (Saigon out, Seattle to Indy, IND to DC, and the return) still need ticketing and exact times.
   </footer>
 
 </div>
