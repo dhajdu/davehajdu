@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Georgetown + AI in Action · Ground & Free Time</title>
+<style>
+  :root{
+    --ink:#1a1d24; --muted:#6b7280; --line:#e5e7eb;
+    --flight:#2563eb; --rail:#7c3aed; --ground:#0f766e; --ground-bg:#ecfdf5;
+    --evt:#b91c1c; --evt-bg:#fef2f2; --free:#0f766e;
+    --tbd:#b45309; --tbd-bg:#fffbeb; --card:#ffffff; --bg:#f7f8fa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:780px;margin:0 auto;padding:32px 20px 80px}
+  header h1{font-size:22px;margin:0 0 4px}
+  header p{margin:0;color:var(--muted);font-size:14px}
+
+  .summary{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;margin:20px 0 8px}
+  .summary h2{font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px}
+  .summary .big{font-size:15px}
+  .summary .big strong{color:var(--free)}
+
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0 26px;font-size:13px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .dot.f{background:var(--flight)} .dot.r{background:var(--rail)}
+  .dot.e{background:var(--evt)} .dot.g{background:var(--ground)}
+
+  .seg{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:0 0 10px;display:flex;gap:14px;align-items:flex-start}
+  .seg .bar{width:4px;align-self:stretch;border-radius:4px;background:var(--flight);flex:none}
+  .seg.rail .bar{background:var(--rail)}
+  .seg .body{flex:1;min-width:0}
+  .route{font-size:16px;font-weight:600;margin:0 0 2px}
+  .meta{font-size:13px;color:var(--muted)}
+  .times{font-size:14px;margin:4px 0 0}
+  .layover{font-size:12px;color:var(--muted);margin-top:6px}
+  .tag{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+  /* city / ground stay */
+  .city{background:var(--ground-bg);border:1px solid #99f6e4;border-radius:10px;
+    padding:12px 16px;margin:10px 0}
+  .city .top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .city .where{font-weight:700;color:var(--ground);font-size:16px}
+  .city .window{font-size:12px;color:#0f766e;opacity:.8}
+  .city .rows{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px}
+  .pill{padding:3px 9px;border-radius:999px;font-weight:600;white-space:nowrap}
+  .pill.ground{background:#d1fae5;color:#065f46}
+  .pill.evt{background:var(--evt-bg);color:var(--evt)}
+  .pill.free{background:#0f766e;color:#fff}
+  .pill.free.big{font-size:14px}
+
+  .tbd-seg .bar{background:var(--tbd)}
+  .tbd-seg{background:var(--tbd-bg);border-color:#fcd34d}
+  .tbd-seg .route{color:var(--tbd)}
+  .note{font-size:13px;color:var(--muted);margin-top:4px}
+  .city.tbd{background:var(--tbd-bg);border-color:#fcd34d}
+  .city.tbd .where,.city.tbd .window{color:var(--tbd)}
+
+  footer{font-size:12px;color:var(--muted);margin-top:24px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Georgetown + AI in Action</h1>
+    <p>Jul 8 to 27, 2026 · flights, the 9-to-5 tour days, and free time · Dave's routing (Indianapolis start, Saigon finish)</p>
+  </header>
+
+  <div class="summary">
+    <h2>The quick read</h2>
+    <p class="big">Roughly <strong>120 hours of free time</strong> across the five mid-tour stops, plus a long <strong>~2 free days</strong> in the Bay Area before Saigon. <strong>Denver</strong> is your single biggest open block (~37 h). The tour event is the same in every city: <strong>AI in Action, 9 AM to 5 PM</strong>, one day per stop.</p>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot f"></i>Flight</span>
+    <span><i class="dot r"></i>Rail</span>
+    <span><i class="dot e"></i>Event (9-5)</span>
+    <span><i class="dot g"></i>Ground / free time</span>
+  </div>
+
+  <!-- LEG 1: personal -->
+  <div class="seg tbd-seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 8 · your flights</div>
+      <p class="route">Indianapolis (IND) to Washington, DC</p>
+      <p class="note">Add your IND departure and DC arrival times.</p>
+    </div>
+  </div>
+
+  <!-- DC: Georgetown, no AI in Action event -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Washington, DC</span>
+      <span class="window">arrive Jul 8 → Amtrak Jul 12, 9:58 AM · Georgetown days</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~3 d 20 h</span>
+      <span class="pill evt">Georgetown program</span>
+    </div>
+  </div>
+
+  <!-- RAIL: DC to Philly -->
+  <div class="seg rail">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 12 · Amtrak</div>
+      <p class="route">DC Union Station to Philadelphia 30th St</p>
+      <p class="times">9:58 AM &rarr; 11:56 AM&nbsp; EDT · 1 h 58 m</p>
+    </div>
+  </div>
+
+  <!-- Philadelphia -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Philadelphia</span>
+      <span class="window">Jul 12, 11:56 AM → Jul 14, 9:46 AM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground 1 d 21 h</span>
+      <span class="pill evt">AI in Action · Jul 13, 9-5</span>
+      <span class="pill free big">~22 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: PHL-DTW-CVG -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 14 · Delta 2968 / 5257</div>
+      <p class="route">Philadelphia to Cincinnati <span style="font-weight:400;color:var(--muted)">via Detroit</span></p>
+      <p class="times">PHL 9:46 AM &rarr; DTW 11:31 AM&nbsp; EDT</p>
+      <p class="layover">Connection at Detroit: <strong>49 m</strong></p>
+      <p class="times">DTW 12:20 PM &rarr; CVG 1:35 PM&nbsp; EDT</p>
+    </div>
+  </div>
+
+  <!-- Cincinnati -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Cincinnati</span>
+      <span class="window">Jul 14, 1:35 PM → Jul 16, 6:09 AM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground 1 d 16 h</span>
+      <span class="pill evt">AI in Action · Jul 15, 9-5</span>
+      <span class="pill free big">~17 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: CVG-MSP-DEN -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 16 · Delta 2752 / 2849</div>
+      <p class="route">Cincinnati to Denver <span style="font-weight:400;color:var(--muted)">via Minneapolis</span></p>
+      <p class="times">CVG 6:09 AM EDT &rarr; MSP 7:05 AM CDT</p>
+      <p class="layover">Connection at Minneapolis: <strong>1 h 50 m</strong></p>
+      <p class="times">MSP 8:55 AM CDT &rarr; DEN 10:03 AM MDT</p>
+    </div>
+  </div>
+
+  <!-- Denver -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Denver</span>
+      <span class="window">Jul 16, 10:03 AM → Jul 19, 7:32 AM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground 2 d 21 h</span>
+      <span class="pill evt">AI in Action · Jul 17, 9-5</span>
+      <span class="pill free big">~37 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: DEN-DFW -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 19 · United 2160</div>
+      <p class="route">Denver to Dallas</p>
+      <p class="times">DEN 7:32 AM MDT &rarr; DFW 10:39 AM CDT · 2 h 7 m</p>
+    </div>
+  </div>
+
+  <!-- Frisco / Plano -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Frisco / Plano</span>
+      <span class="window">Jul 19, 10:39 AM → Jul 21, 6:30 AM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground 1 d 20 h</span>
+      <span class="pill evt">AI in Action · Jul 20, 9-5</span>
+      <span class="pill free big">~20 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: DFW-SEA -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 21 · Delta 804</div>
+      <p class="route">Dallas to Seattle</p>
+      <p class="times">DFW 6:30 AM CDT &rarr; SEA 8:46 AM PDT · 4 h 16 m</p>
+    </div>
+  </div>
+
+  <!-- Bellevue -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Bellevue</span>
+      <span class="window">Jul 21, 8:46 AM → Jul 23, 11:41 AM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground 2 d 3 h</span>
+      <span class="pill evt">AI in Action · Jul 22, 9-5</span>
+      <span class="pill free big">~27 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: SEA-OAK -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 23 · Alaska 1328</div>
+      <p class="route">Seattle to Oakland</p>
+      <p class="times">SEA 11:41 AM &rarr; OAK 1:59 PM&nbsp; PDT · 2 h 18 m · seat 17C</p>
+    </div>
+  </div>
+
+  <!-- Walnut Creek -->
+  <div class="city tbd">
+    <div class="top">
+      <span class="where">Walnut Creek / SF</span>
+      <span class="window">Jul 23, 1:59 PM → your Saigon departure Jul 27</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~3 d 22 h</span>
+      <span class="pill evt">AI in Action · Jul 24, 9-5</span>
+      <span class="pill free big">~54 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: to Saigon -->
+  <div class="seg tbd-seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 27 · your flights</div>
+      <p class="route">Bay Area to Saigon (SGN)</p>
+      <p class="note">Add your departure time to firm up the Bay Area free figure.</p>
+    </div>
+  </div>
+
+  <footer>
+    Free time = ground window minus the 8 h event (9-5) minus ~8 h sleep per night. Early-morning flights (Cincinnati 6:09 AM, Dallas 6:30 AM) shorten the last night, so those figures run slightly generous. DC is the Georgetown portion with no AI in Action day. First and last legs depend on your Indianapolis and Saigon flight times.
+  </footer>
+
+</div>
+</body>
+</html>
