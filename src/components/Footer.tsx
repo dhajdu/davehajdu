@@ -40,6 +40,12 @@ export default function Footer() {
           >
             LinkedIn
           </Link>
+          <a
+            href="/llms.txt"
+            className="text-white/25 text-[12px] hover:text-white/50 transition-colors"
+          >
+            llms.txt
+          </a>
           <span className="text-white/15 text-[12px]">© {currentYear} Dave Hajdu</span>
         </div>
 
