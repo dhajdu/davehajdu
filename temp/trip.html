@@ -44,6 +44,7 @@
   .times{font-size:14px;margin:4px 0 0}
   .layover{font-size:12px;color:var(--muted);margin-top:6px}
   .tag{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tag.ok{color:#065f46}
 
   /* city / ground stay */
   .city{background:var(--ground-bg);border:1px solid #99f6e4;border-radius:10px;
@@ -65,12 +66,6 @@
   .city.tbd{background:var(--tbd-bg);border-color:#fcd34d}
   .city.tbd .where,.city.tbd .window{color:var(--tbd)}
 
-  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  @media(max-width:560px){.options{grid-template-columns:1fr}}
-  .opt{background:var(--tbd-bg);border:1px solid #fcd34d;border-radius:12px;padding:14px 16px}
-  .opt .tag{color:var(--tbd)}
-  .opt .route{font-size:15px;color:var(--ink);margin:2px 0 4px}
-
   footer{font-size:12px;color:var(--muted);margin-top:24px;line-height:1.6}
 </style>
 </head>
@@ -78,12 +73,12 @@
 <div class="wrap">
   <header>
     <h1>Georgetown + AI in Action</h1>
-    <p>Jul 3 to 27, 2026 · door to door, Saigon round trip · flights, the 9-to-5 tour days, and free time</p>
+    <p>Jul 4 to 27, 2026 · door to door, Saigon round trip · flights, the 9-to-5 tour days, and free time</p>
   </header>
 
   <div class="summary">
     <h2>The quick read</h2>
-    <p class="big">Out from Saigon Jul 3, overnight at Seattle airport, into Indianapolis Jul 4 with a few days' buffer before the tour. Then the six-city tour (<strong>AI in Action, 9 to 5</strong>, one day per city) with roughly <strong>120 hours of free time</strong> across the stops, biggest blocks in <strong>Denver</strong> and the <strong>Bay Area</strong>. Home to Saigon from SF on Jul 27.</p>
+    <p class="big">Out from Saigon Jul 4 on Vietnam Airlines, an overnight near SFO, then into Indianapolis Jul 5 with a couple of days' buffer before the DC program. Then the five-city <strong>AI in Action</strong> tour (9 to 5, one day per city) &mdash; <strong>Cincinnati is off</strong>, so you stay in Philadelphia after the Jul 13 session right through to the Denver leg. Free time stacks up in <strong>Philadelphia</strong>, <strong>Denver</strong>, and the <strong>Bay Area</strong>. Home from SF on Vietnam Airlines Jul 25, into Saigon Jul 27.</p>
   </div>
 
   <div class="legend">
@@ -97,35 +92,36 @@
   <!-- ============ GETTING THERE ============ -->
   <div class="phase">Getting there</div>
 
-  <!-- SGN -> TPE -> SEA on EVA -->
-  <div class="seg tbd-seg">
+  <!-- SGN -> SFO on Vietnam Airlines -->
+  <div class="seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 3 · EVA Air · to book</div>
-      <p class="route">Saigon to Seattle <span style="font-weight:400;color:var(--tbd)">via Taipei</span></p>
-      <p class="times">SGN &rarr; TPE&nbsp; EVA (evening connection, time to confirm)</p>
-      <p class="times">TPE 11:40 PM &rarr; SEA 7:40 PM&nbsp; (BR26, lands same day via date line)</p>
+      <div class="tag ok">Jul 4 · Vietnam Airlines 98 · booked</div>
+      <p class="route">Saigon to San Francisco</p>
+      <p class="times">SGN 5:40 PM ICT &rarr; SFO 5:55 PM PDT · ~14 h 15 m nonstop (lands same day via date line)</p>
+      <p class="meta">Conf D83RGH · Terminal 2 · round trip $2,442</p>
     </div>
   </div>
 
-  <!-- Overnight SEA airport -->
+  <!-- Overnight SFO -->
   <div class="city">
     <div class="top">
-      <span class="where">Overnight · Seattle airport</span>
-      <span class="window">land Jul 3, 7:40 PM → AS500 Jul 4, 9:09 AM · 1 night</span>
+      <span class="where">Overnight · San Francisco</span>
+      <span class="window">land Jul 4, 5:55 PM → UA1902 Jul 5, 11:29 AM · 1 night</span>
     </div>
     <div class="rows">
-      <span class="pill ground">Airport hotel · sleep + reset</span>
+      <span class="pill ground">SFO hotel · $170 · sleep + reset</span>
     </div>
   </div>
 
-  <!-- SEA -> IND on Alaska -->
-  <div class="seg tbd-seg">
+  <!-- SFO -> IND on United -->
+  <div class="seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 4 · Alaska 500 · to book</div>
-      <p class="route">Seattle to Indianapolis</p>
-      <p class="times">SEA 9:09 AM PDT &rarr; IND 4:16 PM EDT · nonstop, 4 h 10 m</p>
+      <div class="tag ok">Jul 5 · United 1902 · booked</div>
+      <p class="route">San Francisco to Indianapolis</p>
+      <p class="times">SFO 11:29 AM PDT &rarr; IND 6:57 PM EDT · 4 h 28 m</p>
+      <p class="meta">Conf GDQWBB · $558</p>
     </div>
   </div>
 
@@ -133,35 +129,38 @@
   <div class="city">
     <div class="top">
       <span class="where">Indianapolis</span>
-      <span class="window">Jul 4, 4:16 PM → tour start Jul 8 · pre-tour buffer</span>
+      <span class="window">Jul 5, 6:57 PM → DC flight Jul 8, 4:33 PM · pre-tour buffer</span>
     </div>
     <div class="rows">
-      <span class="pill ground">~3 days to settle before the tour</span>
+      <span class="pill ground">Ground ~2 d 22 h · settle before DC</span>
     </div>
   </div>
 
   <!-- ============ THE TOUR ============ -->
   <div class="phase">The tour</div>
 
-  <!-- LEG: IND -> DC (tour start) -->
-  <div class="seg tbd-seg">
+  <!-- LEG: IND -> DCA via Atlanta on Delta -->
+  <div class="seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 8 · your flights · to book</div>
-      <p class="route">Indianapolis (IND) to Washington, DC</p>
-      <p class="note">Add your IND departure and DC arrival times.</p>
+      <div class="tag ok">Jul 8 · Delta 3138 / 325 · booked</div>
+      <p class="route">Indianapolis to Washington, DC (DCA) <span style="font-weight:400;color:var(--muted)">via Atlanta</span></p>
+      <p class="times">IND 4:33 PM &rarr; ATL 6:15 PM&nbsp; EDT</p>
+      <p class="layover">Connection at Atlanta: <strong>40 m</strong></p>
+      <p class="times">ATL 6:55 PM &rarr; DCA 8:47 PM&nbsp; EDT</p>
+      <p class="meta">Conf HSMO9Y · $388.20</p>
     </div>
   </div>
 
-  <!-- DC: Georgetown -->
+  <!-- DC: Georgetown + DOXA -->
   <div class="city">
     <div class="top">
       <span class="where">Washington, DC</span>
-      <span class="window">arrive Jul 8 → Amtrak Jul 12, 9:58 AM · Georgetown days</span>
+      <span class="window">arrive Jul 8, 8:47 PM → Amtrak Jul 12, 9:58 AM · Georgetown + DOXA</span>
     </div>
     <div class="rows">
-      <span class="pill ground">Ground ~3 d 20 h</span>
-      <span class="pill evt">Georgetown program</span>
+      <span class="pill ground">Ground ~3 d 13 h</span>
+      <span class="pill evt">Georgetown + DOXA</span>
     </div>
   </div>
 
@@ -169,59 +168,33 @@
   <div class="seg rail">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 12 · Amtrak</div>
+      <div class="tag ok">Jul 12 · Amtrak 118 · booked</div>
       <p class="route">DC Union Station to Philadelphia 30th St</p>
       <p class="times">9:58 AM &rarr; 11:56 AM&nbsp; EDT · 1 h 58 m</p>
+      <p class="meta">Conf 42A680 · $75</p>
     </div>
   </div>
 
-  <!-- Philadelphia -->
+  <!-- Philadelphia (extended — Cincinnati dropped) -->
   <div class="city">
     <div class="top">
       <span class="where">Philadelphia</span>
-      <span class="window">Jul 12, 11:56 AM → Jul 14, 9:46 AM</span>
+      <span class="window">Jul 12, 11:56 AM → Denver departure Jul 16</span>
     </div>
     <div class="rows">
-      <span class="pill ground">Ground 1 d 21 h</span>
+      <span class="pill ground">Ground ~3 d 20 h</span>
       <span class="pill evt">AI in Action · Jul 13, 9-5</span>
-      <span class="pill free big">~22 h free</span>
+      <span class="pill free big">~52 h free</span>
     </div>
   </div>
 
-  <!-- LEG: PHL-DTW-CVG -->
-  <div class="seg">
+  <!-- LEG: PHL -> Denver (to book) -->
+  <div class="seg tbd-seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 14 · Delta 2968 / 5257</div>
-      <p class="route">Philadelphia to Cincinnati <span style="font-weight:400;color:var(--muted)">via Detroit</span></p>
-      <p class="times">PHL 9:46 AM &rarr; DTW 11:31 AM&nbsp; EDT</p>
-      <p class="layover">Connection at Detroit: <strong>49 m</strong></p>
-      <p class="times">DTW 12:20 PM &rarr; CVG 1:35 PM&nbsp; EDT</p>
-    </div>
-  </div>
-
-  <!-- Cincinnati -->
-  <div class="city">
-    <div class="top">
-      <span class="where">Cincinnati</span>
-      <span class="window">Jul 14, 1:35 PM → Jul 16, 6:09 AM</span>
-    </div>
-    <div class="rows">
-      <span class="pill ground">Ground 1 d 16 h</span>
-      <span class="pill evt">AI in Action · Jul 15, 9-5</span>
-      <span class="pill free big">~17 h free</span>
-    </div>
-  </div>
-
-  <!-- LEG: CVG-MSP-DEN -->
-  <div class="seg">
-    <div class="bar"></div>
-    <div class="body">
-      <div class="tag">Jul 16 · Delta 2752 / 2849</div>
-      <p class="route">Cincinnati to Denver <span style="font-weight:400;color:var(--muted)">via Minneapolis</span></p>
-      <p class="times">CVG 6:09 AM EDT &rarr; MSP 7:05 AM CDT</p>
-      <p class="layover">Connection at Minneapolis: <strong>1 h 50 m</strong></p>
-      <p class="times">MSP 8:55 AM CDT &rarr; DEN 10:03 AM MDT</p>
+      <div class="tag">Jul 16 · to book</div>
+      <p class="route">Philadelphia to Denver</p>
+      <p class="note">Cincinnati canceled &mdash; book a PHL &rarr; DEN flight (~Jul 16) so you land before the Jul 17 session. No fare yet.</p>
     </div>
   </div>
 
@@ -229,22 +202,23 @@
   <div class="city">
     <div class="top">
       <span class="where">Denver</span>
-      <span class="window">Jul 16, 10:03 AM → Jul 19, 7:32 AM</span>
+      <span class="window">Jul 16 (arrival to book) → Jul 19, 7:32 AM</span>
     </div>
     <div class="rows">
-      <span class="pill ground">Ground 2 d 21 h</span>
+      <span class="pill ground">Ground ~2 d 21 h</span>
       <span class="pill evt">AI in Action · Jul 17, 9-5</span>
       <span class="pill free big">~37 h free</span>
     </div>
   </div>
 
-  <!-- LEG: DEN-DFW -->
+  <!-- LEG: DEN-DFW on United -->
   <div class="seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 19 · United 2160</div>
+      <div class="tag ok">Jul 19 · United 2160 · booked</div>
       <p class="route">Denver to Dallas</p>
       <p class="times">DEN 7:32 AM MDT &rarr; DFW 10:39 AM CDT · 2 h 7 m</p>
+      <p class="meta">Conf HSN29E · $223</p>
     </div>
   </div>
 
@@ -252,22 +226,22 @@
   <div class="city">
     <div class="top">
       <span class="where">Frisco / Plano</span>
-      <span class="window">Jul 19, 10:39 AM → Jul 21, 6:30 AM</span>
+      <span class="window">Jul 19, 10:39 AM → Seattle departure Jul 21</span>
     </div>
     <div class="rows">
-      <span class="pill ground">Ground 1 d 20 h</span>
+      <span class="pill ground">Ground ~1 d 20 h</span>
       <span class="pill evt">AI in Action · Jul 20, 9-5</span>
       <span class="pill free big">~20 h free</span>
     </div>
   </div>
 
-  <!-- LEG: DFW-SEA -->
-  <div class="seg">
+  <!-- LEG: DFW-SEA on United (to book) -->
+  <div class="seg tbd-seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 21 · Delta 804</div>
+      <div class="tag">Jul 21 · United · to book</div>
       <p class="route">Dallas to Seattle</p>
-      <p class="times">DFW 6:30 AM CDT &rarr; SEA 8:46 AM PDT · 4 h 16 m</p>
+      <p class="note">United fare found at <strong>$221.53</strong> &mdash; not booked yet. Book it for ~Jul 21 (between the Jul 20 and Jul 22 sessions).</p>
     </div>
   </div>
 
@@ -275,58 +249,53 @@
   <div class="city">
     <div class="top">
       <span class="where">Bellevue</span>
-      <span class="window">Jul 21, 8:46 AM → Jul 23, 11:41 AM</span>
+      <span class="window">Jul 21 (arrival to book) → Bay Area departure Jul 23</span>
     </div>
     <div class="rows">
-      <span class="pill ground">Ground 2 d 3 h</span>
+      <span class="pill ground">Ground ~2 d</span>
       <span class="pill evt">AI in Action · Jul 22, 9-5</span>
       <span class="pill free big">~27 h free</span>
     </div>
   </div>
 
-  <!-- LEG: SEA-OAK -->
-  <div class="seg">
+  <!-- LEG: SEA -> SFO/OAK (to book) -->
+  <div class="seg tbd-seg">
     <div class="bar"></div>
     <div class="body">
-      <div class="tag">Jul 23 · Alaska 1328</div>
-      <p class="route">Seattle to Oakland</p>
-      <p class="times">SEA 11:41 AM &rarr; OAK 1:59 PM&nbsp; PDT · 2 h 18 m · seat 17C</p>
+      <div class="tag">Jul 23 · to book</div>
+      <p class="route">Seattle to San Francisco / Oakland</p>
+      <p class="note">Book a SEA &rarr; SFO/OAK flight (~Jul 23) so you land before the Jul 24 session. No fare yet.</p>
     </div>
   </div>
 
-  <!-- Walnut Creek -->
+  <!-- Walnut Creek / SF -->
   <div class="city">
     <div class="top">
       <span class="where">Walnut Creek / SF</span>
-      <span class="window">Jul 23, 1:59 PM → SF departure Jul 27</span>
+      <span class="window">Jul 23 (arrival to book) → SFO departure Jul 25, 10:50 PM</span>
     </div>
     <div class="rows">
-      <span class="pill ground">Ground ~3 d 22 h</span>
+      <span class="pill ground">Ground ~2 d 9 h</span>
       <span class="pill evt">AI in Action · Jul 24, 9-5</span>
-      <span class="pill free big">~54 h free</span>
+      <span class="pill free big">~33 h free</span>
     </div>
   </div>
 
   <!-- ============ GETTING HOME ============ -->
-  <div class="phase">Getting home · Jul 27 · pick one</div>
+  <div class="phase">Getting home · Jul 25</div>
 
-  <div class="options">
-    <div class="opt">
-      <div class="tag">Option A · nonstop</div>
-      <p class="route">Vietnam Airlines · SFO to Saigon</p>
-      <p class="times">VN99 · 10:50 PM &rarr; 4:50 AM (+2 days) · ~16 h nonstop</p>
-      <p class="note">Easiest ride. Note: VN99 currently runs Wed / Thu / Sat / Sun, and Jul 27 is a Monday, so confirm the date or shift a day.</p>
-    </div>
-    <div class="opt">
-      <div class="tag">Option B · one stop</div>
-      <p class="route">EVA Air · SFO to Saigon</p>
-      <p class="times">SFO &rarr; TPE &rarr; SGN (via Taipei, times to confirm)</p>
-      <p class="note">Keeps you on EVA both directions. Longer with the Taipei connection, daily service.</p>
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 25 · Vietnam Airlines 99 · booked</div>
+      <p class="route">San Francisco to Saigon</p>
+      <p class="times">SFO 10:50 PM PDT (Jul 25) &rarr; SGN 4:30 AM ICT (Jul 27) · ~15 h 40 m nonstop</p>
+      <p class="meta">Conf D83RGH · Terminal I · return leg of round trip</p>
     </div>
   </div>
 
   <footer>
-    Free time = ground window minus the 8 h event (9-5) minus ~8 h sleep per night; early-morning flights run the figure slightly generous. The Saigon-Seattle journey lands the same calendar day (Jul 3) because it crosses the date line westbound to eastbound. DC is the Georgetown portion with no AI in Action day. Legs marked "to book" (Saigon out, Seattle to Indy, IND to DC, and the return) still need ticketing and exact times.
+    Free time = ground window minus the 8 h event (9-5) minus ~8 h sleep per night; early-morning flights run the figure slightly generous. The Saigon–San Francisco flight (VN98) lands the same calendar day (Jul 4) because it crosses the date line. DC is the Georgetown + DOXA portion with no AI in Action day. Cincinnati (Jul 15) is canceled — you stay in Philadelphia until the Denver leg. Three legs are still to book: <strong>Philadelphia → Denver</strong>, <strong>Dallas → Seattle</strong> (United fare found at $221.53), and <strong>Seattle → SFO/Oakland</strong>. The city windows around those legs will firm up once the times are set.
   </footer>
 
 </div>
