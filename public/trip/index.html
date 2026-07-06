@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Georgetown + AI in Action · Full Itinerary</title>
+<style>
+  :root{
+    --ink:#1a1d24; --muted:#6b7280; --line:#e5e7eb;
+    --flight:#2563eb; --rail:#7c3aed; --ground:#0f766e; --ground-bg:#ecfdf5;
+    --evt:#b91c1c; --evt-bg:#fef2f2; --free:#0f766e;
+    --tbd:#b45309; --tbd-bg:#fffbeb; --card:#ffffff; --bg:#f7f8fa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:780px;margin:0 auto;padding:32px 20px 80px}
+  header h1{font-size:22px;margin:0 0 4px}
+  header p{margin:0;color:var(--muted);font-size:14px}
+
+  .summary{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;margin:20px 0 8px}
+  .summary h2{font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px}
+  .summary .big{font-size:15px}
+  .summary .big strong{color:var(--free)}
+
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0 26px;font-size:13px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .dot.f{background:var(--flight)} .dot.r{background:var(--rail)}
+  .dot.e{background:var(--evt)} .dot.g{background:var(--ground)}
+  .dot.t{background:var(--tbd)}
+
+  .phase{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    font-weight:700;margin:26px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+
+  .seg{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:0 0 10px;display:flex;gap:14px;align-items:flex-start}
+  .seg .bar{width:4px;align-self:stretch;border-radius:4px;background:var(--flight);flex:none}
+  .seg.rail .bar{background:var(--rail)}
+  .seg .body{flex:1;min-width:0}
+  .route{font-size:16px;font-weight:600;margin:0 0 2px}
+  .meta{font-size:13px;color:var(--muted)}
+  .times{font-size:14px;margin:4px 0 0}
+  .layover{font-size:12px;color:var(--muted);margin-top:6px}
+  .tag{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tag.ok{color:#065f46}
+
+  /* city / ground stay */
+  .city{background:var(--ground-bg);border:1px solid #99f6e4;border-radius:10px;
+    padding:12px 16px;margin:10px 0}
+  .city .top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .city .where{font-weight:700;color:var(--ground);font-size:16px}
+  .city .window{font-size:12px;color:#0f766e;opacity:.8}
+  .city .rows{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px}
+  .pill{padding:3px 9px;border-radius:999px;font-weight:600;white-space:nowrap}
+  .pill.ground{background:#d1fae5;color:#065f46}
+  .pill.evt{background:var(--evt-bg);color:var(--evt)}
+  .pill.free{background:#0f766e;color:#fff}
+  .pill.free.big{font-size:14px}
+
+  .tbd-seg .bar{background:var(--tbd)}
+  .tbd-seg{background:var(--tbd-bg);border-color:#fcd34d}
+  .tbd-seg .route{color:var(--tbd)}
+  .note{font-size:13px;color:var(--muted);margin-top:4px}
+  .city.tbd{background:var(--tbd-bg);border-color:#fcd34d}
+  .city.tbd .where,.city.tbd .window{color:var(--tbd)}
+
+  footer{font-size:12px;color:var(--muted);margin-top:24px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Georgetown + AI in Action</h1>
+    <p>Jul 4 to 27, 2026 · door to door, Saigon round trip · flights, the 9-to-5 tour days, and free time</p>
+  </header>
+
+  <div class="summary">
+    <h2>The quick read</h2>
+    <p class="big">Out from Saigon Jul 4 on Vietnam Airlines, an overnight near SFO, then into Indianapolis Jul 5 with a couple of days' buffer before the DC program. Then the five-city <strong>AI in Action</strong> tour (9 to 5, one day per city) &mdash; <strong>Cincinnati is off</strong>, so you stay in Philadelphia after the Jul 13 session right through to the Denver leg. Free time stacks up in <strong>Philadelphia</strong>, <strong>Denver</strong>, and the <strong>Bay Area</strong>. Home from SF on Vietnam Airlines Jul 25, into Saigon Jul 27.</p>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot f"></i>Flight</span>
+    <span><i class="dot r"></i>Rail</span>
+    <span><i class="dot e"></i>Event (9-5)</span>
+    <span><i class="dot g"></i>Ground / free time</span>
+    <span><i class="dot t"></i>To book</span>
+  </div>
+
+  <!-- ============ GETTING THERE ============ -->
+  <div class="phase">Getting there</div>
+
+  <!-- SGN -> SFO on Vietnam Airlines -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 4 · Vietnam Airlines 98 · booked</div>
+      <p class="route">Saigon to San Francisco</p>
+      <p class="times">SGN 5:40 PM ICT &rarr; SFO 5:55 PM PDT · ~14 h 15 m nonstop (lands same day via date line)</p>
+      <p class="meta">Conf D83RGH · Terminal 2 · round trip $2,442</p>
+    </div>
+  </div>
+
+  <!-- Overnight SFO -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Overnight · San Francisco</span>
+      <span class="window">land Jul 4, 5:55 PM → UA1902 Jul 5, 11:29 AM · 1 night</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">SFO hotel · $170 · sleep + reset</span>
+    </div>
+  </div>
+
+  <!-- SFO -> IND on United -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 5 · United 1902 · booked</div>
+      <p class="route">San Francisco to Indianapolis</p>
+      <p class="times">SFO 11:29 AM PDT &rarr; IND 6:57 PM EDT · 4 h 28 m</p>
+      <p class="meta">Conf GDQWBB · $558</p>
+    </div>
+  </div>
+
+  <!-- Indianapolis buffer -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Indianapolis</span>
+      <span class="window">Jul 5, 6:57 PM → DC flight Jul 8, 4:33 PM · pre-tour buffer</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~2 d 22 h · settle before DC</span>
+    </div>
+  </div>
+
+  <!-- ============ THE TOUR ============ -->
+  <div class="phase">The tour</div>
+
+  <!-- LEG: IND -> DCA via Atlanta on Delta -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 8 · Delta 3138 / 325 · booked</div>
+      <p class="route">Indianapolis to Washington, DC (DCA) <span style="font-weight:400;color:var(--muted)">via Atlanta</span></p>
+      <p class="times">IND 4:33 PM &rarr; ATL 6:15 PM&nbsp; EDT</p>
+      <p class="layover">Connection at Atlanta: <strong>40 m</strong></p>
+      <p class="times">ATL 6:55 PM &rarr; DCA 8:47 PM&nbsp; EDT</p>
+      <p class="meta">Conf HSMO9Y · $388.20</p>
+    </div>
+  </div>
+
+  <!-- DC: Georgetown + DOXA -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Washington, DC</span>
+      <span class="window">arrive Jul 8, 8:47 PM → Amtrak Jul 12, 9:58 AM · Georgetown + DOXA</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~3 d 13 h</span>
+      <span class="pill evt">Georgetown + DOXA</span>
+    </div>
+  </div>
+
+  <!-- RAIL: DC to Philly -->
+  <div class="seg rail">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 12 · Amtrak 118 · booked</div>
+      <p class="route">DC Union Station to Philadelphia 30th St</p>
+      <p class="times">9:58 AM &rarr; 11:56 AM&nbsp; EDT · 1 h 58 m</p>
+      <p class="meta">Conf 42A680 · $75</p>
+    </div>
+  </div>
+
+  <!-- Philadelphia (extended — Cincinnati dropped) -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Philadelphia</span>
+      <span class="window">Jul 12, 11:56 AM → Denver departure Jul 16</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~3 d 20 h</span>
+      <span class="pill evt">AI in Action · Jul 13, 9-5</span>
+      <span class="pill free big">~52 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: PHL -> Denver (to book) -->
+  <div class="seg tbd-seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 16 · to book</div>
+      <p class="route">Philadelphia to Denver</p>
+      <p class="note">Cincinnati canceled &mdash; book a PHL &rarr; DEN flight (~Jul 16) so you land before the Jul 17 session. No fare yet.</p>
+    </div>
+  </div>
+
+  <!-- Denver -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Denver</span>
+      <span class="window">Jul 16 (arrival to book) → Jul 19, 7:32 AM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~2 d 21 h</span>
+      <span class="pill evt">AI in Action · Jul 17, 9-5</span>
+      <span class="pill free big">~37 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: DEN-DFW on United -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 19 · United 2160 · booked</div>
+      <p class="route">Denver to Dallas</p>
+      <p class="times">DEN 7:32 AM MDT &rarr; DFW 10:39 AM CDT · 2 h 7 m</p>
+      <p class="meta">Conf HSN29E · $223</p>
+    </div>
+  </div>
+
+  <!-- Frisco / Plano -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Frisco / Plano</span>
+      <span class="window">Jul 19, 10:39 AM → Jul 21, 6:30 AM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~1 d 20 h</span>
+      <span class="pill evt">AI in Action · Jul 20, 9-5</span>
+      <span class="pill free big">~20 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: DFW-SEA on Delta -->
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 21 · Delta 804 · booked</div>
+      <p class="route">Dallas to Seattle</p>
+      <p class="times">DFW 6:30 AM CDT &rarr; SEA 8:46 AM PDT · 4 h 16 m · seat 22C</p>
+      <p class="meta">Ticket 0067499270487 · $265.35</p>
+    </div>
+  </div>
+
+  <!-- Bellevue -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Bellevue</span>
+      <span class="window">Jul 21, 8:46 AM → Bay Area departure Jul 23</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~2 d</span>
+      <span class="pill evt">AI in Action · Jul 22, 9-5</span>
+      <span class="pill free big">~27 h free</span>
+    </div>
+  </div>
+
+  <!-- LEG: SEA -> SFO/OAK (to book) -->
+  <div class="seg tbd-seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag">Jul 23 · to book</div>
+      <p class="route">Seattle to San Francisco / Oakland</p>
+      <p class="note">Book a SEA &rarr; SFO/OAK flight (~Jul 23) so you land before the Jul 24 session. No fare yet.</p>
+    </div>
+  </div>
+
+  <!-- Walnut Creek / SF -->
+  <div class="city">
+    <div class="top">
+      <span class="where">Walnut Creek / SF</span>
+      <span class="window">Jul 23 (arrival to book) → SFO departure Jul 25, 10:50 PM</span>
+    </div>
+    <div class="rows">
+      <span class="pill ground">Ground ~2 d 9 h</span>
+      <span class="pill evt">AI in Action · Jul 24, 9-5</span>
+      <span class="pill free big">~33 h free</span>
+    </div>
+  </div>
+
+  <!-- ============ GETTING HOME ============ -->
+  <div class="phase">Getting home · Jul 25</div>
+
+  <div class="seg">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="tag ok">Jul 25 · Vietnam Airlines 99 · booked</div>
+      <p class="route">San Francisco to Saigon</p>
+      <p class="times">SFO 10:50 PM PDT (Jul 25) &rarr; SGN 4:30 AM ICT (Jul 27) · ~15 h 40 m nonstop</p>
+      <p class="meta">Conf D83RGH · Terminal I · return leg of round trip</p>
+    </div>
+  </div>
+
+  <footer>
+    Free time = ground window minus the 8 h event (9-5) minus ~8 h sleep per night; early-morning flights run the figure slightly generous. The Saigon–San Francisco flight (VN98) lands the same calendar day (Jul 4) because it crosses the date line. DC is the Georgetown + DOXA portion with no AI in Action day. Cincinnati (Jul 15) is canceled — you stay in Philadelphia until the Denver leg. Two legs are still to book: <strong>Philadelphia → Denver</strong> and <strong>Seattle → SFO/Oakland</strong>. The city windows around those legs will firm up once the times are set.
+  </footer>
+
+</div>
+</body>
+</html>
