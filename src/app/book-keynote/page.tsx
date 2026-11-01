@@ -244,7 +244,7 @@ export default function BookWorkshopPage() {
           >
             Book an AI workshop
             <br />
-            <span className="text-[#6FF2C1]">for your organization.</span>
+            <span className="text-[#6FF2C1]">for your organization</span>
           </h1>
           <p
             className="text-white/70 leading-relaxed mb-8"
@@ -323,7 +323,7 @@ export default function BookWorkshopPage() {
               <h2 className={`text-[#04102D] ${h2}`}>
                 Ask the members
                 <br />
-                who built.
+                who built
               </h2>
             </div>
             <p className="text-[#2A3044]/75 text-[16px] leading-relaxed">
@@ -346,7 +346,7 @@ export default function BookWorkshopPage() {
           <h2 className={`text-[#04102D] ${h2} mb-10`}>
             The rooms
             <br />
-            so far.
+            so far
           </h2>
           <div className="flex flex-col gap-4">
             {ROOMS.map((r) => (
@@ -420,7 +420,7 @@ export default function BookWorkshopPage() {
               <h2 className={`text-[#04102D] ${h2}`}>
                 Leadership in
                 <br />
-                the AI Era.
+                the AI Era
               </h2>
             </div>
             <p className="text-[#2A3044]/75 text-[16px] leading-relaxed">
@@ -465,7 +465,7 @@ export default function BookWorkshopPage() {
           <h2 className={`text-white ${h2} mb-10`}>
             Bring the room
             <br />
-            <span className="text-[#6FF2C1]">to your members.</span>
+            <span className="text-[#6FF2C1]">to your members</span>
           </h2>
           <div className="grid md:grid-cols-3 gap-5">
             {DOORS.map((d) => (
@@ -512,7 +512,7 @@ export default function BookWorkshopPage() {
           <div className="text-center mb-12">
             <div className={`text-[#6FF2C1] ${eyebrow} mb-4`}>Plan your event</div>
             <h2 className="text-white font-black leading-tight mb-4 text-[clamp(28px,3.5vw,42px)]">
-              Bring your chapter. I bring the engineers.
+              Bring your chapter, I bring the engineers
             </h2>
             <p className="text-white/55 text-[16px] leading-relaxed max-w-xl mx-auto">
               Grab a time on my calendar, or send the details and I&apos;ll get back to you within
