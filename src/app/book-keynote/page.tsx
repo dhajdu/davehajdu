@@ -21,53 +21,56 @@ const PROOF = [
   { stat: '4.4/5', label: 'More confident leading AI' },
 ];
 
+// Members on camera, picked to differ from the Infinite Leverage retreats page.
 const CLIPS: Clip[] = [
   {
-    id: 'andrew',
-    src: 'https://h126e1av9m6qb7an.public.blob.vercel-storage.com/video/founder-andrew.mp4',
-    poster: '/images/workshops/andrew.webp',
-    name: 'Andrew Le',
-    role: 'Founder, Health Practice Digital',
+    id: 'goro',
+    src: 'https://h126e1av9m6qb7an.public.blob.vercel-storage.com/video/founder-goro.mp4',
+    poster: '/images/workshops/goro.webp',
+    name: 'Goro Gupta',
+    role: 'Founder, Ethical Property Investments',
     room: 'EO Melbourne',
-    quote: 'One of the best EO events of the year, and I mean it',
+    quote: "You're actually doing the AI stuff",
     posterHasText: true,
   },
   {
-    id: 'fiona',
-    src: 'https://h126e1av9m6qb7an.public.blob.vercel-storage.com/video/founder-fiona.mp4',
-    poster: '/images/workshops/fiona.webp',
-    name: 'Fiona White',
-    role: 'Founder, Own Body',
+    id: 'ashton',
+    src: 'https://h126e1av9m6qb7an.public.blob.vercel-storage.com/video/founder-ashton.mp4',
+    poster: '/images/workshops/ashton.webp',
+    name: 'Ashton Bishop',
+    role: 'Founder, Step Change',
     room: 'EO Melbourne',
-    quote: "I came from a point where I'm embarrassingly awful with AI",
+    quote: 'An agent in the cloud which pulls together a daily dashboard',
     posterHasText: true,
   },
   {
-    id: 'tracy',
-    src: 'https://youtu.be/8mIWhaKYsjU',
-    youtubeId: '8mIWhaKYsjU',
-    poster: 'https://img.youtube.com/vi/8mIWhaKYsjU/maxresdefault.jpg',
-    name: 'Tracy',
-    role: 'Chief of Staff, CMG.ASIA',
-    room: 'Saigon build day',
+    id: 'peter',
+    src: 'https://h126e1av9m6qb7an.public.blob.vercel-storage.com/video/founder-peter.mp4',
+    poster: '/images/workshops/peter.webp',
+    name: 'Peter Ling',
+    role: 'Founder, Crystal Palace Catering',
+    room: 'EO Melbourne',
+    quote: "I'm now sort of weaponized with some tools",
+    posterHasText: true,
   },
   {
-    id: 'huy',
-    src: 'https://youtu.be/-x8gGeH_FnU',
-    youtubeId: '-x8gGeH_FnU',
-    poster: 'https://img.youtube.com/vi/-x8gGeH_FnU/maxresdefault.jpg',
-    name: 'Huy',
-    role: 'Commercial Director, Gam Esport',
-    room: 'Saigon build day',
+    id: 'sue',
+    src: 'https://h126e1av9m6qb7an.public.blob.vercel-storage.com/video/founder-sue.mp4',
+    poster: '/images/workshops/sue.webp',
+    name: 'Sue Cook',
+    role: 'Founder, Aged Care & Medical',
+    room: 'EO Melbourne',
+    quote: 'Definitely recommend it to anyone',
+    posterHasText: true,
   },
   {
-    id: 'james',
-    src: 'https://youtu.be/9g6bhTIJeKA',
-    youtubeId: '9g6bhTIJeKA',
-    poster: '/images/workshops/saigon-private.webp',
-    name: 'James Murray',
-    role: 'Founder',
-    room: 'Work Healthy Australia',
+    id: 'minh',
+    src: 'https://youtu.be/wiorv1uiGvw',
+    youtubeId: 'wiorv1uiGvw',
+    poster: 'https://img.youtube.com/vi/wiorv1uiGvw/maxresdefault.jpg',
+    name: 'Minh',
+    role: 'CEO / Entrepreneur',
+    room: 'Saigon build day',
   },
 ];
 
@@ -96,7 +99,7 @@ const ROOMS = [
     img: '/images/workshops/saigon-private.webp',
     kicker: 'Private · Work Healthy Australia · Saigon',
     title: 'Flew in with a problem, flew home with the system',
-    detail: 'James Murray and his team in Thao Dien with the engineers',
+    detail: 'A founder team in Thao Dien with the engineers beside them',
     stats: [{ n: '▶', label: 'Watch the film' }],
   },
 ];
@@ -301,7 +304,7 @@ export default function BookWorkshopPage() {
               </h2>
             </div>
             <p className="text-[#2A3044]/75 text-[16px] leading-relaxed">
-              Members and founders from three different rooms, on camera the moment they finished.
+              Founders from EO Melbourne and Saigon, on camera the moment they finished.
               Tap any one to hear it.
             </p>
           </div>
