@@ -429,6 +429,16 @@ export default function BookWorkshopPage() {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <figure className="col-span-2 md:col-span-3">
+              <img
+                src="/images/workshops/dave-keynote-ai-agents.webp"
+                alt="Dave Hajdu on stage delivering a keynote on AI agents in business"
+                className="w-full aspect-[16/9] md:aspect-[21/9] object-cover object-[center_80%] rounded-lg"
+              />
+              <figcaption className="mt-3 text-[13px] text-[#2A3044]/70 leading-snug">
+                On stage: AI Agents in Business, Vietnam
+              </figcaption>
+            </figure>
             {GEORGETOWN.map((g) => (
               <figure key={g.src}>
                 <img src={g.src} alt={g.caption} loading="lazy" className="w-full aspect-[4/3] object-cover object-[center_30%] rounded-lg" />
