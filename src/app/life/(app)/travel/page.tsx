@@ -1,20 +1,26 @@
-import Link from 'next/link';
 import { requireOwner } from '@/lib/life/auth';
-import { Card, Chip, EmptyState, PageHeader } from '@/components/life/ui';
+import { EmptyState, PageHeader } from '@/components/life/ui';
 import { TravelTabs } from '@/components/life/travel/TravelTabs';
 import { Itinerary } from '@/components/life/travel/Itinerary';
-import { TripRow } from '@/components/life/travel/TripRow';
+import { NextTripPass } from '@/components/life/travel/NextTripPass';
+import { Postcard } from '@/components/life/travel/Postcard';
 import { legsForTrips, TRIP_SELECT } from '@/components/life/travel/data';
 import {
-  countdown,
-  fmtRange,
-  nightsLabel,
+  HOME_IATA,
+  HOME_TZ,
+  daysBetween,
+  fmtDay,
+  fmtDuration,
+  localDateKey,
+  localTime,
   nightsOf,
+  placeCode,
   purposeLabel,
-  purposeTone,
   todayKey,
 } from '@/components/life/travel/format';
-import type { Trip } from '@/components/life/travel/types';
+import type { Place, Trip } from '@/components/life/travel/types';
+
+const cityOf = (p: Place | null | undefined) => p?.city ?? p?.name ?? '';
 
 export default async function TravelUpcomingPage() {
   const { supabase } = await requireOwner();
@@ -30,8 +36,10 @@ export default async function TravelUpcomingPage() {
   const [next, ...later] = trips;
 
   const legs = next ? (await legsForTrips(supabase, [next.id])).filter((l) => l.status !== 'cancelled') : [];
-  const where = next?.primary && [next.primary.city ?? next.primary.name, next.primary.country].filter(Boolean).join(', ');
-  const when = next ? countdown(next, today) : '';
+  const flight = legs.find((l) => l.kind === 'flight');
+  const hotel = legs.find((l) => l.kind === 'hotel');
+  const dest = next?.primary?.city ?? next?.primary?.name ?? next?.title ?? '';
+  const started = !!next && next.start_on <= today;
 
   return (
     <div className="max-w-2xl">
@@ -41,26 +49,30 @@ export default async function TravelUpcomingPage() {
       {!next ? (
         <EmptyState>Trips arrive from Gmail and TripIt. Nothing upcoming yet.</EmptyState>
       ) : (
-        <div className="space-y-5">
-          <Card>
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-xs font-semibold text-muted">{when === 'Now' ? 'On the road' : 'Next trip'}</p>
-                <Link href={`/life/travel/${next.id}`} className="block text-xl font-bold text-navy break-words">
-                  {next.title}
-                </Link>
-                {where && where !== next.title && <p className="text-sm text-body-text">{where}</p>}
-                <p className="text-sm text-muted mt-0.5">
-                  {fmtRange(next.start_on, next.end_on)}
-                  {next.end_on && ` · ${nightsLabel(nightsOf(next))}`}
-                </p>
-              </div>
-              <div className="flex flex-col items-end gap-1 shrink-0">
-                <Chip tone={when === 'Now' ? 'magenta' : 'mint'}>{when}</Chip>
-                <Chip tone={purposeTone[next.purpose]}>{purposeLabel[next.purpose]}</Chip>
-              </div>
-            </div>
-          </Card>
+        <div className="space-y-8">
+          <NextTripPass
+            href={`/life/travel/${next.id}`}
+            title={next.title}
+            purpose={purposeLabel[next.purpose]}
+            from={flight ? { code: placeCode(flight.origin), city: cityOf(flight.origin) } : { code: HOME_IATA, city: 'Home' }}
+            to={flight ? { code: placeCode(flight.destination), city: cityOf(flight.destination) } : { code: hotel?.destination?.iata ?? dest, city: dest }}
+            // Without a flight, count down to midnight home time (Vietnam has no DST).
+            targetMs={flight ? Date.parse(flight.starts_at) : Date.parse(`${next.start_on}T00:00:00+07:00`)}
+            departDay={fmtDay(flight ? localDateKey(flight.starts_at, flight.start_tz) : next.start_on)}
+            departTime={flight ? `${localTime(flight.starts_at, flight.start_tz)} ${placeCode(flight.origin)}` : null}
+            flight={flight ? ([flight.number, flight.provider].find(Boolean) ?? 'Flight') : null}
+            duration={flight?.ends_at ? fmtDuration(flight.starts_at, flight.ends_at) : null}
+            nights={next.end_on ? nightsOf(next) : null}
+            hotel={hotel ? (hotel.destination?.name ?? hotel.provider) : null}
+            destTz={flight?.end_tz ?? hotel?.start_tz ?? null}
+            homeTz={HOME_TZ}
+            code={flight?.confirmation_code ?? hotel?.confirmation_code ?? null}
+            onRoad={
+              started
+                ? { day: daysBetween(next.start_on, today) + 1, of: daysBetween(next.start_on, next.end_on ?? today) + 1 }
+                : null
+            }
+          />
 
           {legs.length > 0 ? (
             <Itinerary legs={legs} />
@@ -69,13 +81,14 @@ export default async function TravelUpcomingPage() {
           )}
 
           {later.length > 0 && (
-            <Card title="Later">
-              <ul className="divide-y divide-border -my-3">
+            <section>
+              <h2 className="life-card-title">Later</h2>
+              <ul className="life-postcards">
                 {later.map((t) => (
-                  <TripRow key={t.id} trip={t} right={<span className="text-xs text-muted">{countdown(t, today)}</span>} />
+                  <Postcard key={t.id} trip={t} daysAway={daysBetween(today, t.start_on)} />
                 ))}
               </ul>
-            </Card>
+            </section>
           )}
         </div>
       )}

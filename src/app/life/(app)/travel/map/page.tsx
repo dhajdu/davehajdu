@@ -1,12 +1,12 @@
 import { requireOwner } from '@/lib/life/auth';
 import { Card, EmptyState, PageHeader } from '@/components/life/ui';
 import { TravelTabs } from '@/components/life/travel/TravelTabs';
-import { WorldMap, type MapPin } from '@/components/life/travel/WorldMap';
+import { WorldMap, type MapArc, type MapPin } from '@/components/life/travel/WorldMap';
 import { fetchAll } from '@/components/life/travel/data';
 import { isHome } from '@/components/life/travel/format';
 import type { Place } from '@/components/life/travel/types';
 
-type Ref = { trip_id: string | null; origin_place_id: string | null; destination_place_id: string | null };
+type Ref = { trip_id: string | null; kind: string; starts_at: string; origin_place_id: string | null; destination_place_id: string | null };
 
 export default async function TravelMapPage() {
   const { supabase } = await requireOwner();
@@ -18,42 +18,70 @@ export default async function TravelMapPage() {
     fetchAll<Ref>((from, to) =>
       supabase
         .from('trip_legs')
-        .select('trip_id, origin_place_id, destination_place_id')
+        .select('trip_id, kind, starts_at, origin_place_id, destination_place_id')
         .neq('status', 'cancelled')
         .range(from, to)
     ),
-    fetchAll<{ id: string; primary_place_id: string | null }>((from, to) =>
-      supabase.from('trips').select('id, primary_place_id').range(from, to)
+    fetchAll<{ id: string; primary_place_id: string | null; start_on: string; purpose: string }>((from, to) =>
+      supabase.from('trips').select('id, primary_place_id, start_on, purpose').range(from, to)
     ),
   ]);
 
-  // Visits = distinct trips that touched the place (legs without a trip count once each).
-  const visits = new Map<string, Set<string>>();
-  const touch = (placeId: string | null, key: string) => {
+  // Visits = distinct trips that touched the place (legs without a trip count once each), per year.
+  const visits = new Map<string, Map<string, Set<string>>>();
+  const touch = (placeId: string | null, key: string, year: string) => {
     if (!placeId) return;
-    if (!visits.has(placeId)) visits.set(placeId, new Set());
-    visits.get(placeId)!.add(key);
+    const byYear = visits.get(placeId) ?? new Map<string, Set<string>>();
+    visits.set(placeId, byYear);
+    byYear.set(year, (byYear.get(year) ?? new Set()).add(key));
   };
   legs.forEach((l, i) => {
     const key = l.trip_id ?? `leg${i}`;
-    touch(l.origin_place_id, key);
-    touch(l.destination_place_id, key);
+    touch(l.origin_place_id, key, l.starts_at.slice(0, 4));
+    touch(l.destination_place_id, key, l.starts_at.slice(0, 4));
   });
-  trips.forEach((t) => touch(t.primary_place_id, t.id));
+  trips.forEach((t) => touch(t.primary_place_id, t.id, t.start_on.slice(0, 4)));
+  const total = (id: string) => new Set([...visits.get(id)!.values()].flatMap((s) => [...s])).size;
 
   const visited = places
     .filter((p) => visits.has(p.id))
-    .map((p) => ({ place: p, count: visits.get(p.id)!.size }))
+    .map((p) => ({ place: p, count: total(p.id) }))
     .sort((a, b) => b.count - a.count || a.place.name.localeCompare(b.place.name));
   const located = visited.filter((v) => v.place.lat != null && v.place.lng != null);
-  const pins: MapPin[] = located.map(({ place, count }) => ({
+  const pins: MapPin[] = located.map(({ place }) => ({
     id: place.id,
     label: place.iata ? `${place.name} (${place.iata})` : place.name,
+    code: place.iata ?? place.city ?? place.name,
     lat: place.lat!,
     lng: place.lng!,
-    count,
+    byYear: Object.fromEntries([...visits.get(place.id)!].map(([y, s]) => [y, s.size])),
     home: isHome(place),
   }));
+
+  // One arc per route per year, from every leg that moves between two known points.
+  const byId = new Map(places.map((p) => [p.id, p]));
+  const business = new Set(trips.filter((t) => t.purpose === 'business').map((t) => t.id));
+  const arcMap = new Map<string, MapArc>();
+  legs.forEach((l, i) => {
+    const a = l.origin_place_id ? byId.get(l.origin_place_id) : undefined;
+    const b = l.destination_place_id ? byId.get(l.destination_place_id) : undefined;
+    if (!a || !b || a.id === b.id || a.lat == null || a.lng == null || b.lat == null || b.lng == null) return;
+    const year = l.starts_at.slice(0, 4);
+    const key = `${year}:${a.id}:${b.id}`;
+    const arc = arcMap.get(key) ?? {
+      key,
+      from: { lat: a.lat, lng: a.lng },
+      to: { lat: b.lat, lng: b.lng },
+      year,
+      business: !!l.trip_id && business.has(l.trip_id),
+      count: 0,
+      trips: [],
+    };
+    arc.count += 1;
+    arc.trips.push(l.trip_id ?? `leg${i}`);
+    arcMap.set(key, arc);
+  });
+  const arcs = [...arcMap.values()].sort((x, y) => x.key.localeCompare(y.key));
 
   return (
     <div className="max-w-3xl">
@@ -66,12 +94,10 @@ export default async function TravelMapPage() {
         <div className="space-y-5">
           {pins.length > 0 ? (
             <div>
-              <WorldMap pins={pins} />
-              <p className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted mt-2">
-                <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-magenta" />Home</span>
-                <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue" />Visited, larger means more trips</span>
-                {pins.length < visited.length && <span>{visited.length - pins.length} without coordinates</span>}
-              </p>
+              <WorldMap pins={pins} arcs={arcs} />
+              {pins.length < visited.length && (
+                <p className="text-xs text-muted mt-2">{visited.length - pins.length} places without coordinates are listed below but not pinned</p>
+              )}
             </div>
           ) : (
             <EmptyState>{visited.length} places visited, but none has coordinates yet, so there is nothing to pin.</EmptyState>

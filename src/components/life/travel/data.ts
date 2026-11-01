@@ -6,7 +6,7 @@ type Client = Awaited<ReturnType<typeof import('@/lib/life/supabase-server').cre
 const PLACE = 'id, name, city, country, lat, lng, kind, iata';
 
 export const TRIP_SELECT =
-  'id, title, title_locked, start_on, end_on, purpose, notes, primary_place_id, primary:places!trips_primary_place_id_fkey(name, city, country)';
+  'id, title, title_locked, start_on, end_on, purpose, notes, primary_place_id, primary:places!trips_primary_place_id_fkey(name, city, country, lat, lng)';
 
 export const LEG_SELECT = `id, trip_id, kind, status, confirmation_code, provider, number, starts_at, start_tz, ends_at, end_tz, address,
   origin:places!trip_legs_origin_place_id_fkey(${PLACE}),

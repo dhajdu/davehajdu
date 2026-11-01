@@ -106,3 +106,11 @@ export const purposeLabel: Record<Purpose, string> = {
   personal: 'Personal',
   unknown: 'Unsorted',
 };
+
+// "5h 50m" between two instants.
+export function fmtDuration(fromIso: string, toIso: string): string {
+  const mins = Math.round((Date.parse(toIso) - Date.parse(fromIso)) / 60_000);
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return h === 0 ? `${m}m` : m === 0 ? `${h}h` : `${h}h ${m}m`;
+}
