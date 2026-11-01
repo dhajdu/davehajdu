@@ -70,7 +70,10 @@ export default function LoginForm() {
 
   const sendCode = () =>
     run(async () => {
-      const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: true } });
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: { shouldCreateUser: true, emailRedirectTo: `${window.location.origin}/life/auth/callback` },
+      });
       if (error) throw new Error('This email cannot sign in to /life.');
       setCode('');
       setStep('code');
@@ -107,7 +110,7 @@ export default function LoginForm() {
         <>
           <label className="block text-sm font-semibold text-navy" htmlFor="email">Email</label>
           <input id="email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
-          <p className="text-xs text-muted">We will email you a 6-digit code.</p>
+          <p className="text-xs text-muted">We will email you a sign-in link and a 6-digit code.</p>
         </>
       )}
 
