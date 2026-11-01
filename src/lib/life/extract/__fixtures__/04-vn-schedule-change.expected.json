@@ -1,0 +1,27 @@
+{
+  "kind": "change",
+  "confidence": 0.95,
+  "notes": null,
+  "legs": [
+    {
+      "kind": "flight",
+      "status": "changed",
+      "confirmation_code": "K7Q2ZP",
+      "provider": "Vietnam Airlines",
+      "number": "VN772",
+      "origin_iata": "SYD",
+      "destination_iata": "SGN",
+      "origin_city": "Sydney",
+      "destination_city": "Ho Chi Minh City",
+      "starts_at_local": "2026-03-23T09:30",
+      "start_tz": "Australia/Sydney",
+      "ends_at_local": "2026-03-23T15:25",
+      "end_tz": "Asia/Ho_Chi_Minh",
+      "hotel_name": null,
+      "address": null,
+      "city": "Ho Chi Minh City",
+      "country": "Vietnam",
+      "confidence": 0.95
+    }
+  ]
+}

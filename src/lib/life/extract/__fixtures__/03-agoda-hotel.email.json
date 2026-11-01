@@ -1,0 +1,6 @@
+{
+  "from": "Agoda <no-reply@example-agoda.test>",
+  "subject": "Booking confirmation 1122334455 - Ovolo Woolloomooloo",
+  "received_at": "2026-02-10T14:20:00Z",
+  "body_text": "Your booking is confirmed!\n\nBooking ID: 1122334455\nProperty: Ovolo Woolloomooloo\nAddress: 6 Cowper Wharf Roadway, Woolloomooloo, Sydney, Australia\n\nCheck-in: 20 March 2026 (after 14:00)\nCheck-out: 22 March 2026 (before 11:00)\nRoom: Loft Suite, 2 nights\n\nThis is a synthetic fixture for automated tests.\n"
+}

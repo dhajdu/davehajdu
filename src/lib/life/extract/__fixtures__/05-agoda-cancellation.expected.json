@@ -1,0 +1,27 @@
+{
+  "kind": "cancellation",
+  "confidence": 0.97,
+  "notes": null,
+  "legs": [
+    {
+      "kind": "hotel",
+      "status": "cancelled",
+      "confirmation_code": "1122334455",
+      "provider": "Agoda",
+      "number": "Ovolo Woolloomooloo",
+      "origin_iata": null,
+      "destination_iata": null,
+      "origin_city": null,
+      "destination_city": null,
+      "starts_at_local": "2026-03-20T14:00",
+      "start_tz": "Australia/Sydney",
+      "ends_at_local": "2026-03-22T11:00",
+      "end_tz": "Australia/Sydney",
+      "hotel_name": "Ovolo Woolloomooloo",
+      "address": null,
+      "city": "Sydney",
+      "country": "Australia",
+      "confidence": 0.97
+    }
+  ]
+}

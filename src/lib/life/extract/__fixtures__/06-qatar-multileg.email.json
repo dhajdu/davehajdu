@@ -1,0 +1,6 @@
+{
+  "from": "Qatar Airways <booking@example-qatarairways.test>",
+  "subject": "Your Qatar Airways booking confirmation - PNR 7XKQ4M",
+  "received_at": "2026-04-01T11:00:00Z",
+  "body_text": "Booking reference: 7XKQ4M\n\nOutbound\nQR 975  Ho Chi Minh City SGN 03 May 2026 19:35  ->  Doha DOH 03 May 2026 23:25\nQR 3    Doha DOH 04 May 2026 02:10  ->  London Heathrow LHR 04 May 2026 07:05\n\nReturn\nQR 4    London Heathrow LHR 12 May 2026 21:00  ->  Doha DOH 13 May 2026 06:35\nQR 974  Doha DOH 13 May 2026 08:10  ->  Ho Chi Minh City SGN 13 May 2026 19:30\n\nPassenger: Mr Dave Hajdu. Synthetic fixture.\n"
+}

@@ -1,0 +1,47 @@
+{
+  "kind": "flight",
+  "confidence": 0.97,
+  "notes": null,
+  "legs": [
+    {
+      "kind": "flight",
+      "status": "confirmed",
+      "confirmation_code": "K7Q2ZP",
+      "provider": "Vietnam Airlines",
+      "number": "VN773",
+      "origin_iata": "SGN",
+      "destination_iata": "SYD",
+      "origin_city": "Ho Chi Minh City",
+      "destination_city": "Sydney",
+      "starts_at_local": "2026-03-14T23:55",
+      "start_tz": "Asia/Ho_Chi_Minh",
+      "ends_at_local": "2026-03-15T11:10",
+      "end_tz": "Australia/Sydney",
+      "hotel_name": null,
+      "address": null,
+      "city": "Sydney",
+      "country": "Australia",
+      "confidence": 0.97
+    },
+    {
+      "kind": "flight",
+      "status": "confirmed",
+      "confirmation_code": "K7Q2ZP",
+      "provider": "Vietnam Airlines",
+      "number": "VN772",
+      "origin_iata": "SYD",
+      "destination_iata": "SGN",
+      "origin_city": "Sydney",
+      "destination_city": "Ho Chi Minh City",
+      "starts_at_local": "2026-03-22T12:40",
+      "start_tz": "Australia/Sydney",
+      "ends_at_local": "2026-03-22T18:35",
+      "end_tz": "Asia/Ho_Chi_Minh",
+      "hotel_name": null,
+      "address": null,
+      "city": "Ho Chi Minh City",
+      "country": "Vietnam",
+      "confidence": 0.97
+    }
+  ]
+}

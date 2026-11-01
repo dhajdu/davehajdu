@@ -1,5 +1,19 @@
 {
   "framework": "nextjs",
   "buildCommand": "npm run build",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "crons": [
+    {
+      "path": "/api/life/cron/notion",
+      "schedule": "0 19 * * *"
+    },
+    {
+      "path": "/api/life/cron/tripit",
+      "schedule": "0 22 * * *"
+    },
+    {
+      "path": "/api/life/cron/review",
+      "schedule": "0 23 * * *"
+    }
+  ]
 }
