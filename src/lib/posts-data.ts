@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'building-a-database-for-my-life',
+    title: 'My Life Is Spread Across Twenty Apps. So I\'m Building a Database for It.',
+    excerpt:
+      'Blood tests in a portal, surgeries in old emails, five years of journals in Notion, twenty years of trips in Gmail. None of it can tell me if I\'m living the life I intend to. So I\'m building a personal operating system, in public.',
+    date: 'Nov 1, 2026',
+    readTime: '6 min',
+    category: 'AI In Business',
+    tags: ['ai-in-business', 'high-performance-culture'],
+    featured: true,
+    image: '/images/leverage-journal-in-notion.webp',
+  },
+  {
     slug: 'leadership-now-means-leading-ai-and-people',
     title: 'My Dad Took His PhD Courses at Georgetown. This Week He Texted Me "I\'m Proud of You"',
     excerpt:
@@ -144,6 +156,70 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'building-a-database-for-my-life': [
+    { tag: 'p', text: 'This morning I tried to answer a simple question about my own life and couldn\'t.' },
+    { tag: 'p', text: 'When was my last surgery? The records are somewhere in an email from years ago. How many times have I been to Australia this year? Ask Gmail, ask TripIt, ask my calendar. How has my energy trended since I started tracking it? That lives in five years of Notion pages that nobody, including me, will ever read again.' },
+    { tag: 'p', text: '<strong>My life is spread across twenty systems, and none of them can tell me whether I\'m living the life I intend to.</strong>' },
+    { tag: 'p', text: 'So I\'m building a database for it. A private one, on my own website, that fills itself from the apps I already use. And I\'m doing it in public.' },
+
+    { tag: 'h2', text: 'The ocean problem' },
+    { tag: 'p', text: 'Every app holds a slice. My watch knows my sleep. My bank knows my money. WhatsApp knows who I actually talk to. Google Photos holds tens of thousands of pictures I will never scroll back through. Notion holds every journal entry and every monthly update I\'ve written for my EO forum since 2021.' },
+    { tag: 'p', text: 'None of them talk to each other. And the insights that actually matter live between them. Sleep against mood. Travel against happiness. Money stress against relationships. You feel those patterns. You never see them.' },
+    { tag: 'p', text: 'It\'s an ocean of data. Very little of it is useful.' },
+
+    { tag: 'h2', text: 'What should a person actually track?' },
+    { tag: 'p', text: 'My first draft of this project was wrong. I designed it around the data I already had: my journal, my trips, my medical files. That\'s a filing cabinet, not a system.' },
+    { tag: 'p', text: 'The better question is what a person should track at all. I landed on ten areas of a life:' },
+    { tag: 'li', text: '<strong>Body:</strong> health, fitness, sleep, habits' },
+    { tag: 'li', text: '<strong>Mind:</strong> mood, learning, lessons, principles' },
+    { tag: 'li', text: '<strong>People:</strong> family, friends, mentors, community' },
+    { tag: 'li', text: '<strong>Money:</strong> net worth, income, debt, cash flow' },
+    { tag: 'li', text: '<strong>Work:</strong> companies, wins, talks, reputation' },
+    { tag: 'li', text: '<strong>Places:</strong> travel, homes, experiences' },
+    { tag: 'li', text: '<strong>Time:</strong> where the hours actually go' },
+    { tag: 'li', text: '<strong>Direction:</strong> vision, goals, reviews' },
+    { tag: 'li', text: '<strong>Admin:</strong> passports, insurance, the will you keep putting off' },
+    { tag: 'li', text: '<strong>Legacy:</strong> photos, stories, family history' },
+    { tag: 'p', text: 'The filter for every single thing in there: <strong>does it change a decision, or keep a memory worth keeping?</strong> If neither, it doesn\'t go in.' },
+
+    { tag: 'h2', text: 'Three kinds of data, one loop' },
+    { tag: 'p', text: 'Once you look at it this way, every area holds only three kinds of data. <strong>Records</strong> (things that happened), <strong>metrics</strong> (things measured over time), and <strong>reflections</strong> (what I thought about it).' },
+    { tag: 'p', text: 'Direction sits on top. Goals point at metrics. Metrics prompt reflection. Reflection changes goals. That loop is the product. The database just feeds it.' },
+    { tag: 'p', text: 'I\'ve been running that loop by hand for five years. Every month I score myself on five dimensions for my forum, pick one word for the month, write my headlines and set 30 and 60-day goals. It works. It also takes an hour, starts from a blank page every time, and is impossible to compare across years.' },
+    { tag: 'p', text: 'So the heart of this system is a monthly review that fills itself in. On the first of the month my weight, workouts, sleep, trips, the people I saw and the themes from my journal are already waiting. I add the scores and the meaning. Ten minutes instead of an hour.' },
+    { tag: 'blockquote', text: 'Tracking dies when it\'s manual. The only thing I should ever type is what only I can know: the score, the meaning, the decision.' },
+
+    { tag: 'h2', text: 'How I\'m building it' },
+    { tag: 'p', text: 'I wrote the plan the way I write every AI program for clients, using our 5Ds framework: Definition of the problem, Datasources needed, Diagram and documented workflow, ROI (skipped, this one is personal), and the Deployment plan with a clear definition of done.' },
+    { tag: 'p', text: 'The stack is boring on purpose. <a href="/blog/supabase-for-non-technical-founders">Supabase</a> for the database, a private section of this website for the app, and Claude doing the reading. A small script inside my Gmail sends every booking confirmation over, and Claude turns twenty years of flight and hotel emails into a travel history that works like TripIt, except the data is mine. My Notion journal syncs every night. Apple Health pushes my body data every morning.' },
+    { tag: 'p', text: 'Anything Claude isn\'t sure about goes into an inbox for me to approve. A wrong date on a medical record is worse than a missing one.' },
+    { tag: 'p', text: 'And yes, I built the first version the way I keep telling founders to work: <a href="/blog/claude-routines-changed-everything">plan first, then multi-delegate</a>. One afternoon, six AI agents working in parallel on separate parts of the system, each with a clear brief and a definition of done. The plan did the heavy lifting. The agents did the typing.' },
+
+    { tag: 'h2', text: 'Private by construction' },
+    { tag: 'p', text: 'This is the most personal data I have, sitting behind a public website. So it has one login, two-factor authentication, its own database separate from everything else, every row locked to my account, and an AI that can read everything and change nothing. Bank data comes in from statements only. No passwords stored, ever.' },
+
+    { tag: 'h2', text: 'Read the full plan' },
+    { tag: 'p', text: 'I\'ve published the whole plan: the problem, every data source, the database tables, the ten workflows, wireframes for every screen and the definition of done. <a href="/personal-os">Read the Personal OS plan here.</a>' },
+    { tag: 'p', text: 'I scrubbed my own data out of it. The structure is the useful part.' },
+
+    { tag: 'h2', text: 'Want one for yourself?' },
+    { tag: 'p', text: 'I\'m planning to turn this into two things. An <strong>open source</strong> version, so anyone technical can take the code and run their own. And a <strong>small SaaS</strong> for people who want the system without the setup.' },
+    { tag: 'p', text: 'If either sounds useful, <a href="/schedule-consultation">tell me here</a>. The first people who raise their hand will shape what it becomes.' },
+    { tag: 'p', text: 'And whether you build one or not, here\'s the question I\'d leave you with:' },
+    { tag: 'blockquote', text: 'If someone asked you today whether you\'re living the life you intend to, what would you point to as evidence?' },
+    { tag: 'p', text: 'Dave.' },
+
+    { tag: 'h2', text: 'Things people ask me about this' },
+    { tag: 'h3', text: 'What is a personal operating system?' },
+    { tag: 'p', text: 'A personal operating system is a private database that pulls together the data from every area of your life (health, money, relationships, work, travel, goals) and turns it into a monthly review. Its job is to answer one question: am I living the life I intend to?' },
+    { tag: 'h3', text: 'What should you track in your personal life?' },
+    { tag: 'p', text: 'Track only what changes a decision or keeps a memory worth keeping. A useful frame is ten areas: body, mind, people, money, work, places, time, direction, admin and legacy. Each one holds records, metrics and reflections.' },
+    { tag: 'h3', text: 'Is it safe to put personal data in a database like this?' },
+    { tag: 'p', text: 'Only if it is private by construction: a separate database, a single login with two-factor authentication, row-level security on every table, no stored bank passwords, and AI access that is read-only.' },
+    { tag: 'h3', text: 'Will this be open source?' },
+    { tag: 'p', text: 'That is the plan. An open source version for people who want to run their own, and a small hosted SaaS for people who want it without the setup.' },
+  ],
+
   'leadership-now-means-leading-ai-and-people': [
     { tag: 'p', text: 'My dad sent me a message this week. Three words, no preamble.' },
     { tag: 'blockquote', text: "I'm proud of you." },
@@ -618,6 +694,25 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 // FAQ schema content keyed by slug. Used to render FAQPage JSON-LD on posts that have FAQ content.
 // Keep these aligned with the visible "Things people ask me about this" h3/p blocks above.
 export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
+  'building-a-database-for-my-life': [
+    {
+      q: 'What is a personal operating system?',
+      a: 'A personal operating system is a private database that pulls together the data from every area of your life (health, money, relationships, work, travel, goals) and turns it into a monthly review. Its job is to answer one question: am I living the life I intend to?',
+    },
+    {
+      q: 'What should you track in your personal life?',
+      a: 'Track only what changes a decision or keeps a memory worth keeping. A useful frame is ten areas: body, mind, people, money, work, places, time, direction, admin and legacy. Each one holds records, metrics and reflections.',
+    },
+    {
+      q: 'Is it safe to put personal data in a database like this?',
+      a: 'Only if it is private by construction: a separate database, a single login with two-factor authentication, row-level security on every table, no stored bank passwords, and AI access that is read-only.',
+    },
+    {
+      q: 'Will this be open source?',
+      a: 'That is the plan. An open source version for people who want to run their own, and a small hosted SaaS for people who want it without the setup.',
+    },
+  ],
+
   'leadership-now-means-leading-ai-and-people': [
     {
       q: 'What does it mean to lead AI and people?',
