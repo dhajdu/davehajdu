@@ -70,7 +70,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
       <Link href="/life/travel" className="inline-block text-xs font-semibold text-blue">← Travel</Link>
 
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold text-navy break-words">{trip.title}</h1>
+        <h1 className="life-page-title break-words">{trip.title}</h1>
         <p className="text-sm text-muted">
           {fmtRange(trip.start_on, trip.end_on)}
           {trip.end_on && ` · ${nightsLabel(nightsOf(trip))}`}
