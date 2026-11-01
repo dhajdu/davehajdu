@@ -42,6 +42,9 @@ export const AIRPORTS: Record<string, AirportInfo> = {
   CGK: A('Jakarta', 'Indonesia', 'Asia/Jakarta', -6.1256, 106.6559),
   DPS: A('Bali', 'Indonesia', 'Asia/Makassar', -8.7482, 115.1672),
   MNL: A('Manila', 'Philippines', 'Asia/Manila', 14.5086, 121.0194),
+  CRK: A('Angeles City', 'Philippines', 'Asia/Manila', 15.186, 120.5603),
+  CGY: A('Cagayan de Oro', 'Philippines', 'Asia/Manila', 8.6122, 124.4561),
+  BKI: A('Kota Kinabalu', 'Malaysia', 'Asia/Kuching', 5.9372, 116.0515),
   CEB: A('Cebu', 'Philippines', 'Asia/Manila', 10.3075, 123.9794),
   PNH: A('Phnom Penh', 'Cambodia', 'Asia/Phnom_Penh', 11.5466, 104.8441),
   KTI: A('Phnom Penh', 'Cambodia', 'Asia/Phnom_Penh', 11.38, 104.93),
@@ -73,6 +76,8 @@ export const AIRPORTS: Record<string, AirportInfo> = {
   OOL: A('Gold Coast', 'Australia', 'Australia/Brisbane', -28.1644, 153.5047),
   CNS: A('Cairns', 'Australia', 'Australia/Brisbane', -16.8858, 145.7553),
   AKL: A('Auckland', 'New Zealand', 'Pacific/Auckland', -37.0082, 174.785),
+  NGO: A('Nagoya', 'Japan', 'Asia/Tokyo', 34.8584, 136.8054),
+  ZQN: A('Queenstown', 'New Zealand', 'Pacific/Auckland', -45.0211, 168.7392),
   // Middle East
   DOH: A('Doha', 'Qatar', 'Asia/Qatar', 25.2731, 51.6081),
   DXB: A('Dubai', 'United Arab Emirates', 'Asia/Dubai', 25.2532, 55.3657),
@@ -112,6 +117,16 @@ export const AIRPORTS: Record<string, AirportInfo> = {
   BOS: A('Boston', 'United States', 'America/New_York', 42.3656, -71.0096),
   HNL: A('Honolulu', 'United States', 'Pacific/Honolulu', 21.3187, -157.9225),
   YVR: A('Vancouver', 'Canada', 'America/Vancouver', 49.1967, -123.1815),
+  YYZ: A('Toronto', 'Canada', 'America/Toronto', 43.6777, -79.6248),
+  OAK: A('Oakland', 'United States', 'America/Los_Angeles', 37.7126, -122.2197),
+  LGB: A('Long Beach', 'United States', 'America/Los_Angeles', 33.8177, -118.1516),
+  BOI: A('Boise', 'United States', 'America/Boise', 43.5644, -116.2228),
+  MCI: A('Kansas City', 'United States', 'America/Chicago', 39.2976, -94.7139),
+  STL: A('St. Louis', 'United States', 'America/Chicago', 38.7487, -90.37),
+  IND: A('Indianapolis', 'United States', 'America/Indiana/Indianapolis', 39.7173, -86.2944),
+  DCA: A('Washington', 'United States', 'America/New_York', 38.8512, -77.0402),
+  PHL: A('Philadelphia', 'United States', 'America/New_York', 39.8744, -75.2424),
+  CHS: A('Charleston', 'United States', 'America/New_York', 32.8986, -80.0405),
 };
 
 export function airportInfo(iata: string | null | undefined): AirportInfo | null {

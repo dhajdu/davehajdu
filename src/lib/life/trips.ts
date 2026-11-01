@@ -18,6 +18,8 @@ export interface TripLeg {
   // Where the leg takes you: hotel city, or the destination airport's city.
   city: string | null;
   trip_id: string | null;
+  // Flight number or hotel name, used to drop the same booking seen twice.
+  number?: string | null;
 }
 
 export interface PlannedTrip {
@@ -38,7 +40,7 @@ export interface GroupOptions {
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const DEFAULT_MAX_GAP_DAYS = 60;
+const DEFAULT_MAX_GAP_DAYS = 14;
 
 export const SAIGON_ALIASES = ['ho chi minh city', 'ho chi minh', 'saigon', 'sai gon', 'hcmc', 'thanh pho ho chi minh'];
 
@@ -84,9 +86,25 @@ export function groupTrips(legs: TripLeg[], opts: GroupOptions): { trips: Planne
   const homeCities = new Set(opts.homeCities.map(normCity));
   const maxGap = opts.maxGapDays ?? DEFAULT_MAX_GAP_DAYS;
 
-  const active = legs
+  const sorted = legs
     .filter((l) => l.status !== 'cancelled')
     .sort((a, b) => Date.parse(a.starts_at) - Date.parse(b.starts_at) || a.id.localeCompare(b.id));
+
+  // The same booking can arrive from two sources (TripIt and an export) under
+  // different keys. Keep the first leg per kind + number/hotel + local start day.
+  const seen = new Set<string>();
+  const duplicates: string[] = [];
+  const active = sorted.filter((l) => {
+    const name = (l.number ?? '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '').slice(0, 14);
+    if (!name) return true;
+    const key = `${l.kind}|${name}|${localDate(l.starts_at, l.start_tz)}`;
+    if (seen.has(key)) {
+      duplicates.push(l.id);
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
 
   const trips: PlannedTrip[] = [];
   const unassigned: string[] = [];
@@ -112,7 +130,10 @@ export function groupTrips(legs: TripLeg[], opts: GroupOptions): { trips: Planne
     });
     let primary: { city: string; legId: string } | null = null;
     if (hotelNights.size) {
-      const best = [...hotelNights.values()].sort((a, b) => b.nights - a.nights || a.order - b.order)[0];
+      // Home is never the destination unless the trip saw nowhere else.
+      const away = [...hotelNights.entries()].filter(([k]) => !homeCities.has(k)).map(([, v]) => v);
+      const pool = away.length ? away : [...hotelNights.values()];
+      const best = pool.sort((a, b) => b.nights - a.nights || a.order - b.order)[0];
       primary = { city: best.city, legId: best.legId };
     } else {
       // No hotels: the destination where the most time passes before the next leg,
@@ -151,7 +172,11 @@ export function groupTrips(legs: TripLeg[], opts: GroupOptions): { trips: Planne
     const arrivesHome = l.kind === 'flight' && l.destination_iata?.toUpperCase() === home;
     const atHome = l.kind !== 'flight' && homeCities.has(normCity(l.city));
 
-    if (departsHome) {
+    if (departsHome && cur && dayNumber(sd) - dayNumber(start(cur.legs[0])) <= 1) {
+      // Same trip seen twice (two sources, or a hotel logged before its flight).
+      cur.legs.push(l);
+      cur.lastEnd = end(l) > cur.lastEnd ? end(l) : cur.lastEnd;
+    } else if (departsHome) {
       finalize(); // a previous trip with no recorded return closes here
       cur = { legs: [l], lastEnd: end(l), closedOn: null };
     } else if (arrivesHome) {
@@ -163,12 +188,9 @@ export function groupTrips(legs: TripLeg[], opts: GroupOptions): { trips: Planne
         unassigned.push(l.id);
       }
     } else if (atHome) {
-      if (cur) {
-        cur.legs.push(l);
-        cur.lastEnd = end(l) > cur.lastEnd ? end(l) : cur.lastEnd;
-      } else {
-        unassigned.push(l.id);
-      }
+      // A stay in the home city means the owner is back: any open trip ends.
+      finalize();
+      unassigned.push(l.id);
     } else if (cur) {
       cur.legs.push(l);
       cur.lastEnd = end(l) > cur.lastEnd ? end(l) : cur.lastEnd;
@@ -180,6 +202,7 @@ export function groupTrips(legs: TripLeg[], opts: GroupOptions): { trips: Planne
   finalize();
 
   for (const l of legs) if (l.status === 'cancelled') unassigned.push(l.id);
+  unassigned.push(...duplicates);
   return { trips, unassigned };
 }
 
@@ -239,6 +262,7 @@ interface LegRow {
   id: string;
   kind: TripLeg['kind'];
   status: TripLeg['status'];
+  number: string | null;
   starts_at: string;
   start_tz: string;
   ends_at: string | null;
@@ -262,7 +286,7 @@ export async function rebuildTrips(db: SupabaseClient, ownerId: string): Promise
     fetchAll<LegRow>((a, b) =>
       db
         .from('trip_legs')
-        .select('id,kind,status,starts_at,start_tz,ends_at,end_tz,trip_id,origin_place_id,destination_place_id,raw')
+        .select('id,kind,status,number,starts_at,start_tz,ends_at,end_tz,trip_id,origin_place_id,destination_place_id,raw')
         .eq('owner_id', ownerId)
         .order('id')
         .range(a, b)
@@ -291,8 +315,10 @@ export async function rebuildTrips(db: SupabaseClient, ownerId: string): Promise
       end_tz: r.end_tz,
       origin_iata: origin?.iata ?? null,
       destination_iata: dest?.iata ?? null,
-      city: dest?.city ?? r.raw?.city ?? null,
+      // A hotel's own booking names its city; a shared place row may not.
+      city: r.kind === 'hotel' ? (r.raw?.city ?? dest?.city ?? null) : (dest?.city ?? r.raw?.city ?? null),
       trip_id: r.trip_id,
+      number: r.number,
     };
   });
   const legById = new Map(legRows.map((r) => [r.id, r]));
