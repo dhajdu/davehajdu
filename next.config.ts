@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/keynotes', destination: '/book-keynote', permanent: true },
+      { source: '/workshops', destination: '/book-keynote', permanent: false },
       { source: '/consultation', destination: '/schedule-consultation', permanent: true },
     ];
   },

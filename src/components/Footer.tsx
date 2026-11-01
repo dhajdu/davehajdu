@@ -16,7 +16,7 @@ export default function Footer() {
         <div className="flex items-center gap-8">
           {[
             { label: 'Blog', href: '/blog' },
-            { label: 'Keynotes', href: '/book-keynote' },
+            { label: 'Workshops', href: '/book-keynote' },
             { label: 'Consultation', href: '/schedule-consultation' },
             { label: 'Books', href: '/books' },
           ].map((link) => (
