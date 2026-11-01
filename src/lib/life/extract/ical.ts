@@ -236,8 +236,10 @@ export function icalToLegs(events: IcalEvent[], airport: AirportLookup): { legs:
       (c) => !usedOut.has(c) && hotelKey(c.summary.match(CHECKOUT_RE)![1]) === hotelKey(name) && (c.start!.value > ci.start!.value)
     );
     if (co) usedOut.add(co);
-    // Hotel zone/city: the last flight arrival before check-in, when the feed gives UTC.
-    const prior = [...arrivalsBefore].reverse().find((a) => a.at <= ci.start!.value)?.info ?? null;
+    const day = (v: string) => v.replace(/\D/g, '').slice(0, 8);
+    // Hotel zone/city: the last flight arrival on or before the check-in day. TripIt's
+    // check-in events carry placeholder times that can sit before that day's flight.
+    const prior = [...arrivalsBefore].reverse().find((a) => day(a.at) <= day(ci.start!.value))?.info ?? null;
     const tz = ci.start!.tz && !ci.start!.utc ? ci.start!.tz : prior?.tz ?? null;
     const s = toLocal(ci.start!, tz);
     const startLocal = ci.start!.allDay ? `${ci.start!.value}T15:00` : s.local;
