@@ -6,14 +6,12 @@ function isOwnerEmail(email: string | undefined) {
   return !!email && email.toLowerCase() === process.env.LIFE_OWNER_EMAIL?.toLowerCase();
 }
 
-// Returns the session client if the caller is the owner with MFA verified (aal2),
-// otherwise null. Use in route handlers: `if (!ctx) return 401`.
+// Returns the session client if the caller is the signed-in owner, otherwise
+// null. Use in route handlers: `if (!ctx) return 401`.
 export async function getOwnerContext() {
   const supabase = await createLifeClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !isOwnerEmail(user.email)) return null;
-  const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-  if (aal?.currentLevel !== 'aal2') return null;
   return { supabase, user };
 }
 

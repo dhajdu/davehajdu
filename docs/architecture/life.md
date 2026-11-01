@@ -30,7 +30,7 @@ All ingestion goes through one raw inbox (`source_items`), then Claude extractio
 |---|---|---|
 | Database | New Supabase project `dave-life` (Singapore) | Separate from the `leads` project and its keys |
 | Hosting | Same Next.js 16 app, `/life/*` | One deploy; ship flow unchanged |
-| Auth | Supabase Auth, allowlist of one email (`LIFE_OWNER_EMAIL`), TOTP MFA required | One user |
+| Auth | Supabase Auth, allowlist of one email (`LIFE_OWNER_EMAIL`), emailed link or code, no MFA (owner's call) | One user |
 | Data access | RLS on every table (`owner_id = auth.uid()`). Request-path code uses the publishable key + user session. Secret key only in ingest routes and scripts | A broken page cannot leak rows |
 | Files | Private bucket `life-files`, signed URLs (5 min) | |
 | Gmail | Google Apps Script in dhajdu@gmail.com, hourly, POSTs to `/api/life/ingest` | No OAuth app, no 7-day token expiry |
@@ -229,7 +229,7 @@ Each slice is a branch and PR into `main`. Gate = what must be true to merge.
 | # | Slice | Gate |
 |---|---|---|
 | 1 | Create `dave-life` project; base migration with every table above, RLS, column comments, `life_reader`; seed `areas`, Phase 1 `metrics`, `sources`; env vars in Vercel | `get_advisors` security returns no issues; publishable key with no session reads zero rows from every table; `life_reader` cannot insert |
-| 2 | Auth: `proxy.ts` gate, `requireOwner()` in layout and every route/action, login with TOTP, `noindex`, sitemap/robots exclusion | Logged out: every `/life` page redirects, every `/api/life` route (except ingest with valid secret) returns 401. A second Google account is refused |
+| 2 | Auth: `proxy.ts` gate, `requireOwner()` in layout and every route/action, email link login, `noindex`, sitemap/robots exclusion | Logged out: every `/life` page redirects, every `/api/life` route (except ingest with valid secret) returns 401. A second Google account is refused |
 | 3 | Ingest plumbing: `/api/life/ingest`, `source_items`, `workflow_runs`, Sources page, Inbox page with approve/reject | Replaying the same item is a no-op; bad secret returns 401; an injected test item shows in Inbox and resolves |
 | 4 | W2 Notion import + nightly cron | 579 journal + 65 EO pages imported; rerun creates zero rows; 5 sampled daily entries contain only that day's text; 76s, 2028 and date mismatches are in Inbox; an edit in Notion appears next morning |
 | 5 | Home, area pages, timeline, search | Every Phase 1 metric charts on its area page; a term from a 2021 entry is found by search; timeline renders 2021 to now |
