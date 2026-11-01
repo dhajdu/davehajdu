@@ -1,5 +1,10 @@
+import { Manrope } from 'next/font/google';
 import { requireOwner } from '@/lib/life/auth';
 import Sidebar from '@/components/life/Sidebar';
+import '../life.css';
+
+// The Edge8 team portal's typeface.
+const manrope = Manrope({ subsets: ['latin'], variable: '--life-font' });
 
 export default async function LifeAppLayout({ children }: { children: React.ReactNode }) {
   const { supabase } = await requireOwner();
@@ -9,9 +14,9 @@ export default async function LifeAppLayout({ children }: { children: React.Reac
     .eq('status', 'pending');
 
   return (
-    <div className="min-h-screen bg-white md:flex">
+    <div className={`life-shell ${manrope.variable}`}>
       <Sidebar pending={count ?? 0} />
-      <div className="flex-1 min-w-0 px-4 py-6 md:px-8 md:py-8">{children}</div>
+      <main className="life-main">{children}</main>
     </div>
   );
 }
