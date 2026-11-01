@@ -1,0 +1,6 @@
+{
+  "from": "Agoda <no-reply@example-agoda.test>",
+  "subject": "Cancellation confirmed - Booking ID 1122334455",
+  "received_at": "2026-03-02T05:45:00Z",
+  "body_text": "Your booking has been cancelled.\n\nBooking ID: 1122334455\nProperty: Ovolo Woolloomooloo\nOriginal dates: 20 March 2026 - 22 March 2026\n\nRefund: full refund to original payment method. Synthetic fixture.\n"
+}

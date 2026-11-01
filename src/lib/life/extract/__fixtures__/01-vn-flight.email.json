@@ -1,0 +1,6 @@
+{
+  "from": "Vietnam Airlines <noreply@example-vietnamairlines.test>",
+  "subject": "Your e-ticket confirmation - Booking K7Q2ZP",
+  "received_at": "2026-02-02T03:15:00Z",
+  "body_text": "Dear Mr HAJDU/DAVE,\n\nThank you for choosing Vietnam Airlines. Your booking is confirmed.\n\nBooking reference (PNR): K7Q2ZP\nE-ticket number: 738-0000000000\n\nItinerary\nFlight VN 773  Ho Chi Minh City (SGN) - Sydney (SYD)\n  Depart: Sat 14 Mar 2026 23:55  Tan Son Nhat International, Terminal 2\n  Arrive: Sun 15 Mar 2026 11:10  Sydney Kingsford Smith, Terminal 1\n  Class: Business (J)\n\nFlight VN 772  Sydney (SYD) - Ho Chi Minh City (SGN)\n  Depart: Sun 22 Mar 2026 12:40  Sydney Kingsford Smith, Terminal 1\n  Arrive: Sun 22 Mar 2026 18:35  Tan Son Nhat International, Terminal 2\n  Class: Business (J)\n\nPassenger: HAJDU/DAVE MR\nTotal: VND 00,000,000 (synthetic fixture)\n"
+}

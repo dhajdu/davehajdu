@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SiteChrome from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.davehajdu.com"),
@@ -25,15 +27,16 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col" style={{ fontFamily: "'Inter', sans-serif" }}>
-        <Navbar />
+        <SiteChrome><Navbar /></SiteChrome>
         <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteChrome><Footer /></SiteChrome>
         <Script
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="f6e74def-f515-48bb-af6f-6dd01e173b39"
           strategy="afterInteractive"
         />
+        <Analytics />
       </body>
     </html>
   );

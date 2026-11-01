@@ -1,0 +1,6 @@
+{
+  "from": "Marriott Bonvoy <reservations@example-marriott.test>",
+  "subject": "Reservation Confirmation #81234567 for Sydney Harbour Marriott Hotel at Circular Quay",
+  "received_at": "2026-02-03T09:00:00Z",
+  "body_text": "Thank you for your reservation, Dave.\n\nConfirmation Number: 81234567\n\nSydney Harbour Marriott Hotel at Circular Quay\n30 Pitt Street, Sydney, NSW 2000, Australia\n\nCheck-in: Sunday, March 15, 2026 (from 3:00 PM)\nCheck-out: Saturday, March 21, 2026 (by 11:00 AM)\n\n1 room, 1 adult, King Harbour View\nRate: synthetic fixture\n"
+}

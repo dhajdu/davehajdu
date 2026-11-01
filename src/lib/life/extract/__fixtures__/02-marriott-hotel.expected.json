@@ -1,0 +1,27 @@
+{
+  "kind": "hotel",
+  "confidence": 0.98,
+  "notes": null,
+  "legs": [
+    {
+      "kind": "hotel",
+      "status": "confirmed",
+      "confirmation_code": "81234567",
+      "provider": "Marriott",
+      "number": "Sydney Harbour Marriott Hotel at Circular Quay",
+      "origin_iata": null,
+      "destination_iata": null,
+      "origin_city": null,
+      "destination_city": null,
+      "starts_at_local": "2026-03-15T15:00",
+      "start_tz": "Australia/Sydney",
+      "ends_at_local": "2026-03-21T11:00",
+      "end_tz": "Australia/Sydney",
+      "hotel_name": "Sydney Harbour Marriott Hotel at Circular Quay",
+      "address": "30 Pitt Street, Sydney, NSW 2000, Australia",
+      "city": "Sydney",
+      "country": "Australia",
+      "confidence": 0.98
+    }
+  ]
+}

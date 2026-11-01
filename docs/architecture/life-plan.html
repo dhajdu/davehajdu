@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>/life Program Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #04102D;
+    --blue: #287BE8;
+    --magenta: #D1458B;
+    --mint: #6FF2C1;
+    --light-gray: #EAEEF2;
+    --body-text: #2A3044;
+    --muted: #6B7280;
+    --border: #D4D9E0;
+    --white: #ffffff;
+    --r-md: 6px;
+    --r-lg: 8px;
+    --r-xl: 12px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--white); color: var(--body-text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.55; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  header.hero { background: var(--navy); color: var(--white); padding: 64px 0 56px; }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .04em; color: var(--mint); margin: 0 0 12px; }
+  h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.05; margin: 0 0 16px; font-weight: 800; letter-spacing: -.02em; }
+  .hero p { max-width: 720px; font-size: 18px; color: #C9D2E3; margin: 0; }
+  .toc { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .toc a { color: var(--white); text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: rgb(255 255 255 / .1); }
+  .toc a.skip { opacity: .45; text-decoration: line-through; }
+  .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--light-gray); color: var(--navy); white-space: nowrap; }
+  .chip.blue { background: var(--blue); color: var(--white); }
+  .chip.mint { background: var(--mint); color: var(--navy); }
+  .chip.magenta { background: var(--magenta); color: var(--white); }
+  .chip.navy { background: var(--navy); color: var(--white); }
+  section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+  .dnum { font-size: 13px; font-weight: 800; color: var(--magenta); margin: 0 0 6px; }
+  h2 { font-size: 32px; color: var(--navy); margin: 0 0 10px; letter-spacing: -.01em; line-height: 1.15; }
+  .lede { color: var(--muted); margin: 0 0 32px; max-width: 760px; font-size: 17px; }
+  h3 { font-size: 20px; color: var(--navy); margin: 40px 0 10px; }
+  h4 { font-size: 15px; color: var(--navy); margin: 0 0 6px; }
+  p { margin: 0 0 14px; }
+  .prose { max-width: 780px; }
+  .prose p { font-size: 16px; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .g5 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+  .card { border: 1px solid var(--border); border-radius: var(--r-xl); padding: 20px; background: var(--white); }
+  .card p, .card li { font-size: 14px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card.fill { background: var(--light-gray); border-color: var(--light-gray); }
+  .card.navy { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .card.navy h4 { color: var(--mint); }
+  .quote { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; color: var(--navy); line-height: 1.2; border-left: 4px solid var(--magenta); padding: 4px 0 4px 18px; margin: 8px 0 28px; max-width: 820px; }
+  ul.tight { margin: 0; padding-left: 18px; }
+  ul.tight li { margin-bottom: 6px; font-size: 14px; }
+  .small { font-size: 13px; color: var(--muted); }
+  .note { font-size: 13px; color: var(--muted); border-left: 3px solid var(--mint); padding: 4px 12px; margin: 16px 0 0; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; background: var(--light-gray); padding: 1px 5px; border-radius: 4px; color: var(--navy); }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--r-xl); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-size: 12px; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--border); background: #FAFBFC; white-space: nowrap; }
+  td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td b { color: var(--navy); }
+  td.area { white-space: nowrap; font-weight: 700; color: var(--navy); }
+
+  /* schema */
+  .tbl { border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; background: var(--white); }
+  .tbl .tn { background: var(--navy); color: var(--white); font-family: ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 700; padding: 7px 10px; display: flex; justify-content: space-between; gap: 8px; }
+  .tbl .tn span { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; color: var(--mint); }
+  .tbl .cols { padding: 8px 10px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.7; color: var(--body-text); }
+  .tbl .cols i { font-style: normal; color: var(--muted); }
+  .layer { margin-bottom: 28px; }
+  .layer > .lh { display: flex; gap: 10px; align-items: baseline; margin-bottom: 10px; }
+  .layer > .lh h4 { margin: 0; font-size: 16px; }
+
+  /* diagram */
+  .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .flow .col { background: var(--light-gray); border-radius: var(--r-xl); padding: 14px; }
+  .flow .col h5 { margin: 0 0 10px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .node { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 8px 10px; font-size: 12.5px; margin-bottom: 8px; }
+  .node b { color: var(--navy); display: block; font-size: 13px; }
+  .node.hl { border-color: var(--blue); box-shadow: inset 3px 0 0 var(--blue); }
+  .node.mg { border-color: var(--magenta); box-shadow: inset 3px 0 0 var(--magenta); }
+  .arrow-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 12px; font-weight: 600; }
+  .loop { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 8px; }
+  .loop .step { border: 1.5px solid var(--navy); border-radius: var(--r-xl); padding: 14px; position: relative; }
+  .loop .step .n { font-size: 12px; font-weight: 800; color: var(--magenta); }
+  .loop .step b { display: block; color: var(--navy); font-size: 16px; margin: 2px 0 4px; }
+  .loop .step p { font-size: 13px; margin: 0; }
+
+  /* workflows */
+  .wf { border: 1px solid var(--border); border-radius: var(--r-xl); padding: 16px; }
+  .wf .top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+  .wf .top b { color: var(--navy); font-size: 15px; }
+  .wf .id { font-size: 12px; font-weight: 800; color: var(--magenta); }
+  .wf dl { margin: 0; display: grid; grid-template-columns: 70px 1fr; gap: 4px 10px; font-size: 13px; }
+  .wf dt { color: var(--muted); font-weight: 600; }
+  .wf dd { margin: 0; }
+
+  /* wireframes */
+  .wf-label { display: flex; align-items: baseline; gap: 10px; margin: 44px 0 6px; }
+  .wf-label .num { font-weight: 800; color: var(--magenta); }
+  .wf-label h4 { font-size: 18px; margin: 0; }
+  .wf-desc { margin: 0 0 16px; color: var(--muted); font-size: 14px; max-width: 760px; }
+  .wf-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+  .browser { flex: 1 1 560px; min-width: 0; border: 1.5px solid var(--navy); border-radius: var(--r-xl); overflow: hidden; background: var(--white); }
+  .browser .bar { background: var(--light-gray); border-bottom: 1.5px solid var(--navy); padding: 8px 12px; display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--muted); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--navy); }
+  .url { margin-left: 8px; background: var(--white); border: 1px solid var(--border); border-radius: var(--r-md); padding: 2px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .phone { flex: 0 0 290px; max-width: 100%; border: 1.5px solid var(--navy); border-radius: 28px; padding: 14px 10px; background: var(--white); }
+  .phone .screen { border: 1px solid var(--border); border-radius: 18px; overflow: hidden; min-height: 520px; }
+  .app { display: flex; min-height: 420px; }
+  .side { width: 150px; flex: 0 0 150px; border-right: 1px solid var(--border); padding: 14px 10px; font-size: 13px; background: #FAFBFC; }
+  .side .brand { font-weight: 800; color: var(--navy); margin-bottom: 12px; }
+  .side .grp { font-size: 11px; color: var(--muted); font-weight: 600; margin: 12px 0 4px 8px; }
+  .side .it { padding: 5px 8px; border-radius: var(--r-md); margin-bottom: 1px; }
+  .side .it.on { background: var(--navy); color: var(--white); }
+  .main { flex: 1; padding: 16px; min-width: 0; }
+  .topbar { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .search { flex: 1; min-width: 140px; border: 1.5px solid var(--border); border-radius: var(--r-lg); padding: 7px 10px; font-size: 13px; color: var(--muted); }
+  .btn { border: 1.5px solid var(--navy); border-radius: var(--r-lg); padding: 6px 10px; font-size: 12px; font-weight: 600; color: var(--navy); background: var(--white); white-space: nowrap; display: inline-block; }
+  .btn.pri { background: var(--blue); border-color: var(--blue); color: var(--white); }
+  .btn.ok { background: var(--mint); border-color: var(--mint); }
+  .ph { background: var(--light-gray); border-radius: var(--r-md); }
+  .areas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 14px; }
+  .ar { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 8px; font-size: 11px; }
+  .ar b { display: block; color: var(--navy); font-size: 12px; }
+  .ar .v { font-size: 16px; font-weight: 800; color: var(--navy); }
+  .ar .t { font-size: 11px; }
+  .up { color: #0E8F5F; font-weight: 700; } .dn { color: var(--magenta); font-weight: 700; }
+  .bar2 { height: 5px; background: var(--light-gray); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+  .bar2 i { display: block; height: 100%; background: var(--blue); }
+  .two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
+  .panel { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 12px; font-size: 12px; margin-bottom: 10px; }
+  .panel h5 { margin: 0 0 8px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .trow { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .trow:last-child { border-bottom: 0; }
+  .trow b { color: var(--navy); }
+  .score { display: grid; grid-template-columns: 110px 1fr 28px; gap: 8px; align-items: center; font-size: 12px; margin-bottom: 7px; }
+  .score .track { display: flex; gap: 3px; }
+  .score .track i { flex: 1; height: 14px; border-radius: 3px; background: var(--light-gray); }
+  .score .track i.f { background: var(--blue); }
+  .score .track i.p { background: var(--border); }
+  .auto { font-size: 11px; color: var(--muted); }
+  .auto b { color: var(--navy); }
+  .field { border: 1.5px solid var(--border); border-radius: var(--r-md); padding: 8px; font-size: 12px; color: var(--muted); min-height: 34px; margin-bottom: 8px; }
+  .field.f { color: var(--body-text); }
+  .tl { position: relative; padding-left: 22px; }
+  .tl::before { content: ""; position: absolute; left: 6px; top: 4px; bottom: 4px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 10px; font-size: 12.5px; }
+  .tl-item::before { content: ""; position: absolute; left: -21px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--white); border: 2px solid var(--muted); }
+  .tl-item.r::before { border-color: var(--navy); background: var(--mint); }
+  .tl-item.tr::before { border-color: var(--blue); background: var(--blue); }
+  .tl-item .d { color: var(--muted); font-size: 11px; }
+  .tl-item b { color: var(--navy); }
+  .m-head { background: var(--navy); color: var(--white); padding: 16px 14px; }
+  .m-head .k { font-size: 11px; color: var(--mint); font-weight: 600; }
+  .m-head .t { font-size: 20px; font-weight: 800; margin: 2px 0; }
+  .m-head .s { font-size: 12px; color: #C9D2E3; }
+  .count { display: inline-block; margin-top: 10px; background: var(--mint); color: var(--navy); font-weight: 800; font-size: 12px; padding: 3px 10px; border-radius: 999px; }
+  .day { padding: 10px 14px 4px; font-size: 12px; font-weight: 700; color: var(--muted); }
+  .seg { margin: 0 10px 8px; border: 1px solid var(--border); border-radius: var(--r-lg); padding: 10px; font-size: 12px; display: flex; gap: 10px; }
+  .ic { width: 28px; height: 28px; flex: 0 0 28px; border-radius: var(--r-md); display: grid; place-items: center; font-weight: 800; font-size: 11px; background: var(--light-gray); color: var(--navy); }
+  .ic.b { background: var(--blue); color: var(--white); }
+  .seg b { color: var(--navy); font-size: 13px; display: block; }
+  .codebox { font-family: ui-monospace, Menlo, monospace; background: var(--light-gray); border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--navy); }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .tabs div { flex: 1; text-align: center; padding: 9px 0; color: var(--muted); }
+  .tabs .on { color: var(--navy); font-weight: 700; box-shadow: inset 0 -2px 0 var(--blue); }
+  .person { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 12px; }
+  .av { width: 30px; height: 30px; border-radius: 50%; background: var(--light-gray); flex: 0 0 30px; }
+  .person .grow { flex: 1; min-width: 0; }
+  .person b { color: var(--navy); display: block; }
+  .photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .photos i { aspect-ratio: 1; background: var(--light-gray); border-radius: var(--r-md); display: block; }
+  .rq { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 12px; margin-bottom: 10px; font-size: 12px; }
+  .rq .why { color: var(--magenta); font-weight: 600; margin-bottom: 4px; }
+  .rq .acts { display: flex; gap: 6px; justify-content: flex-end; margin-top: 8px; flex-wrap: wrap; }
+  .src-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr 70px; gap: 8px; font-size: 12px; padding: 8px 0; border-bottom: 1px dashed var(--border); align-items: center; }
+  .src-row b { color: var(--navy); }
+  .ok-dot::before, .warn-dot::before, .off-dot::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .ok-dot::before { background: #0E8F5F; } .warn-dot::before { background: var(--magenta); } .off-dot::before { background: var(--border); }
+  .bubble { max-width: 88%; padding: 10px 12px; border-radius: var(--r-xl); font-size: 13px; margin-bottom: 10px; }
+  .bubble.me { margin-left: auto; background: var(--navy); color: var(--white); }
+  .bubble.ai { background: var(--light-gray); }
+  .src { display: inline-block; margin: 6px 4px 0 0; font-size: 11px; border: 1px solid var(--border); background: var(--white); border-radius: 999px; padding: 2px 8px; color: var(--blue); }
+
+  /* deployment */
+  .phase { border-radius: var(--r-xl); padding: 20px; border: 1.5px solid var(--border); }
+  .phase.now { border-color: var(--navy); }
+  .phase .ph-h { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .phase .ph-h h4 { margin: 0; font-size: 17px; }
+  ol.dod { margin: 0; padding-left: 20px; }
+  ol.dod li { margin-bottom: 10px; font-size: 15px; }
+  ol.dod li b { color: var(--navy); }
+  footer { padding: 32px 0 56px; font-size: 13px; color: var(--muted); }
+  @media (max-width: 760px) {
+    .side { display: none; }
+    .two { grid-template-columns: 1fr; }
+    .areas { grid-template-columns: repeat(2, 1fr); }
+    .src-row { grid-template-columns: 1fr 1fr; }
+    .score { grid-template-columns: 90px 1fr 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">5Ds AI Program Brief · davehajdu.com/life · Nov 1, 2026</p>
+    <h1>/life: a personal operating system</h1>
+    <p>A private database for one person's whole life: body, mind, people, money, work, places, time, direction, admin and legacy. It fills itself from the systems you already use, and it exists to answer one question: am I living the life I intend to?</p>
+    <nav class="toc">
+      <a href="#d1">1 · Definition of the Problem</a>
+      <a href="#d2">2 · Datasources Needed</a>
+      <a href="#d3">3 · Diagram &amp; Documented Workflow</a>
+      <a class="skip">4 · ROI Determined</a>
+      <a href="#d5">5 · Deployment Plan</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= D1 ================= -->
+<section id="d1">
+  <div class="wrap">
+    <p class="dnum">D1</p>
+    <h2>Definition of the Problem</h2>
+    <p class="lede">A life generates more data than ever, and almost none of it is in a form you can use to live better.</p>
+
+    <div class="quote">My life is spread across twenty systems, and none of them can tell me whether I'm living the life I intend to.</div>
+
+    <div class="prose">
+      <p><b>Scattered.</b> Health lives in a watch, a hospital portal and old emails. Money lives in bank statements and an accounting file. Relationships live in a phone, WhatsApp, LinkedIn and memory. Travel lives in confirmation emails. Reflections live in Notion. Photos live in Google Photos, tens of thousands of them, mostly never seen again. Each system holds a slice, and none of them talk to each other.</p>
+      <p><b>Unanswerable.</b> Simple questions about your own life take an hour or can't be answered at all. When was that surgery? How many times have I been to Australia? What's my net worth trend over five years? Who haven't I spoken to in a year who used to matter? What was I thinking the month the company sold?</p>
+      <p><b>Patterns stay invisible.</b> The most useful insights sit between systems: sleep against mood, travel against happiness, drinking against fitness, money stress against relationships. No single app can see across them, so the patterns that drive a life stay hidden, even when you feel them.</p>
+      <p><b>Direction drifts.</b> Goals get written in January and reviewed, if ever, by memory. Forum updates and monthly reviews are filled in by hand from scratch every time, so they're hard to sustain and impossible to compare over years.</p>
+      <p><b>Admin lapses.</b> A passport expires, insurance renews at the wrong price, the will that came up twice in one meeting still isn't written. Nobody else could step in and find anything.</p>
+      <p><b>Memory fades, legacy is lost.</b> The stories, people and moments that make up a life are recorded somewhere, but not kept anywhere. Family history disappears with the people who hold it.</p>
+    </div>
+
+    <h3>What /life does about it</h3>
+    <div class="grid g3">
+      <div class="card fill"><h4>Remember</h4><p>Every record of what happened, in one timeline: trips, surgeries, jobs, moves, milestones, people met. Searchable in seconds.</p></div>
+      <div class="card fill"><h4>Reflect</h4><p>Metrics over time across every area, side by side, so patterns between areas become visible. A monthly review that fills itself in.</p></div>
+      <div class="card fill"><h4>Run</h4><p>The admin of a life: expiry dates, renewals, accounts, documents, the people to call. Reminded before it's urgent.</p></div>
+    </div>
+
+    <h3>The ten areas of a life</h3>
+    <p class="small" style="margin-bottom:14px">The structure every table, workflow and screen hangs on. Each area is scored monthly, so the whole life fits on one screen.</p>
+    <div class="grid g5">
+      <div class="card"><h4>1 · Body</h4><p>Health, fitness, sleep, nutrition, habits</p></div>
+      <div class="card"><h4>2 · Mind</h4><p>Mood, learning, skills, principles, lessons</p></div>
+      <div class="card"><h4>3 · People</h4><p>Family, friends, partner, mentors, community</p></div>
+      <div class="card"><h4>4 · Money</h4><p>Net worth, income, debt, cash flow, insurance</p></div>
+      <div class="card"><h4>5 · Work</h4><p>Companies, roles, wins, talks, books, reputation</p></div>
+      <div class="card"><h4>6 · Places</h4><p>Travel, homes, events, firsts, bucket list</p></div>
+      <div class="card"><h4>7 · Time</h4><p>Where the hours go, by area</p></div>
+      <div class="card"><h4>8 · Direction</h4><p>Vision, goals, commitments, reviews</p></div>
+      <div class="card"><h4>9 · Admin</h4><p>IDs, accounts, property, will, emergency info</p></div>
+      <div class="card"><h4>10 · Legacy</h4><p>Photos, stories, family history, lifeline</p></div>
+    </div>
+
+    <h3>Design principles</h3>
+    <div class="grid g2">
+      <div class="card"><h4>Automatic first</h4><p>Tracking dies when it's manual. Every area gets an automatic source where one exists. Manual input is only what a person alone can provide: scores, meaning, decisions.</p></div>
+      <div class="card"><h4>Track what changes a decision or keeps a memory</h4><p>Everything else is noise. Monthly snapshots beat every transaction. Curated photos beat the whole library.</p></div>
+      <div class="card"><h4>Keep the original</h4><p>Every structured row links back to the email, statement or page it came from. Claude extracts; nothing is lost in translation.</p></div>
+      <div class="card"><h4>Ask before guessing</h4><p>Low confidence and conflicts go to a review queue. A wrong medical date or balance is worse than a missing one.</p></div>
+      <div class="card"><h4>Private by construction</h4><p>One owner, one login, every row locked to that login. The most sensitive data a person has, treated that way.</p></div>
+      <div class="card"><h4>Generic model, personal content</h4><p>Areas, metrics and sources are data, not code. Adding "tennis matches" or a new bank is a row, not a release.</p></div>
+    </div>
+
+    <h3>Not in scope</h3>
+    <ul class="tight" style="max-width:760px">
+      <li>Storing bank or service passwords. Money comes in through statements and exports only.</li>
+      <li>Every transaction categorised like a budgeting app. Monthly balances and totals are enough to answer the questions that matter.</li>
+      <li>A full medical record or lab archive. Key events, conditions, medications and documents only.</li>
+      <li>Importing the entire photo library. Curated selections only.</li>
+      <li>Any public view. A future public "now" page would be a separate decision.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= D2 ================= -->
+<section id="d2">
+  <div class="wrap">
+    <p class="dnum">D2</p>
+    <h2>Datasources Needed</h2>
+    <p class="lede">Everything a life could draw from, not only what's connected today. Each source has a method, a cadence and a phase. Phase 1 is in bold.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Area</th><th>Source</th><th>What it gives</th><th>Method</th><th>Cadence</th><th>Phase</th></tr></thead>
+        <tbody>
+          <tr><td class="area" rowspan="5">Body</td><td><b>Apple Health</b> (aggregates the watch, scale, phone)</td><td>Steps, workouts, sleep, resting heart rate, HRV, weight, body fat</td><td>Health Auto Export app → webhook</td><td>Daily</td><td><span class="chip navy">1</span></td></tr>
+          <tr><td>Wearable (Whoop, Oura, Garmin)</td><td>Recovery, strain, sleep stages</td><td>Vendor API</td><td>Daily</td><td><span class="chip">2</span></td></tr>
+          <tr><td>Strava</td><td>Runs, rides, tennis and pickleball sessions</td><td>API</td><td>Daily</td><td><span class="chip">2</span></td></tr>
+          <tr><td><b>Gmail + uploads</b></td><td>Surgery reports, discharge notes, prescriptions, lab PDFs</td><td>Upload or email search → Claude</td><td>On demand</td><td><span class="chip navy">1</span></td></tr>
+          <tr><td>Manual check-in</td><td>Alcohol, sugar, habits not captured by devices</td><td>One-tap daily log</td><td>Daily</td><td><span class="chip">2</span></td></tr>
+          <tr><td class="area" rowspan="3">Mind</td><td><b>Notion</b> journal and EO updates</td><td>Daily reflections, monthly scores, forum learnings</td><td>Notion API</td><td>Nightly</td><td><span class="chip navy">1</span></td></tr>
+          <tr><td>Kindle / Readwise / Goodreads</td><td>Books read, highlights</td><td>Readwise API or export</td><td>Weekly</td><td><span class="chip">3</span></td></tr>
+          <tr><td>Course platforms, Duolingo</td><td>Courses finished, language streaks</td><td>Export or manual</td><td>Monthly</td><td><span class="chip">3</span></td></tr>
+          <tr><td class="area" rowspan="4">People</td><td>Google Contacts / iCloud</td><td>Names, numbers, birthdays, companies</td><td>vCard export or People API</td><td>Weekly</td><td><span class="chip">2</span></td></tr>
+          <tr><td>Google Calendar</td><td>Who you met and when</td><td>Calendar API</td><td>Daily</td><td><span class="chip">2</span></td></tr>
+          <tr><td>LinkedIn</td><td>Connections, where people work</td><td>Data export</td><td>Quarterly</td><td><span class="chip">2</span></td></tr>
+          <tr><td>WhatsApp, Zalo</td><td>Last contact dates (not message content)</td><td>Chat export, metadata only</td><td>Monthly</td><td><span class="chip">3</span></td></tr>
+          <tr><td class="area" rowspan="4">Money</td><td>Bank and credit card statements</td><td>Month-end balances, income, big outflows</td><td>PDF/CSV upload or Gmail → Claude</td><td>Monthly</td><td><span class="chip">2</span></td></tr>
+          <tr><td>Brokerage, crypto, property</td><td>Asset values</td><td>Statement or manual snapshot</td><td>Monthly</td><td><span class="chip">2</span></td></tr>
+          <tr><td>Loans</td><td>Balances, rates, payoff dates</td><td>Statement or manual</td><td>Monthly</td><td><span class="chip">2</span></td></tr>
+          <tr><td>Business books (QuickBooks)</td><td>Owner draws, company revenue trend</td><td>QBO API</td><td>Monthly</td><td><span class="chip">3</span></td></tr>
+          <tr><td class="area" rowspan="2">Work</td><td>LinkedIn profile, CV</td><td>Roles, companies, dates</td><td>Export, one-time</td><td>Once</td><td><span class="chip">2</span></td></tr>
+          <tr><td>Speaking site, books, press</td><td>Talks given, audiences, publications</td><td>Site data + manual</td><td>Monthly</td><td><span class="chip">3</span></td></tr>
+          <tr><td class="area" rowspan="3">Places</td><td><b>Gmail</b> (dhajdu@gmail.com)</td><td>Flights, hotels, trains, cars, events, back to 2006</td><td>Apps Script → webhook → Claude</td><td>Hourly</td><td><span class="chip navy">1</span></td></tr>
+          <tr><td><b>TripIt</b></td><td>Cross-check for recent trips</td><td>Private iCal feed</td><td>Daily</td><td><span class="chip navy">1</span></td></tr>
+          <tr><td>Google Maps Timeline</td><td>Where you actually were, places visited</td><td>On-device export</td><td>Quarterly</td><td><span class="chip">3</span></td></tr>
+          <tr><td class="area">Time</td><td>Google Calendar, Lark calendar</td><td>Hours by category (work, people, health, admin)</td><td>Calendar APIs</td><td>Daily</td><td><span class="chip">3</span></td></tr>
+          <tr><td class="area" rowspan="2">Direction</td><td><b>Notion</b> EO updates, vision pages</td><td>Goals, 30/60-day commitments, past results</td><td>Notion API</td><td>Nightly</td><td><span class="chip navy">1</span></td></tr>
+          <tr><td><b>/life itself</b></td><td>Monthly review, yearly goals</td><td>Native</td><td>Monthly</td><td><span class="chip navy">1</span></td></tr>
+          <tr><td class="area" rowspan="2">Admin</td><td>Google Drive scans</td><td>Passport, licence, insurance, deeds, will</td><td>Upload → Claude extracts expiry and numbers kept out of text</td><td>On change</td><td><span class="chip">2</span></td></tr>
+          <tr><td>Gmail</td><td>Renewals, subscriptions, warranties</td><td>Apps Script → Claude</td><td>Daily</td><td><span class="chip">2</span></td></tr>
+          <tr><td class="area" rowspan="3">Legacy</td><td>Google Photos</td><td>Favourites and named albums, with dates, places, faces</td><td>Photos Picker (you choose) or Takeout of albums</td><td>Monthly</td><td><span class="chip">3</span></td></tr>
+          <tr><td>Forever app</td><td>Dad's life chapters, recordings</td><td>App export</td><td>Monthly</td><td><span class="chip">3</span></td></tr>
+          <tr><td>Notion lifeline, presentations</td><td>Your own story, in your words</td><td>Notion API</td><td>Nightly</td><td><span class="chip navy">1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Google Photos no longer lets apps read a whole library. Selection happens through Google's Photos Picker or a Takeout of chosen albums, which fits "curated, not everything" anyway.</p>
+
+    <h3>Database tables</h3>
+    <p class="small" style="margin-bottom:20px">One Supabase project, <code>dave-life</code>. Every table has <code>id</code>, <code>owner_id</code>, <code>created_at</code>, <code>updated_at</code> and row-level security limited to the owner, so those are left off below. Every column carries a comment so Ask can read the schema.</p>
+
+    <div class="layer">
+      <div class="lh"><h4>The frame</h4><span class="small">What a life is organised by</span></div>
+      <div class="grid g3">
+        <div class="tbl"><div class="tn">areas <span>10 seeded</span></div><div class="cols">slug <i>body, mind, people…</i><br>name, sort_order<br>description</div></div>
+        <div class="tbl"><div class="tn">metrics <span>definitions</span></div><div class="cols">area_id<br>slug <i>weight_kg, sleep_hours, net_worth</i><br>unit, aggregation <i>avg, sum, last</i><br>direction <i>higher_better, lower_better</i><br>source_id</div></div>
+        <div class="tbl"><div class="tn">tags · taggables</div><div class="cols">tags: name, color<br>taggables: tag_id, entity_type, entity_id</div></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="lh"><h4>Records, metrics, reflections</h4><span class="small">The three kinds of data every area holds</span></div>
+      <div class="grid g3">
+        <div class="tbl"><div class="tn">records <span>the timeline</span></div><div class="cols">area_id<br>kind <i>surgery, job, move, milestone…</i><br>title, started_on, ended_on<br>place_id, notes<br>source_item_id</div></div>
+        <div class="tbl"><div class="tn">measurements <span>time series</span></div><div class="cols">metric_id<br>measured_at, value<br>source_item_id<br><i>unique (metric_id, measured_at)</i></div></div>
+        <div class="tbl"><div class="tn">entries <span>reflections</span></div><div class="cols">kind <i>journal, eo_update, learning, note</i><br>date, title, body_md<br>external_id <i>notion page id</i><br>search <i>tsvector</i></div></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="lh"><h4>Direction</h4><span class="small">The loop that ties the areas together</span></div>
+      <div class="grid g3">
+        <div class="tbl"><div class="tn">goals</div><div class="cols">area_id, title<br>horizon <i>30d, 60d, year, vision</i><br>metric_id, target_value<br>due_on, status</div></div>
+        <div class="tbl"><div class="tn">reviews <span>monthly</span></div><div class="cols">period <i>2026-10</i><br>one_word, headline<br>status <i>draft, done</i><br>auto_summary <i>jsonb</i></div></div>
+        <div class="tbl"><div class="tn">review_scores</div><div class="cols">review_id, area_id<br>score <i>0 to 10</i><br>feelings, headline, impact</div></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="lh"><h4>Area detail</h4><span class="small">Tables where an area needs more than a record or a metric</span></div>
+      <div class="grid g3">
+        <div class="tbl"><div class="tn">people</div><div class="cols">name, relationship <i>family, friend…</i><br>closeness <i>1 to 5</i>, how_met<br>birthday, contact <i>jsonb</i><br>contact_every_days</div></div>
+        <div class="tbl"><div class="tn">interactions</div><div class="cols">person_id, happened_at<br>kind <i>meeting, call, trip, message</i><br>record_id, notes</div></div>
+        <div class="tbl"><div class="tn">places</div><div class="cols">name, city, country<br>lat, lng<br>kind <i>home, hotel, venue, city</i></div></div>
+        <div class="tbl"><div class="tn">trips</div><div class="cols">title, start_on, end_on<br>primary_place_id<br>purpose <i>business, personal</i></div></div>
+        <div class="tbl"><div class="tn">trip_legs</div><div class="cols">trip_id, kind <i>flight, hotel…</i><br>status, confirmation_code<br>provider, number, origin, destination<br>starts_at, start_tz, ends_at, end_tz</div></div>
+        <div class="tbl"><div class="tn">accounts</div><div class="cols">name, institution<br>kind <i>bank, card, brokerage, loan, property</i><br>currency, is_liability</div></div>
+        <div class="tbl"><div class="tn">balances</div><div class="cols">account_id, as_of<br>balance, balance_usd<br>source_item_id</div></div>
+        <div class="tbl"><div class="tn">obligations <span>admin</span></div><div class="cols">title <i>passport, insurance…</i><br>expires_on, renews_on<br>remind_days_before<br>document_id</div></div>
+        <div class="tbl"><div class="tn">media <span>photos</span></div><div class="cols">storage_path, taken_at<br>place_id, caption<br>linked to people, trips, records via <i>links</i></div></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="lh"><h4>Plumbing</h4><span class="small">How data gets in, safely and without duplicates</span></div>
+      <div class="grid g3">
+        <div class="tbl"><div class="tn">sources <span>connector registry</span></div><div class="cols">slug <i>gmail, notion, apple_health…</i><br>method, cadence<br>last_run_at, last_status<br>cursor <i>jsonb</i></div></div>
+        <div class="tbl"><div class="tn">source_items <span>raw inbox</span></div><div class="cols">source_id, external_id<br>received_at, payload <i>jsonb</i><br>processed_at, extraction <i>jsonb</i><br><i>unique (source_id, external_id)</i></div></div>
+        <div class="tbl"><div class="tn">review_queue</div><div class="cols">source_item_id<br>proposed <i>jsonb</i>, confidence<br>reason, status</div></div>
+        <div class="tbl"><div class="tn">documents</div><div class="cols">storage_path <i>private bucket</i><br>mime, title, doc_date<br>text <i>extracted</i></div></div>
+        <div class="tbl"><div class="tn">links</div><div class="cols">from_type, from_id<br>to_type, to_id<br>relation <i>mentions, attached, during</i></div></div>
+        <div class="tbl"><div class="tn">workflow_runs</div><div class="cols">workflow, started_at, finished_at<br>status, items_in, items_out<br>error</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= D3 ================= -->
+<section id="d3">
+  <div class="wrap">
+    <p class="dnum">D3</p>
+    <h2>Diagram &amp; Documented Workflow</h2>
+    <p class="lede">Sources feed a single raw inbox. Claude turns raw items into records, measurements and reflections. Anything uncertain waits for review. Everything rolls up into the monthly review.</p>
+
+    <div class="flow">
+      <div class="col">
+        <h5>Sources</h5>
+        <div class="node"><b>Gmail</b>Travel, medical, admin, statements</div>
+        <div class="node"><b>Notion</b>Journal, EO updates</div>
+        <div class="node"><b>Apple Health</b>Body metrics</div>
+        <div class="node"><b>Calendar, Contacts</b>People, time</div>
+        <div class="node"><b>Uploads</b>Statements, scans, photos</div>
+      </div>
+      <div class="col">
+        <h5>Collect</h5>
+        <div class="node hl"><b>Connectors</b>Apps Script, webhooks, scheduled pulls</div>
+        <div class="node"><b>source_items</b>Raw inbox. One row per email, page, file or reading. Never duplicated.</div>
+      </div>
+      <div class="col">
+        <h5>Understand</h5>
+        <div class="node hl"><b>Claude extraction</b>Classify, extract fields, link people and places</div>
+        <div class="node mg"><b>Review queue</b>Low confidence or conflict</div>
+      </div>
+      <div class="col">
+        <h5>Store</h5>
+        <div class="node"><b>Records</b>Timeline</div>
+        <div class="node"><b>Measurements</b>Charts</div>
+        <div class="node"><b>Entries</b>Reflections</div>
+        <div class="node"><b>Documents, media</b>Private bucket</div>
+      </div>
+      <div class="col">
+        <h5>Use</h5>
+        <div class="node mg"><b>Monthly review</b>Auto-filled</div>
+        <div class="node"><b>Areas, timeline</b></div>
+        <div class="node"><b>Nudges</b>People, renewals</div>
+        <div class="node"><b>Search, Ask</b></div>
+      </div>
+    </div>
+    <p class="arrow-note">Sources → Collect → Understand → Store → Use</p>
+
+    <h3>The core loop</h3>
+    <div class="loop">
+      <div class="step"><span class="n">1</span><b>Capture</b><p>Sources fill records and metrics automatically, all month.</p></div>
+      <div class="step"><span class="n">2</span><b>Review</b><p>On the 1st, a draft review is waiting with every area's numbers and highlights.</p></div>
+      <div class="step"><span class="n">3</span><b>Reflect</b><p>You add scores, one word and meaning. Ten minutes, not an hour.</p></div>
+      <div class="step"><span class="n">4</span><b>Direct</b><p>Set 30 and 60-day goals tied to metrics. Next month's review checks them.</p></div>
+    </div>
+
+    <h3>Workflows</h3>
+    <div class="grid g2">
+      <div class="wf"><div class="top"><b>Gmail sweep</b><span class="id">W1</span></div><dl>
+        <dt>Trigger</dt><dd>Hourly, Apps Script inside dhajdu@gmail.com</dd>
+        <dt>Steps</dt><dd>Search unlabelled travel, medical, admin and statement emails → POST to <code>/api/life/ingest</code> with a shared secret → label <code>life/ingested</code></dd>
+        <dt>Output</dt><dd><code>source_items</code>, then W3</dd>
+        <dt>Backfill</dt><dd>Monthly windows back to 2006, resumable cursor</dd></dl></div>
+      <div class="wf"><div class="top"><b>Notion sync</b><span class="id">W2</span></div><dl>
+        <dt>Trigger</dt><dd>Nightly cron, plus a one-time full import</dd>
+        <dt>Steps</dt><dd>Fetch pages edited in 48 hours → strip repeated template blocks → upsert <code>entries</code> → EO scores into <code>review_scores</code>, weight into <code>measurements</code></dd>
+        <dt>Output</dt><dd>Journal and history of monthly reviews</dd></dl></div>
+      <div class="wf"><div class="top"><b>Extract and route</b><span class="id">W3</span></div><dl>
+        <dt>Trigger</dt><dd>Every new <code>source_item</code></dd>
+        <dt>Steps</dt><dd>Claude classifies (flight, hotel, statement, medical, renewal…) and extracts fields → match on natural keys (confirmation code, account and date) → apply changes and cancellations</dd>
+        <dt>Output</dt><dd>Rows in the right tables, or a <code>review_queue</code> item</dd></dl></div>
+      <div class="wf"><div class="top"><b>Health sync</b><span class="id">W4</span></div><dl>
+        <dt>Trigger</dt><dd>Daily push from the Health Auto Export app</dd>
+        <dt>Steps</dt><dd>Webhook receives daily aggregates → upsert <code>measurements</code> per metric and day</dd>
+        <dt>Output</dt><dd>Body charts, review numbers</dd></dl></div>
+      <div class="wf"><div class="top"><b>Trip builder</b><span class="id">W5</span></div><dl>
+        <dt>Trigger</dt><dd>After any trip leg changes</dd>
+        <dt>Steps</dt><dd>Order legs by time → a trip opens when you leave Saigon and closes when you return → name it, attach places and journal entries from those dates</dd>
+        <dt>Output</dt><dd><code>trips</code>, timeline records</dd></dl></div>
+      <div class="wf"><div class="top"><b>Monthly review draft</b><span class="id">W6</span></div><dl>
+        <dt>Trigger</dt><dd>1st of each month, 06:00 Saigon</dd>
+        <dt>Steps</dt><dd>Compute every metric's month vs last month and 12-month average → gather records, trips, people seen → Claude drafts highlights per area and checks last month's goals → notify</dd>
+        <dt>Human</dt><dd>Score, one word, meaning, next goals</dd></dl></div>
+      <div class="wf"><div class="top"><b>Statement ingest</b><span class="id">W7</span></div><dl>
+        <dt>Trigger</dt><dd>Statement email (W1) or upload</dd>
+        <dt>Steps</dt><dd>Claude reads the PDF → month-end balance per account, income and large outflows → <code>balances</code> → net worth recalculated</dd>
+        <dt>Phase</dt><dd>2</dd></dl></div>
+      <div class="wf"><div class="top"><b>Nudges</b><span class="id">W8</span></div><dl>
+        <dt>Trigger</dt><dd>Weekly, Monday morning</dd>
+        <dt>Steps</dt><dd>People past their contact interval, birthdays in 14 days, obligations inside their reminder window → one digest</dd>
+        <dt>Phase</dt><dd>2</dd></dl></div>
+      <div class="wf"><div class="top"><b>Photo curation</b><span class="id">W9</span></div><dl>
+        <dt>Trigger</dt><dd>Monthly prompt, or after a trip ends</dd>
+        <dt>Steps</dt><dd>Open Google Photos Picker for the trip's dates → chosen photos copied to the private bucket → linked to trip, places, people</dd>
+        <dt>Phase</dt><dd>3</dd></dl></div>
+      <div class="wf"><div class="top"><b>Ask</b><span class="id">W10</span></div><dl>
+        <dt>Trigger</dt><dd>On demand</dd>
+        <dt>Steps</dt><dd>Claude queries through a read-only database role, cites every row it used</dd>
+        <dt>Guarantee</dt><dd>Can read everything, can change nothing</dd></dl></div>
+    </div>
+
+    <h3>Wireframes</h3>
+    <p class="small">Layout and content, not final visual design. The build uses the site's navy, blue, magenta and mint on Inter, white background. Sample numbers are illustrative.</p>
+
+    <!-- 01 Life dashboard -->
+    <div class="wf-label"><span class="num">01</span><h4>Home: this month across all ten areas</h4></div>
+    <p class="wf-desc">The whole life on one screen. Each area shows its key number and its trend against your 12-month average. What needs attention sits underneath.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life</span></div>
+      <div class="app">
+        <div class="side"><div class="brand">/life</div><div class="it on">This month</div><div class="it">Review</div><div class="it">Timeline</div><div class="grp">Areas</div><div class="it">Body</div><div class="it">People</div><div class="it">Money</div><div class="it">Places</div><div class="it">…</div><div class="grp">System</div><div class="it">Inbox · 4</div><div class="it">Sources</div><div class="it">Ask</div></div>
+        <div class="main">
+          <div class="topbar"><div class="search">Search your life…</div><span class="btn">November 2026</span></div>
+          <div class="areas">
+            <div class="ar"><b>Body</b><span class="v">78.4</span> kg<div class="t"><span class="dn">▲ 0.6</span> · 11 workouts</div></div>
+            <div class="ar"><b>Mind</b><span class="v">22</span> entries<div class="t"><span class="up">▲ 6</span> vs avg</div></div>
+            <div class="ar"><b>People</b><span class="v">14</span> seen<div class="t"><span class="dn">3 overdue</span></div></div>
+            <div class="ar"><b>Money</b><span class="v">$###k</span><div class="t"><span class="up">▲ 4%</span> net worth</div></div>
+            <div class="ar"><b>Work</b><span class="v">$110k</span><div class="t">record month</div></div>
+            <div class="ar"><b>Places</b><span class="v">3</span> trips<div class="t">9 nights away</div></div>
+            <div class="ar"><b>Time</b><span class="v">62%</span> work<div class="t"><span class="dn">▲ 8 pts</span></div></div>
+            <div class="ar"><b>Direction</b><span class="v">1/3</span> goals<div class="bar2"><i style="width:33%"></i></div></div>
+            <div class="ar"><b>Admin</b><span class="v">2</span> due<div class="t">passport 7 mo</div></div>
+            <div class="ar"><b>Legacy</b><span class="v">48</span> photos<div class="t">2 stories</div></div>
+          </div>
+          <div class="two">
+            <div class="panel"><h5>Needs attention</h5>
+              <div class="trow"><b>Review for October is ready</b><span class="btn pri">Open</span></div>
+              <div class="trow"><b>3 people past their interval</b><span>People</span></div>
+              <div class="trow"><b>4 items waiting in the inbox</b><span>Inbox</span></div>
+            </div>
+            <div class="panel"><h5>Coming up</h5>
+              <div class="trow"><b>Sydney</b><span>Nov 19 to 23</span></div>
+              <div class="trow"><b>Dad's birthday</b><span>in 12 days</span></div>
+              <div class="trow"><b>Health insurance renews</b><span>Dec 15</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+
+    <!-- 02 Monthly review -->
+    <div class="wf-label"><span class="num">02</span><h4>Monthly review: filled in before you open it</h4></div>
+    <p class="wf-desc">The heart of the product. Numbers and highlights are already there for every area. You add the score, the one word and what it meant. Same shape as an EO update, so it can be shared with a forum in one click.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life/review/2026-10</span></div>
+      <div class="main">
+        <div class="topbar"><h4 style="margin:0;flex:1;font-size:18px">October 2026 review</h4><span class="chip magenta">Draft</span><span class="btn">Copy as EO update</span><span class="btn pri">Finish</span></div>
+        <div class="two">
+          <div>
+            <div class="panel"><h5>Scores · you set these</h5>
+              <div class="score"><span>Body</span><span class="track"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i></span><b>7</b></div>
+              <div class="score"><span>Mind</span><span class="track"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span><b>9</b></div>
+              <div class="score"><span>People</span><span class="track"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i></span><b>5</b></div>
+              <div class="score"><span>Money</span><span class="track"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i></span><b>5</b></div>
+              <div class="score"><span>Work</span><span class="track"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span><b>9</b></div>
+              <div class="score"><span>…5 more</span><span class="track"><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i></i><i></i><i></i><i></i><i></i></span><b>·</b></div>
+            </div>
+            <div class="panel"><h5>One word</h5><div class="field f">Hungry</div><h5>Headline</h5><div class="field">What defined this month…</div></div>
+          </div>
+          <div>
+            <div class="panel"><h5>Auto-filled from your data</h5>
+              <div class="auto"><b>Body</b> · 11 workouts (goal 15), avg sleep 6.4h, weight 78.4 kg ▲0.6</div><hr style="border:0;border-top:1px dashed var(--border)">
+              <div class="auto"><b>Places</b> · Nha Trang, Sydney, Phnom Penh · 9 nights away</div><hr style="border:0;border-top:1px dashed var(--border)">
+              <div class="auto"><b>People</b> · 14 people seen, 2 calls with Dad, 3 overdue</div><hr style="border:0;border-top:1px dashed var(--border)">
+              <div class="auto"><b>Mind</b> · 22 journal entries. Recurring themes: discipline, Australia, father</div>
+            </div>
+            <div class="panel"><h5>Last month's goals</h5>
+              <div class="trow"><b>Close 2 deals</b><span class="dn">1 of 2</span></div>
+              <div class="trow"><b>15 workouts</b><span class="dn">11 of 15</span></div>
+              <div class="trow"><b>Book US trip for Dad</b><span class="up">Done</span></div>
+            </div>
+            <div class="panel"><h5>Next 30 and 60 days</h5><div class="field">+ Add a goal, tie it to a metric</div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+
+    <!-- 03 Area page -->
+    <div class="wf-label"><span class="num">03</span><h4>Area page: Body</h4></div>
+    <p class="wf-desc">Every area has the same layout: its metrics as charts, its records as a timeline, its goals, and its sources. This makes adding a new area a configuration change.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life/area/body</span></div>
+      <div class="main">
+        <div class="topbar"><h4 style="margin:0;flex:1;font-size:18px">Body</h4><span class="btn">1Y</span><span class="btn">5Y</span><span class="btn pri">All</span></div>
+        <div class="two">
+          <div>
+            <div class="panel"><h5>Weight (kg) · goal 79</h5>
+              <svg viewBox="0 0 320 90" width="100%" aria-label="Weight trend sketch"><line x1="0" y1="40" x2="320" y2="40" stroke="#6FF2C1" stroke-dasharray="4 3" stroke-width="2"/><polyline fill="none" stroke="#287BE8" stroke-width="2.5" points="0,70 30,62 60,55 90,40 120,30 150,28 180,36 210,48 240,52 270,46 300,44 320,42"/></svg>
+            </div>
+            <div class="panel"><h5>Workouts per week · Sleep hours</h5>
+              <svg viewBox="0 0 320 70" width="100%" aria-label="Workouts and sleep sketch"><g fill="#287BE8"><rect x="4" y="30" width="16" height="40"/><rect x="28" y="40" width="16" height="30"/><rect x="52" y="20" width="16" height="50"/><rect x="76" y="50" width="16" height="20"/><rect x="100" y="25" width="16" height="45"/><rect x="124" y="35" width="16" height="35"/><rect x="148" y="15" width="16" height="55"/><rect x="172" y="30" width="16" height="40"/><rect x="196" y="45" width="16" height="25"/><rect x="220" y="20" width="16" height="50"/><rect x="244" y="28" width="16" height="42"/><rect x="268" y="18" width="16" height="52"/><rect x="292" y="22" width="16" height="48"/></g><polyline fill="none" stroke="#D1458B" stroke-width="2" points="12,30 36,26 60,34 84,22 108,28 132,30 156,24 180,26 204,36 228,28 252,26 276,30 300,24"/></svg>
+            </div>
+          </div>
+          <div>
+            <div class="panel"><h5>Records</h5>
+              <div class="tl">
+                <div class="tl-item r"><span class="d">2022</span><br><b>Spinal fusion</b> · 2 documents</div>
+                <div class="tl-item r"><span class="d">Between ages 28 and 33</span><br><b>Back surgery</b></div>
+                <div class="tl-item r"><span class="d">Age 19</span><br><b>ACL tear</b></div>
+              </div>
+            </div>
+            <div class="panel"><h5>Sources</h5>
+              <div class="trow"><b>Apple Health</b><span class="ok-dot">today 06:10</span></div>
+              <div class="trow"><b>Notion weight</b><span class="ok-dot">nightly</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+
+    <!-- 04 Timeline -->
+    <div class="wf-label"><span class="num">04</span><h4>Timeline</h4></div>
+    <p class="wf-desc">Every record from every area in date order, filterable by area. Zoom from a decade to a single week, where journal entries, trips and photos from those days appear together.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life/timeline</span></div>
+      <div class="main">
+        <div class="topbar"><span class="chip navy">All</span><span class="chip">Body</span><span class="chip">People</span><span class="chip">Money</span><span class="chip">Work</span><span class="chip">Places</span><span class="chip">Legacy</span><span style="flex:1"></span><span class="btn">Decade</span><span class="btn pri">Year</span><span class="btn">Month</span></div>
+        <div class="tl">
+          <div class="tl-item tr"><span class="d">Oct 30 to Nov 3, 2026 · Places</span><br><b>Phnom Penh, Cambodia</b> · 2 flights · 1 hotel · 12 photos</div>
+          <div class="tl-item r"><span class="d">Oct 2026 · Work</span><br><b>Record revenue month</b> · from October review</div>
+          <div class="tl-item tr"><span class="d">Sep 29 to Oct 3, 2026 · Places</span><br><b>Melbourne, Australia</b> · keynote, 88 NPS</div>
+          <div class="tl-item r"><span class="d">2021 · Work</span><br><b>TINYpulse exit</b></div>
+          <div class="tl-item r"><span class="d">2006 · Places</span><br><b>Moved to Saigon</b></div>
+        </div>
+      </div>
+    </div></div>
+
+    <!-- 05 Travel phone -->
+    <div class="wf-label"><span class="num">05</span><h4>Places: upcoming trip on a phone</h4></div>
+    <p class="wf-desc">The TripIt replacement, built from Gmail. Next trip, countdown, each day's flights and hotels in local time, confirmation codes that copy on tap.</p>
+    <div class="wf-row">
+      <div class="phone"><div class="screen">
+        <div class="tabs"><div class="on">Upcoming</div><div>Past</div><div>Map</div></div>
+        <div class="m-head"><div class="k">Next trip</div><div class="t">Sydney, Australia</div><div class="s">Thu Nov 19 to Mon Nov 23 · 4 nights</div><span class="count">in 18 days</span></div>
+        <div class="day">Thu, Nov 19</div>
+        <div class="seg"><div class="ic b">✈</div><div><b>SGN 13:45 → SYD 22:15</b>VN773 · Vietnam Airlines<br><span class="codebox">ABC123</span></div></div>
+        <div class="seg"><div class="ic">H</div><div><b>Check in · Four Points Central Park</b>after 15:00<br><span class="codebox">8841207</span></div></div>
+        <div class="day">Mon, Nov 23</div>
+        <div class="seg"><div class="ic b">✈</div><div><b>SYD 00:15 → SGN 09:15</b>VN772 · Vietnam Airlines</div></div>
+      </div></div>
+      <div class="card" style="flex:1 1 300px">
+        <h4>Past tab</h4>
+        <p>Trips by year with a map of every place visited, plus lifetime totals: countries, trips, flights, nights away. Each trip page shows the itinerary, the journal entries written during it, the people you were with and the photos you picked.</p>
+        <h4 style="margin-top:14px">Changes and cancellations</h4>
+        <p>A change email updates the booking. A cancellation removes it from the plan and keeps it in history. Two bookings that can't both be true go to the inbox.</p>
+      </div>
+    </div>
+
+    <!-- 06 People -->
+    <div class="wf-label"><span class="num">06</span><h4>People</h4></div>
+    <p class="wf-desc">The people who matter, ranked by closeness, with when you last connected and whether you're overdue. A person page shows every trip, meeting, journal mention and photo with them.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life/people</span></div>
+      <div class="main">
+        <div class="topbar"><div class="search">Search people…</div><span class="chip navy">Inner circle</span><span class="chip">Family</span><span class="chip">Friends</span><span class="chip">EO</span><span class="chip magenta">Overdue · 3</span></div>
+        <div class="person"><span class="av"></span><div class="grow"><b>Dad</b>Family · every 7 days</div><span>Last: 2 days ago</span><span class="chip mint">On track</span></div>
+        <div class="person"><span class="av"></span><div class="grow"><b>Forum member</b>EO · every 30 days</div><span>Last: 41 days ago</span><span class="chip magenta">Overdue</span></div>
+        <div class="person"><span class="av"></span><div class="grow"><b>Old friend</b>Friend · every 90 days</div><span>Last: 7 months ago</span><span class="chip magenta">Overdue</span></div>
+        <div class="person"><span class="av"></span><div class="grow"><b>Mentor</b>Mentor · every 60 days</div><span>Last: 3 weeks ago</span><span class="chip mint">On track</span></div>
+      </div>
+    </div></div>
+
+    <!-- 07 Money -->
+    <div class="wf-label"><span class="num">07</span><h4>Money</h4></div>
+    <p class="wf-desc">Net worth over time from month-end balances, with assets and liabilities split. Each number traces back to the statement it came from. No passwords stored, no bank login.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life/area/money</span></div>
+      <div class="main">
+        <div class="two">
+          <div class="panel"><h5>Net worth (USD)</h5>
+            <svg viewBox="0 0 320 110" width="100%" aria-label="Net worth trend sketch"><line x1="0" y1="70" x2="320" y2="70" stroke="#D4D9E0"/><polyline fill="none" stroke="#287BE8" stroke-width="2.5" points="0,30 40,26 80,40 120,72 160,90 200,84 240,70 280,58 320,48"/><text x="110" y="104" font-size="10" fill="#6B7280" font-family="Inter">2021 exit</text></svg>
+          </div>
+          <div>
+            <div class="panel"><h5>Accounts · Oct 31</h5>
+              <div class="trow"><b>Bank, operating</b><span>$##,###</span></div>
+              <div class="trow"><b>Brokerage</b><span>$##,###</span></div>
+              <div class="trow"><b>Loan 2</b><span class="dn">−$##,###</span></div>
+            </div>
+            <div class="panel"><h5>Missing statements</h5><div class="trow"><b>Credit card, Oct</b><span class="btn">Upload</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+
+    <!-- 08 Inbox -->
+    <div class="wf-label"><span class="num">08</span><h4>Inbox: where Claude asks instead of guessing</h4></div>
+    <p class="wf-desc">Everything waiting on a decision, from every source. One click to approve, fix or reject.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life/inbox</span></div>
+      <div class="main">
+        <div class="rq"><div class="why">Places · Two return flights for one trip</div><b>Phnom Penh:</b> KTI → BKK → SGN on Nov 1 to 3, or QR971 KTI → SGN on Nov 1?<div class="acts"><span class="btn">View emails</span><span class="btn">QR971</span><span class="btn pri">Via Bangkok</span></div></div>
+        <div class="rq"><div class="why">Money · New account found</div>A statement from an institution not yet in your accounts. Add as <b>credit card</b>?<div class="acts"><span class="btn">Ignore</span><span class="btn ok">Add account</span></div></div>
+        <div class="rq"><div class="why">Body · Value out of range</div>Physical score of <b>76</b> on May 25. Weight in kg typed into the wrong field?<div class="acts"><span class="btn">Keep</span><span class="btn ok">Move to weight</span></div></div>
+      </div>
+    </div></div>
+
+    <!-- 09 Sources -->
+    <div class="wf-label"><span class="num">09</span><h4>Sources: is everything still flowing?</h4></div>
+    <p class="wf-desc">Every connector, when it last ran, and what it brought in. A broken source shows here before it shows up as a hole in the data.</p>
+    <div class="wf-row"><div class="browser">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">davehajdu.com/life/sources</span></div>
+      <div class="main">
+        <div class="src-row"><span class="small">Source</span><span class="small">Last run</span><span class="small">This month</span><span></span></div>
+        <div class="src-row"><b>Gmail sweep</b><span class="ok-dot">12 min ago</span><span>38 items</span><span class="btn">Logs</span></div>
+        <div class="src-row"><b>Notion sync</b><span class="ok-dot">02:00 today</span><span>27 entries</span><span class="btn">Logs</span></div>
+        <div class="src-row"><b>Apple Health</b><span class="warn-dot">3 days ago</span><span>28 days</span><span class="btn">Fix</span></div>
+        <div class="src-row"><b>TripIt feed</b><span class="ok-dot">06:00 today</span><span>5 trips</span><span class="btn">Logs</span></div>
+        <div class="src-row"><b>Bank statements</b><span class="off-dot">Phase 2</span><span>·</span><span></span></div>
+      </div>
+    </div></div>
+
+    <!-- 10 Ask -->
+    <div class="wf-label"><span class="num">10</span><h4>Ask</h4></div>
+    <p class="wf-desc">Plain-English questions across every area, answered from your own records with the sources linked.</p>
+    <div class="wf-row">
+      <div class="phone"><div class="screen" style="padding:14px">
+        <div class="bubble me">Do I sleep worse in months I travel more?</div>
+        <div class="bubble ai">Yes, slightly. In months with 7+ nights away your average sleep was 6.1h, against 6.8h in months at home, across the 34 months with data.<br><span class="src">Sleep · 34 months</span><span class="src">Trips · 2023 to 2026</span></div>
+        <div class="bubble me">Who haven't I talked to this year that I used to see often?</div>
+        <div class="bubble ai">Four people you saw monthly in 2024 and not at all in 2026. Want the list?</div>
+        <div class="search" style="margin-top:16px">Ask anything…</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= D4 ================= -->
+<section id="d4" style="padding:32px 0">
+  <div class="wrap">
+    <p class="dnum">D4</p>
+    <h2 style="color:var(--muted)">ROI Determined</h2>
+    <p class="small" style="margin:0">Skipped for this brief. This is a personal system, not a business case.</p>
+  </div>
+</section>
+
+<!-- ================= D5 ================= -->
+<section id="d5">
+  <div class="wrap">
+    <p class="dnum">D5</p>
+    <h2>Deployment Plan</h2>
+    <p class="lede">Built into the existing davehajdu.com Next.js app under <code>/life</code>, backed by a new Supabase project. Shipped in three phases, each usable on its own.</p>
+
+    <div class="grid g2">
+      <div class="card"><h4>Where it runs</h4><ul class="tight">
+        <li><b>App:</b> davehajdu.com/life, inside the current Next.js 16 site on Vercel</li>
+        <li><b>Database:</b> new Supabase project <code>dave-life</code>, Singapore region, separate from the site's inquiry database</li>
+        <li><b>Files:</b> private Supabase storage bucket, short-lived signed links only</li>
+        <li><b>Schedules:</b> Vercel cron for nightly and monthly jobs, Apps Script triggers for Gmail</li>
+        <li><b>Ship flow:</b> feature branch → PR → merge to main → Vercel deploys automatically</li>
+      </ul></div>
+      <div class="card"><h4>Security</h4><ul class="tight">
+        <li>One login: only Dave's email can sign in, with two-factor authentication</li>
+        <li>Every page and API route checks the session on the server, not only at the edge</li>
+        <li>Row-level security on every table, limited to the owner</li>
+        <li>Ingest endpoints accept only signed requests with a shared secret</li>
+        <li>/life is hidden from search engines, the sitemap and robots.txt</li>
+        <li>No bank or service passwords stored anywhere</li>
+      </ul></div>
+    </div>
+
+    <h3>Phases</h3>
+    <div class="grid g3">
+      <div class="phase now">
+        <div class="ph-h"><h4>Phase 1 · The loop</h4><span class="chip navy">Now</span></div>
+        <p class="small">Frame, plumbing, Direction, Mind, Body, Places</p>
+        <ul class="tight">
+          <li>Database, security, login</li>
+          <li>Sources, raw inbox, review inbox</li>
+          <li>Notion import and nightly sync</li>
+          <li>Apple Health daily sync</li>
+          <li>Gmail travel sweep and 20-year backfill, trip builder</li>
+          <li>Home, monthly review, area pages, timeline, travel, Ask</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-h"><h4>Phase 2 · People and money</h4><span class="chip">Next</span></div>
+        <p class="small">People, Money, Work, Admin</p>
+        <ul class="tight">
+          <li>Contacts, calendar meetings, LinkedIn import</li>
+          <li>Contact intervals and weekly nudges</li>
+          <li>Bank, card, brokerage and loan statements, net worth</li>
+          <li>Career history</li>
+          <li>Documents, expiry dates, renewal reminders</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-h"><h4>Phase 3 · Memory</h4><span class="chip">Later</span></div>
+        <p class="small">Legacy, Time, the rest of Mind</p>
+        <ul class="tight">
+          <li>Google Photos curation by trip and month</li>
+          <li>Forever app chapters, family history</li>
+          <li>Calendar time by area</li>
+          <li>Books, highlights, courses</li>
+          <li>Maps Timeline places</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Definition of Done · Phase 1</h3>
+    <p class="small" style="margin-bottom:14px">Phase 1 is finished when all of these are true on production, checked by Dave.</p>
+    <ol class="dod">
+      <li><b>Locked down.</b> Logged out, every /life page redirects to login and every /life API route returns 401. A second Google account cannot sign in. The public key reads zero rows from every table. Supabase's security advisor reports no issues.</li>
+      <li><b>Notion is in.</b> All 579 journal entries and 65 EO updates are imported, each journal entry holds only that day's writing, and rerunning the import creates zero duplicates. An edit in Notion appears in /life by the next morning.</li>
+      <li><b>Five years of reviews.</b> Every EO update since 2021 appears as a monthly review with its scores and one word, and the bad values (the 76s, the 2028 date) were resolved through the inbox, not silently.</li>
+      <li><b>Body flows.</b> Apple Health data has arrived every day for 14 consecutive days, and weight, workouts and sleep chart on the Body page.</li>
+      <li><b>Travel is complete.</b> The Gmail backfill has run back to 2006. Every trip in the TripIt feed exists in /life with matching dates and flights. A new booking email appears as a trip within an hour, and a cancellation removes it.</li>
+      <li><b>The review writes itself.</b> On December 1, the November review draft is waiting with numbers and highlights for every Phase 1 area, and finishing it takes under 15 minutes.</li>
+      <li><b>Questions get answered.</b> Ask correctly answers, with sources: "When was my spinal fusion?", "How many times have I been to Australia?", "What word described my month in October 2024?" It cannot change any data.</li>
+      <li><b>Sources are visible.</b> Every Phase 1 source shows its last run on the Sources page, and a failed run shows as a warning within a day.</li>
+      <li><b>Works on a phone.</b> Home, review, travel and Ask are usable at 375px wide.</li>
+      <li><b>Shipped properly.</b> Type check and build pass, each slice merged through a reviewed PR, deployed through git push.</li>
+    </ol>
+
+    <h3>Open decisions</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Question</th><th>Default if not decided</th></tr></thead>
+      <tbody>
+        <tr><td><b>Which wearable, if any, beyond Apple Health?</b></td><td>Apple Health only in Phase 1</td></tr>
+        <tr><td><b>Monthly review: replace the Notion EO template, or feed it?</b></td><td>Feed it: /life drafts, "Copy as EO update" exports</td></tr>
+        <tr><td><b>Trips before 2006 (the US years)</b></td><td>Manual records only, no email backfill</td></tr>
+        <tr><td><b>Where nudges are delivered</b></td><td>Weekly email to dave@edge8.co</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">/life · 5Ds AI Program Brief · Draft 2 · Nov 1, 2026 · Engineering detail in <code>docs/architecture/life.md</code> (to be updated to this model)</div>
+</footer>
+
+</body>
+</html>
