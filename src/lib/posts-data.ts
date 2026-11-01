@@ -204,7 +204,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 
     { tag: 'h2', text: 'Want one for yourself?' },
     { tag: 'p', text: 'I\'m planning to turn this into two things. An <strong>open source</strong> version, so anyone technical can take the code and run their own. And a <strong>small SaaS</strong> for people who want the system without the setup.' },
-    { tag: 'p', text: 'If either sounds useful, <a href="/schedule-consultation">tell me here</a>. The first people who raise their hand will shape what it becomes.' },
+    { tag: 'p', text: 'If either sounds useful, <a href="https://edge8company.sg.larksuite.com/scheduler/10cad5fa7c2d720b" target="_blank" rel="noopener noreferrer">book a discovery call with me</a>. The first people who raise their hand will shape what it becomes.' },
     { tag: 'p', text: 'And whether you build one or not, here\'s the question I\'d leave you with:' },
     { tag: 'blockquote', text: 'If someone asked you today whether you\'re living the life you intend to, what would you point to as evidence?' },
     { tag: 'p', text: 'Dave.' },
