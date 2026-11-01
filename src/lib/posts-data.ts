@@ -196,7 +196,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'figure', images: ['/images/personal-os-agents.webp'], caption: 'One plan, six AI agents building in parallel, and privacy designed in from the start.' },
 
     { tag: 'h2', text: 'Private by construction' },
-    { tag: 'p', text: 'This is the most personal data I have, sitting behind a public website. So it has one login, two-factor authentication, its own database separate from everything else, every row locked to my account, and an AI that can read everything and change nothing. Bank data comes in from statements only. No passwords stored, ever.' },
+    { tag: 'p', text: 'This is the most personal data I have, sitting behind a public website. So it has one login that only my email can use, its own database separate from everything else, every row locked to my account, and an AI that can read everything and change nothing. Bank data comes in from statements only. No passwords stored, ever.' },
 
     { tag: 'h2', text: 'Read the full plan' },
     { tag: 'p', text: 'I\'ve published the whole plan: the problem, every data source, the database tables, the ten workflows, wireframes for every screen and the definition of done. <a href="/personal-os">Read the Personal OS plan here.</a>' },
@@ -215,7 +215,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'h3', text: 'What should you track in your personal life?' },
     { tag: 'p', text: 'Track only what changes a decision or keeps a memory worth keeping. A useful frame is ten areas: body, mind, people, money, work, places, time, direction, admin and legacy. Each one holds records, metrics and reflections.' },
     { tag: 'h3', text: 'Is it safe to put personal data in a database like this?' },
-    { tag: 'p', text: 'Only if it is private by construction: a separate database, a single login with two-factor authentication, row-level security on every table, no stored bank passwords, and AI access that is read-only.' },
+    { tag: 'p', text: 'Only if it is private by construction: a separate database, a single login only the owner can use, row-level security on every table, no stored bank passwords, and AI access that is read-only.' },
     { tag: 'h3', text: 'Will this be open source?' },
     { tag: 'p', text: 'That is the plan. An open source version for people who want to run their own, and a small hosted SaaS for people who want it without the setup.' },
   ],
@@ -705,7 +705,7 @@ export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
     },
     {
       q: 'Is it safe to put personal data in a database like this?',
-      a: 'Only if it is private by construction: a separate database, a single login with two-factor authentication, row-level security on every table, no stored bank passwords, and AI access that is read-only.',
+      a: 'Only if it is private by construction: a separate database, a single login only the owner can use, row-level security on every table, no stored bank passwords, and AI access that is read-only.',
     },
     {
       q: 'Will this be open source?',
