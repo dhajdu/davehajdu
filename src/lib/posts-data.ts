@@ -18,7 +18,7 @@ export const POSTS: Post[] = [
     slug: 'i-rewrote-tripit-in-an-hour',
     title: 'Dear TripIt: I Rewrote You in an Hour on Holiday in Phnom Penh',
     excerpt:
-      'A breakup letter to my travel app of 19 years. It turns out it was just a database and a little script reading my Gmail. So I built my own, and took back my $79.',
+      'A breakup letter to my travel app of 19 years. It turns out it was just a database and a little script reading my Gmail. So I built my own, and took back my $49.',
     date: 'Nov 1, 2026',
     readTime: '4 min',
     category: 'AI In Business',
@@ -175,7 +175,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 
     { tag: 'h2', text: 'The good years' },
     { tag: 'p', text: 'We had something special. Nineteen years. <strong>706 bookings.</strong> You were there for every red-eye, every delayed connection in Doha, every hotel I swore I would never stay at again. Seattle to Long Beach on Alaska in 2007. Manila to Saigon on Cebu Pacific in 2013. Melbourne last month.' },
-    { tag: 'p', text: 'And every year, I paid you. Seventy-nine dollars. I thought you were the one.' },
+    { tag: 'p', text: 'And every year, I paid you. Forty-nine dollars. I thought you were the one.' },
     { tag: 'screens', images: ['/images/dear-tripit-s3.webp', '/images/dear-tripit-s4.webp', '/images/dear-tripit-s6.webp'], caption: 'The receipt, the X-ray, and the settlement.' },
 
     { tag: 'h2', text: 'Then I looked under the hood' },
@@ -194,7 +194,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'p', text: 'Full honesty, since this is a breakup letter: the travel part took about an hour. The whole private system around it took the afternoon, built the way I tell founders to work with AI. <a href="/blog/claude-routines-changed-everything">Plan first, then multi-delegate.</a> The plan did the heavy lifting. The agents did the typing.' },
 
     { tag: 'h2', text: 'The settlement' },
-    { tag: 'p', text: 'I took back my seventy-nine dollars. Refund status: approved, by me.' },
+    { tag: 'p', text: 'I took back my forty-nine dollars. Refund status: approved, by me.' },
     { tag: 'p', text: 'This is not really about TripIt. It is about how many apps we pay every year for what is, underneath, a table and a script. Once you can see that, you start looking at your whole subscription list differently.' },
     { tag: 'p', text: 'If you want to break up with an app or two of your own, <a href="/personal-os">the whole plan is here</a>. Or <a href="https://edge8company.sg.larksuite.com/scheduler/10cad5fa7c2d720b" target="_blank" rel="noopener noreferrer">book a discovery call</a> and I will show you how it works. Bring tissues.' },
     { tag: 'p', text: 'Dave.' },
