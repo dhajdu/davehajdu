@@ -119,6 +119,27 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
                 </p>
               </div>
             );
+          case 'figure':
+            return (
+              <figure key={i} className="my-10 not-prose">
+                {(block.images ?? []).map((src, j) => (
+                  <Image
+                    key={j}
+                    src={src}
+                    alt={block.caption ?? 'Figure'}
+                    width={1800}
+                    height={1770}
+                    sizes="(min-width: 768px) 720px, 100vw"
+                    className="w-full h-auto rounded-lg border border-[#E8ECF2]"
+                  />
+                ))}
+                {block.caption && (
+                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
+                    {block.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
           case 'gallery':
             return (
               <figure key={i} className="my-10 not-prose">

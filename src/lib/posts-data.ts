@@ -163,6 +163,8 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'p', text: 'So I\'m building a database for it. A private one, on my own website, that fills itself from the apps I already use. And I\'m doing it in public.' },
 
     { tag: 'h2', text: 'The ocean problem' },
+    { tag: 'figure', images: ['/images/personal-os-sources.webp'], caption: 'Where my life lives today: 20+ apps across eight areas, none of them connected.' },
+    { tag: 'p', text: 'I counted. My journal moved from Evernote to Obsidian to Notion over the years, and pieces of it still live in all three. Gmail holds twenty years of flight and hotel confirmations. TripIt holds some of them. Doctor visits and surgery records are scattered across clinic emails and hospital portals. My calendar is split between Google and Lark. Conversations happen in WhatsApp, Messages and Zalo. Money lives in bank and credit card statements and QuickBooks. Photos sit in Google Photos, documents in Google Drive.' },
     { tag: 'p', text: 'Every app holds a slice. My watch knows my sleep. My bank knows my money. WhatsApp knows who I actually talk to. Google Photos holds tens of thousands of pictures I will never scroll back through. Notion holds every journal entry and every monthly update I\'ve written for my EO forum since 2021.' },
     { tag: 'p', text: 'None of them talk to each other. And the insights that actually matter live between them. Sleep against mood. Travel against happiness. Money stress against relationships. You feel those patterns. You never see them.' },
     { tag: 'p', text: 'It\'s an ocean of data. Very little of it is useful.' },
