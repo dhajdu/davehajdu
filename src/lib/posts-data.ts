@@ -171,7 +171,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
   'i-rewrote-tripit-in-an-hour': [
     { tag: 'p', text: 'Dear TripIt,' },
     { tag: 'p', text: 'We need to talk. I am writing this from a hotel balcony in Phnom Penh, on holiday, at an hour when nobody should be making decisions about their relationships. And yet here we are.' },
-    { tag: 'video', images: ['/videos/dear-tripit-v2.mp4', '/images/dear-tripit-poster.webp'], caption: 'The one-minute version, narrated by me. Well, by an AI clone of my voice, which is very on theme.' },
+    { tag: 'video', images: ['/videos/dear-tripit-v3.mp4', '/images/dear-tripit-poster-v3.webp'], caption: 'The 36-second version, narrated by me. Well, by an AI clone of my voice, which is very on theme.' },
 
     { tag: 'h2', text: 'The good years' },
     { tag: 'p', text: 'We had something special. Nineteen years. <strong>706 bookings.</strong> You were there for every red-eye, every delayed connection in Doha, every hotel I swore I would never stay at again. Seattle to Long Beach on Alaska in 2007. Manila to Saigon on Cebu Pacific in 2013. Melbourne last month.' },
