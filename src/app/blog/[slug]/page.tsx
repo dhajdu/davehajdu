@@ -119,6 +119,41 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
                 </p>
               </div>
             );
+          case 'video':
+            return (
+              <figure key={i} className="my-10 not-prose">
+                <video
+                  controls
+                  playsInline
+                  preload="metadata"
+                  poster={block.images?.[1]}
+                  src={block.images?.[0]}
+                  className="mx-auto w-full max-w-[380px] rounded-lg border border-[#E8ECF2] bg-[#04102D]"
+                />
+                {block.caption && (
+                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
+                    {block.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          case 'screens':
+            return (
+              <figure key={i} className="my-10 not-prose">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {(block.images ?? []).map((src, j) => (
+                    <div key={j} className="relative aspect-[9/16] overflow-hidden rounded-lg border border-[#E8ECF2]">
+                      <Image src={src} alt={`${block.caption ?? 'Screen'} ${j + 1}`} fill sizes="(min-width: 768px) 240px, 50vw" className="object-cover" />
+                    </div>
+                  ))}
+                </div>
+                {block.caption && (
+                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
+                    {block.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
           case 'figure':
             return (
               <figure key={i} className="my-10 not-prose">

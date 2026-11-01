@@ -15,6 +15,18 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'i-rewrote-tripit-in-an-hour',
+    title: 'Dear TripIt: I Rewrote You in an Hour on Holiday in Phnom Penh',
+    excerpt:
+      'A breakup letter to my travel app of 19 years. It turns out it was just a database and a little script reading my Gmail. So I built my own, and took back my $79.',
+    date: 'Nov 1, 2026',
+    readTime: '4 min',
+    category: 'AI In Business',
+    tags: ['ai-in-business'],
+    featured: true,
+    image: '/images/dear-tripit-hero.webp',
+  },
+  {
     slug: 'building-a-database-for-my-life',
     title: 'My Life Is Spread Across Twenty Apps. So I\'m Building a Database for It.',
     excerpt:
@@ -156,6 +168,46 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'i-rewrote-tripit-in-an-hour': [
+    { tag: 'p', text: 'Dear TripIt,' },
+    { tag: 'p', text: 'We need to talk. I am writing this from a hotel balcony in Phnom Penh, on holiday, at an hour when nobody should be making decisions about their relationships. And yet here we are.' },
+    { tag: 'video', images: ['/videos/dear-tripit.mp4', '/images/dear-tripit-poster.webp'], caption: 'The 90-second version, narrated by me. Well, by an AI clone of my voice, which is very on theme.' },
+
+    { tag: 'h2', text: 'The good years' },
+    { tag: 'p', text: 'We had something special. Nineteen years. <strong>706 bookings.</strong> You were there for every red-eye, every delayed connection in Doha, every hotel I swore I would never stay at again. Seattle to Long Beach on Alaska in 2007. Manila to Saigon on Cebu Pacific in 2013. Melbourne last month.' },
+    { tag: 'p', text: 'And every year, I paid you. Seventy-nine dollars. I thought you were the one.' },
+    { tag: 'screens', images: ['/images/dear-tripit-s3.webp', '/images/dear-tripit-s4.webp', '/images/dear-tripit-s6.webp'], caption: 'The receipt, the X-ray, and the settlement.' },
+
+    { tag: 'h2', text: 'Then I looked under the hood' },
+    { tag: 'p', text: 'This week I have been <a href="/blog/building-a-database-for-my-life">building a private database for my whole life</a>. Travel was one of the ten areas. So, on holiday, I sat down to figure out what a travel app actually is.' },
+    { tag: 'p', text: 'And TripIt, I am sorry, but you are a database. And a little script that reads my Gmail. That is it. That is the whole relationship.' },
+    { tag: 'blockquote', text: 'It is not you. It is... actually, no. It is you.' },
+
+    { tag: 'h2', text: 'So I built my own' },
+    { tag: 'p', text: 'Here is the entire rebound:' },
+    { tag: 'li', text: '<strong>A database.</strong> Supabase, private, locked to my login.' },
+    { tag: 'li', text: '<strong>A little script in my Gmail</strong> that sends every booking confirmation over, hourly.' },
+    { tag: 'li', text: '<strong>Claude reading the emails</strong> and pulling out flights, hotels, dates, confirmation codes, changes and cancellations.' },
+    { tag: 'li', text: '<strong>A rule for what a trip is:</strong> it starts when I leave Saigon and ends when I land back home.' },
+    { tag: 'p', text: 'I loaded twenty years of confirmations into it. It came back with <strong>172 trips, 250 flights, 16 countries and 969 nights away</strong>, all the way back to April 2007. With a map, an upcoming-trip view for airports, and an inbox for the bookings it is not sure about, because a database that guesses is worse than one that asks.' },
+    { tag: 'screens', images: ['/images/dear-tripit-s5a.webp', '/images/dear-tripit-s5b.webp'], caption: 'My /life travel screens: every trip since 2007, and the most recent ones.' },
+    { tag: 'p', text: 'Full honesty, since this is a breakup letter: the travel part took about an hour. The whole private system around it took the afternoon, built the way I tell founders to work with AI. <a href="/blog/claude-routines-changed-everything">Plan first, then multi-delegate.</a> The plan did the heavy lifting. The agents did the typing.' },
+
+    { tag: 'h2', text: 'The settlement' },
+    { tag: 'p', text: 'I took back my seventy-nine dollars. Refund status: approved, by me.' },
+    { tag: 'p', text: 'This is not really about TripIt. It is about how many apps we pay every year for what is, underneath, a table and a script. Once you can see that, you start looking at your whole subscription list differently.' },
+    { tag: 'p', text: 'If you want to break up with an app or two of your own, <a href="/personal-os">the whole plan is here</a>. Or <a href="https://edge8company.sg.larksuite.com/scheduler/10cad5fa7c2d720b" target="_blank" rel="noopener noreferrer">book a discovery call</a> and I will show you how it works. Bring tissues.' },
+    { tag: 'p', text: 'Dave.' },
+
+    { tag: 'h2', text: 'Things people ask me about this' },
+    { tag: 'h3', text: 'Can you really replace TripIt with your own app?' },
+    { tag: 'p', text: 'For personal use, yes. A travel tracker is a database of bookings plus something that reads your confirmation emails. With Claude doing the reading, the hard part is deciding what a trip is, not writing the code.' },
+    { tag: 'h3', text: 'How does it get trips out of Gmail?' },
+    { tag: 'p', text: 'A small Google Apps Script runs inside the Gmail account every hour, finds booking confirmations, and sends them to the app. Claude extracts the flights and hotels, and anything uncertain goes to an inbox for approval instead of being guessed.' },
+    { tag: 'h3', text: 'Will you share the code?' },
+    { tag: 'p', text: 'That is the plan: an open source version for people who want to run their own, and a small hosted version for people who do not.' },
+  ],
+
   'building-a-database-for-my-life': [
     { tag: 'p', text: 'This morning I tried to answer a simple question about my own life and couldn\'t.' },
     { tag: 'p', text: 'When was my last surgery? The records are somewhere in an email from years ago. How many times have I been to Australia this year? Ask Gmail, ask TripIt, ask my calendar. How has my energy trended since I started tracking it? That lives in five years of Notion pages that nobody, including me, will ever read again.' },
@@ -694,6 +746,12 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 // FAQ schema content keyed by slug. Used to render FAQPage JSON-LD on posts that have FAQ content.
 // Keep these aligned with the visible "Things people ask me about this" h3/p blocks above.
 export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
+  'i-rewrote-tripit-in-an-hour': [
+    { q: 'Can you really replace TripIt with your own app?', a: 'For personal use, yes. A travel tracker is a database of bookings plus something that reads your confirmation emails. With Claude doing the reading, the hard part is deciding what a trip is, not writing the code.' },
+    { q: 'How does it get trips out of Gmail?', a: 'A small Google Apps Script runs inside the Gmail account every hour, finds booking confirmations, and sends them to the app. Claude extracts the flights and hotels, and anything uncertain goes to an inbox for approval instead of being guessed.' },
+    { q: 'Will you share the code?', a: 'That is the plan: an open source version for people who want to run their own, and a small hosted version for people who do not.' },
+  ],
+
   'building-a-database-for-my-life': [
     {
       q: 'What is a personal operating system?',
