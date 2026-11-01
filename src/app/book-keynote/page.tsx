@@ -157,6 +157,15 @@ const DOORS = [
   },
 ];
 
+const GEORGETOWN = [
+  { src: '/images/workshops/georgetown-dc-class.webp', caption: 'The Executive MBA cohort, Washington DC' },
+  { src: '/images/workshops/georgetown-dc-faculty.webp', caption: 'After the Workflow Design session, Washington DC' },
+  { src: '/images/workshops/georgetown-dc-room.webp', caption: 'In the lecture hall, Washington DC' },
+  { src: '/images/workshops/georgetown-dubai-podium.webp', caption: 'Teaching Leadership in the AI Era, Dubai' },
+  { src: '/images/workshops/georgetown-dubai-banner.webp', caption: "Georgetown's Executive MBA, Dubai" },
+  { src: '/images/workshops/georgetown-dubai-class.webp', caption: 'The Executive MBA cohort, Dubai' },
+]
+
 const WORKSHOP_FIELDS: InquiryField[] = [
   { name: 'name', label: 'Your Name', type: 'text', required: true },
   { name: 'email', label: 'Email', type: 'email', required: true },
@@ -291,6 +300,20 @@ export default function BookWorkshopPage() {
         </div>
       </section>
 
+      {/* ── Film ─────────────────────────────────────────────── */}
+      <section className="bg-white pb-20">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
+          <video
+            className="w-full aspect-video rounded-lg bg-[#04102D]"
+            src="/video/workshops-film.mp4"
+            poster="/video/workshops-film-poster.webp"
+            controls
+            playsInline
+            preload="none"
+          />
+        </div>
+      </section>
+
       {/* ── Members on camera ────────────────────────────────── */}
       <section className="bg-[#EAEEF2] py-20">
         <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
@@ -385,6 +408,53 @@ export default function BookWorkshopPage() {
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+
+      {/* ── Georgetown ───────────────────────────────────────── */}
+      <section className="bg-[#EAEEF2] py-20">
+        <div className="max-w-[1080px] mx-auto px-8 sm:px-10">
+          <div className="grid md:grid-cols-[1fr_1fr] gap-6 items-end mb-10">
+            <div>
+              <div className={`text-[#287BE8] ${eyebrow} mb-4`}>Georgetown University</div>
+              <h2 className={`text-[#04102D] ${h2}`}>
+                Leadership in
+                <br />
+                the AI Era.
+              </h2>
+            </div>
+            <p className="text-[#2A3044]/75 text-[16px] leading-relaxed">
+              I teach AI leadership to Georgetown&apos;s Executive MBA cohorts in Washington DC and Dubai,
+              alongside Dr. Brooks Holtom.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <figure className="col-span-2 md:col-span-3">
+              <img
+                src="/images/workshops/dave-keynote-ai-agents.webp"
+                alt="Dave Hajdu on stage delivering a keynote on AI agents in business"
+                className="w-full aspect-[16/9] md:aspect-[21/9] object-cover object-[center_80%] rounded-lg"
+              />
+              <figcaption className="mt-3 text-[13px] text-[#2A3044]/70 leading-snug">
+                On stage: AI Agents in Business, Vietnam
+              </figcaption>
+            </figure>
+            {GEORGETOWN.map((g) => (
+              <figure key={g.src}>
+                <img src={g.src} alt={g.caption} loading="lazy" className="w-full aspect-[4/3] object-cover object-[center_30%] rounded-lg" />
+                <figcaption className="mt-3 text-[13px] text-[#2A3044]/70 leading-snug">{g.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <blockquote className="mt-12 max-w-3xl">
+            <p className="text-[#04102D] font-bold text-[clamp(20px,2.4vw,26px)] leading-snug">
+              &ldquo;Dave brings energy and real-world AI insights that inspire our students to think
+              differently about their futures.&rdquo;
+            </p>
+            <footer className="mt-3 text-[#2A3044]/70 text-[14px]">
+              Dr. Brooks Holtom, Professor of Management, Georgetown
+            </footer>
+          </blockquote>
         </div>
       </section>
 
