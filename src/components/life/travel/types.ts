@@ -22,7 +22,7 @@ export type Trip = {
   purpose: Purpose;
   notes: string | null;
   primary_place_id: string | null;
-  primary: Pick<Place, 'name' | 'city' | 'country'> | null;
+  primary: Pick<Place, 'name' | 'city' | 'country' | 'lat' | 'lng'> | null;
 };
 
 export type SourceEmail = {

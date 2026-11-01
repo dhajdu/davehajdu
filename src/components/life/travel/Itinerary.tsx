@@ -1,7 +1,7 @@
 // Day-by-day itinerary. Every time is shown in the leg's own timezone.
 import { Chip } from '@/components/life/ui';
 import { CopyCode } from './CopyCode';
-import { daysBetween, fmtDay, localDateKey, localTime, placeCode } from './format';
+import { daysBetween, fmtDuration, localDateKey, localTime, placeCode } from './format';
 import type { Leg, LegKind } from './types';
 
 type Item = {
@@ -12,7 +12,17 @@ type Item = {
   variant: 'move' | 'checkin' | 'checkout' | 'event';
 };
 
-const ICON: Record<LegKind, string> = { flight: '✈', hotel: 'H', train: 'T', car: 'C', event: 'E' };
+const ICON: Record<LegKind, React.ReactNode> = {
+  flight: <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />,
+  hotel: <path d="M3 19V6m0 8h18v5m0-5v-2a3 3 0 00-3-3h-7v5M7 11h.01" />,
+  train: <path d="M6 3h12a2 2 0 012 2v9a3 3 0 01-3 3H7a3 3 0 01-3-3V5a2 2 0 012-2zM4 10h16M8 21l2-4m6 4l-2-4M8 14h.01M16 14h.01" />,
+  car: <path d="M5 16h14v-4l-2-5H7l-2 5zM5 16v2m14-2v2M3 12h18M8 13.5h.01M16 13.5h.01" />,
+  event: <path d="M4 8a2 2 0 002-2h12a2 2 0 002 2v8a2 2 0 00-2 2H6a2 2 0 00-2-2zM10 6v12" />,
+};
+
+// Bars are scaled against a long-haul day so short hops look short.
+const LONGEST_MIN = 14 * 60;
+const MAX_DOTS = 14;
 
 function buildItems(legs: Leg[]): Item[] {
   const items: Item[] = [];
@@ -76,41 +86,60 @@ function ItemRow({ item, muted }: { item: Item; muted?: boolean }) {
   const first = variant !== 'checkout';
   const mail = gmailUrl(leg);
 
+  const minutes = variant === 'move' && leg.ends_at ? (Date.parse(leg.ends_at) - Date.parse(leg.starts_at)) / 60_000 : 0;
+  const nights = variant === 'checkin' && leg.ends_at ? daysBetween(item.day, localDateKey(leg.ends_at, endTz)) : 0;
+
   return (
-    <li className={`flex gap-3 py-3 ${muted ? 'opacity-70' : ''}`}>
-      <div
-        aria-hidden
-        className={`shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold ${
-          leg.kind === 'flight' ? 'bg-blue text-white' : 'bg-light-gray text-navy'
-        }`}
-      >
-        {ICON[leg.kind]}
+    <li className={`life-stop is-${leg.kind} ${muted ? 'opacity-70' : ''}`}>
+      <div className="flex items-start gap-3">
+        <span className="life-stop-icon" aria-hidden>
+          <svg viewBox="0 0 24 24">{ICON[leg.kind]}</svg>
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className={`font-semibold text-navy break-words ${muted ? 'line-through' : ''}`}>{headline}</p>
+          {detail.length > 0 && <p className="text-sm text-body-text">{detail.join(' · ')}</p>}
+          {variant === 'checkin' && leg.address && <p className="text-xs text-muted mt-0.5">{leg.address}</p>}
+        </div>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className={`font-semibold text-navy break-words ${muted ? 'line-through' : ''}`}>{headline}</p>
-        {detail.length > 0 && <p className="text-sm text-body-text">{detail.join(' · ')}</p>}
-        {variant === 'checkin' && leg.address && <p className="text-xs text-muted mt-0.5">{leg.address}</p>}
-        {(leg.status === 'changed' || (first && leg.confirmation_code)) && (
-          <div className="flex flex-wrap items-center gap-2 mt-1.5">
-            {first && leg.confirmation_code && <CopyCode code={leg.confirmation_code} />}
-            {leg.status === 'changed' && <Chip tone="blue">Changed</Chip>}
+      {minutes > 0 && (
+        <div className="life-stop-dur">
+          <span>{placeCode(leg.origin)}</span>
+          <span className="life-stop-bar">
+            <i style={{ width: `${Math.min(100, Math.max(8, (minutes / LONGEST_MIN) * 100))}%` }} />
+          </span>
+          <span>{fmtDuration(leg.starts_at, leg.ends_at!)}</span>
+        </div>
+      )}
+      {nights > 0 && (
+        <div className="life-stop-nights">
+          {Array.from({ length: Math.min(nights, MAX_DOTS) }, (_, i) => (
+            <i key={i} />
+          ))}
+          <span>
+            {nights} {nights === 1 ? 'night' : 'nights'}
+          </span>
+        </div>
+      )}
+      {(leg.status === 'changed' || (first && leg.confirmation_code)) && (
+        <div className="flex flex-wrap items-center gap-2">
+          {first && leg.confirmation_code && <CopyCode code={leg.confirmation_code} />}
+          {leg.status === 'changed' && <Chip tone="blue">Changed</Chip>}
+        </div>
+      )}
+      {first && leg.source && (
+        <details className="text-xs">
+          <summary className="cursor-pointer text-muted py-1">Source email</summary>
+          <div className="mt-1 rounded-lg bg-light-gray p-2.5 space-y-0.5">
+            <p className="font-semibold text-navy break-words">{leg.source.subject ?? '(no subject)'}</p>
+            {leg.source.from && <p className="text-muted break-words">{leg.source.from}</p>}
+            {mail && (
+              <a href={mail} target="_blank" rel="noreferrer" className="inline-block text-blue font-semibold pt-1">
+                Open in Gmail
+              </a>
+            )}
           </div>
-        )}
-        {first && leg.source && (
-          <details className="mt-1.5 text-xs">
-            <summary className="cursor-pointer text-muted py-1">Source email</summary>
-            <div className="mt-1 rounded-lg bg-light-gray p-2.5 space-y-0.5">
-              <p className="font-semibold text-navy break-words">{leg.source.subject ?? '(no subject)'}</p>
-              {leg.source.from && <p className="text-muted break-words">{leg.source.from}</p>}
-              {mail && (
-                <a href={mail} target="_blank" rel="noreferrer" className="inline-block text-blue font-semibold pt-1">
-                  Open in Gmail
-                </a>
-              )}
-            </div>
-          </details>
-        )}
-      </div>
+        </details>
+      )}
     </li>
   );
 }
@@ -125,17 +154,28 @@ export function Itinerary({ legs, muted }: { legs: Leg[]; muted?: boolean }) {
   }
   const showYear = new Set(days.map((d) => d.day.slice(0, 4))).size > 1;
   return (
-    <div className="space-y-4">
-      {days.map((d) => (
-        <section key={d.day}>
-          <h3 className="text-xs font-semibold text-muted border-b border-border pb-1">{fmtDay(d.day, showYear)}</h3>
-          <ul className="divide-y divide-border">
-            {d.items.map((item) => (
-              <ItemRow key={item.key} item={item} muted={muted} />
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
+    <ol className="life-itin">
+      {days.map((d) => {
+        const at = new Date(`${d.day}T00:00:00Z`);
+        const part = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', ...o }).format(at);
+        return (
+          <li key={d.day} className="life-itin-day">
+            <div className="life-itin-date">
+              <div className="life-itin-dow">{part({ weekday: 'short' })}</div>
+              <div className="life-itin-num">{part({ day: 'numeric' })}</div>
+              <div className="life-itin-mon">
+                {part({ month: 'short' })}
+                {showYear && ` ${d.day.slice(2, 4)}`}
+              </div>
+            </div>
+            <ul className="life-itin-stops">
+              {d.items.map((item) => (
+                <ItemRow key={item.key} item={item} muted={muted} />
+              ))}
+            </ul>
+          </li>
+        );
+      })}
+    </ol>
   );
 }
