@@ -171,7 +171,9 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 
     { tag: 'h2', text: 'What should a person actually track?' },
     { tag: 'p', text: 'My first draft of this project was wrong. I designed it around the data I already had: my journal, my trips, my medical files. That\'s a filing cabinet, not a system.' },
-    { tag: 'p', text: 'The better question is what a person should track at all. I landed on ten areas of a life:' },
+    { tag: 'p', text: 'The fix came from the <a href="/blog/the-long-way-to-georgetown">leadership series I teach with Dr. Holton at Georgetown</a>. One of the lessons we keep coming back to with executives: don\'t start with the data you have. <strong>Start with the decisions you\'re trying to make.</strong> Work backwards from there, and you almost always discover the data you need was never collected properly in the first place.' },
+    { tag: 'p', text: 'That\'s true for a company and it turned out to be true for my life. Should I take on another market or protect my health this quarter? Who have I let drift that I don\'t want to lose? Is the travel making me happier or just busier? I had years of journal entries and none of them could answer those questions, because I\'d never captured the right numbers next to the words.' },
+    { tag: 'p', text: 'So the better question is what a person should track at all, given the decisions they want to make. I landed on ten areas of a life:' },
     { tag: 'li', text: '<strong>Body:</strong> health, fitness, sleep, habits' },
     { tag: 'li', text: '<strong>Mind:</strong> mood, learning, lessons, principles' },
     { tag: 'li', text: '<strong>People:</strong> family, friends, mentors, community' },
