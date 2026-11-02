@@ -9,8 +9,11 @@
 // { "lab": "Diag", "tested_on": "2026-10-29", "file": "26020820467_en.pdf", "title": "Blood panel at Diag",
 //   "rows": [ { "c": "lipids", "p": "Lipid Basic Panel", "a": "LDL Cholesterol", "v": 6.63, "u": "mmol/L",
 //               "hi": 2.59, "ref": "Optimal under 2.59 ...", "m": "ldl" },
-//             { "c": "urine", "a": "Glucose (urine)", "t": "2+ Positive", "ref": "Negative", "flag": "abnormal" } ] }
+//             { "c": "urine", "a": "Glucose (urine)", "t": "2+ Positive", "ref": "Negative", "flag": "abnormal" },
+//             { "c": "biochemistry", "a": "Glucose (fasting)", "v": 132, "u": "mg/dL", "m": "glucose_fasting", "mv": 7.33 } ],
+//   "notes": "Free text appended to the document for Ask (diagnoses, medications)." }
 // `file` is relative to the JSON's folder. Flags are worked out from lo/hi unless given.
+// `mv` is the value in the tracked metric's own unit when the report prints another unit.
 import * as nodeModule from 'node:module';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -29,8 +32,8 @@ type Next = (spec: string, ctx: { parentURL?: string }) => unknown;
 });
 const { loadEnv, adminFromEnv, ownerIdFrom } = await import('./_shared');
 
-type Row = { c: string; p?: string; a: string; v?: number; t?: string; u?: string; lo?: number; hi?: number; ref?: string; flag?: 'normal' | 'low' | 'high' | 'abnormal'; m?: string };
-type Panel = { lab: string; tested_on: string; file?: string; title?: string; rows: Row[] };
+type Row = { c: string; p?: string; a: string; v?: number; t?: string; u?: string; lo?: number; hi?: number; ref?: string; flag?: 'normal' | 'low' | 'high' | 'abnormal'; m?: string; mv?: number };
+type Panel = { lab: string; tested_on: string; file?: string; title?: string; notes?: string; rows: Row[] };
 
 const jsonPath = process.argv[2];
 if (!jsonPath) throw new Error('Usage: import-lab.ts <panel.json>');
@@ -61,6 +64,7 @@ const text = [`${panel.lab} laboratory report, sample collected ${panel.tested_o
       return `${r.c}${r.p ? ` / ${r.p}` : ''}: ${r.a} ${val}${refLabel(r) ? ` [${refLabel(r)}]` : ''}${f !== 'normal' ? ` ${f.toUpperCase()}` : ''}`;
     })
   )
+  .concat(panel.notes ? ['', panel.notes] : [])
   .join('\n');
 if (panel.file) {
   const local = join(dirname(jsonPath), panel.file);
@@ -139,7 +143,7 @@ if (tracked.length) {
   if (missing.length) throw new Error(`No metric for: ${missing.join(', ')}`);
   check(
     (await db.from('measurements').upsert(
-      tracked.map((r) => ({ owner_id: owner, metric_id: bySlug.get(r.m!)!, measured_on: panel.tested_on, value: r.v })),
+      tracked.map((r) => ({ owner_id: owner, metric_id: bySlug.get(r.m!)!, measured_on: panel.tested_on, value: r.mv ?? r.v })),
       { onConflict: 'owner_id,metric_id,measured_on' }
     )).error
   );
