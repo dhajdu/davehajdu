@@ -13,6 +13,7 @@ import { daysBetween } from '@/components/life/travel/format';
 import type { Trip } from '@/components/life/travel/types';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
 import { getHealth, WEIGHT } from '@/lib/life/health';
+import { getLabs } from '@/lib/life/labs';
 import { currentPeriod, ictToday, periodLabel } from '@/lib/life/metrics';
 
 export const metadata: Metadata = { title: 'Today', robots: { index: false, follow: false } };
@@ -22,10 +23,11 @@ export default async function TodayPage() {
   const today = ictToday();
   const now = currentPeriod();
 
-  const [focus, goals, health, draftRes, pendingRes, currentRes, upcomingRes] = await Promise.all([
+  const [focus, goals, health, labs, draftRes, pendingRes, currentRes, upcomingRes] = await Promise.all([
     getFocus(supabase, today),
     getLongGoals(supabase),
     getHealth(supabase, today, 30),
+    getLabs(supabase),
     supabase.from('reviews').select('period').eq('status', 'draft').lte('period', now).order('period', { ascending: false }).limit(1),
     supabase.from('review_queue').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     supabase.from('trips').select(TRIP_SELECT).lte('start_on', today).gte('end_on', today).order('start_on', { ascending: false }).limit(1),
@@ -37,6 +39,8 @@ export default async function TodayPage() {
   const currentLegs = current ? await legsForTrips(supabase, [current.id]) : [];
 
   const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
+  const hba1c = labs.readings.find((r) => r.metric.slug === 'hba1c') ?? null;
+  const hba1cTarget = goals.find((g) => g.metric?.slug === 'hba1c' && g.target_value !== null && g.status === 'open')?.target_value;
   const draft = draftRes.data?.[0]?.period as string | undefined;
   const pending = pendingRes.count ?? 0;
   const upcoming = (upcomingRes.data ?? []) as unknown as Trip[];
@@ -51,7 +55,13 @@ export default async function TodayPage() {
         <FocusLadder focus={focus} goals={goals} today={today} />
 
         <Card title="The foundation">
-          <Foundation health={health} today={today} weightTarget={weightTarget === undefined || weightTarget === null ? null : Number(weightTarget)} />
+          <Foundation
+            health={health}
+            today={today}
+            weightTarget={weightTarget === undefined || weightTarget === null ? null : Number(weightTarget)}
+            hba1c={hba1c}
+            hba1cTarget={hba1cTarget === undefined || hba1cTarget === null ? null : Number(hba1cTarget)}
+          />
         </Card>
 
         {current && (

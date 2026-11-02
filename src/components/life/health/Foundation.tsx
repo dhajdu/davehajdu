@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import type { Health } from '@/lib/life/health';
+import type { LabReading } from '@/lib/life/labs';
 import { ZONE_WORD, zone } from '@/lib/life/health';
-import { addDays, formatDate } from '@/lib/life/metrics';
+import { addDays, formatDate, formatNumber } from '@/lib/life/metrics';
 import { Ring } from './Ring';
 import { Stat } from './Stat';
 
 // Health as the foundation of the day: the recovery ring, the signals that
 // drive it, and the last two weeks of recovery as dots.
-export function Foundation({ health, today, weightTarget }: { health: Health; today: string; weightTarget?: number | null }) {
+export function Foundation({ health, today, weightTarget, hba1c, hba1cTarget }: { health: Health; today: string; weightTarget?: number | null; hba1c?: LabReading | null; hba1cTarget?: number | null }) {
   const rec = health.stats.recovery.last;
   const z = rec ? zone(rec.value) : null;
   const byDate = new Map(health.recoveryDays.map((p) => [p.date, p.value]));
@@ -26,6 +27,22 @@ export function Foundation({ health, today, weightTarget }: { health: Health; to
         <Stat stat={health.stats.hrv} label="HRV" />
         <Stat stat={health.stats.rhr} label="Resting HR" />
         <Stat stat={health.stats.weight} target={weightTarget ?? undefined} label="Weight" />
+        {hba1c?.latest && (
+          <div>
+            <p className="life-stat-k">HbA1c</p>
+            <p className="life-stat-v">
+              {formatNumber(hba1c.latest.value, '%')}
+              <small>%</small>
+            </p>
+            <p className={`life-stat-d${hba1c.band === 'out' ? ' is-worse' : ' is-better'}`}>
+              {hba1cTarget != null
+                ? `${formatNumber(hba1c.latest.value - hba1cTarget, '%')} vs goal ${formatNumber(hba1cTarget, '%')}`
+                : hba1c.band === 'out'
+                  ? 'Out of range'
+                  : 'In range'}
+            </p>
+          </div>
+        )}
       </div>
       <div className="life-found-foot">
         <div className="flex items-center gap-3">

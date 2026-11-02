@@ -484,3 +484,27 @@ button.life-vision-text:focus-visible { outline: none; box-shadow: var(--life-fo
 .life-bubble.is-error { border-color: var(--life-magenta); color: var(--life-pink-ink); }
 .life-bubble.is-busy { color: var(--life-muted); }
 .life-ask-form { display: flex; gap: 8px; position: sticky; bottom: 0; background: var(--life-bg); padding: 10px 0; }
+
+/* ── Bloodwork ─────────────────────────────────────────────────────────── */
+.life-lab-head { display: flex; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; font-size: 13px; color: var(--life-muted); margin-bottom: 12px; }
+.life-lab { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.life-lab-tile { --k: var(--life-line); display: grid; gap: 3px; align-content: start; background: var(--life-surface); border: 1px solid var(--life-line); border-left: 4px solid var(--k); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+.life-lab-tile.is-in { --k: var(--life-ok-ink); }
+.life-lab-tile.is-out { --k: var(--life-magenta); background: var(--life-pink-bg); }
+.life-lab-tile.is-out .life-stat-v { color: var(--life-pink-ink); }
+.life-lab-range { font-size: 11px; font-weight: 600; color: var(--life-muted); }
+.life-lab-tile.is-out .life-lab-range { color: var(--life-pink-ink); }
+.life-lab-goal { font-size: 11px; font-weight: 700; color: var(--life-ink); }
+.life-lab-note { font-size: 11px; color: var(--life-muted); line-height: 1.35; margin-top: 2px; }
+.life-lab-full { margin-top: 14px; border-top: 1px solid var(--life-line-soft); padding-top: 10px; }
+.life-lab-full > summary { cursor: pointer; font-size: 13px; font-weight: 700; color: var(--life-blue); }
+.life-lab-group { margin-top: 14px; }
+.life-lab-group h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--life-muted); margin: 0 0 4px; }
+.life-main .life-lab-group td { padding: 6px 10px; font-size: 13px; vertical-align: top; }
+.life-lab-group td:first-child { padding-left: 0; }
+.life-lab-analyte { color: var(--life-ink); font-weight: 600; width: 38%; }
+.life-lab-value { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--life-ink); }
+.life-lab-ref { color: var(--life-muted); font-size: 12px; }
+.life-lab-flag { font-size: 11px; font-weight: 700; white-space: nowrap; text-align: right; }
+.life-lab-group tr.is-flagged .life-lab-value, .life-lab-group tr.is-flagged .life-lab-flag { color: var(--life-magenta); }
+@media (max-width: 620px) { .life-lab-ref { display: none; } .life-lab-analyte { width: auto; } }
