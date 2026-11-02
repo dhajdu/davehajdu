@@ -42,7 +42,10 @@ names resolve to public. Only public is readable.
 
 ### Direction
 - reviews: period text 'YYYY-MM' (unique), one_word, headline, status
-  (draft|done), auto_summary jsonb, entry_id -> entries (source EO update).
+  (draft|done), auto_summary jsonb, entry_id -> entries (source EO update),
+  eo jsonb (the monthly EO update: merps {mental,emotional,relationship,
+  physical,spiritual}, struggle, success, updates {business,family,personal,
+  community: {feelings,headline,impact}}).
   Monthly life review; imported EO updates become reviews. "What word described
   October 2024" = reviews.one_word where period = '2024-10'.
 - review_scores: review_id -> reviews, area_id -> areas, score numeric 0 to 10,
