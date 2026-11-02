@@ -508,3 +508,6 @@ button.life-vision-text:focus-visible { outline: none; box-shadow: var(--life-fo
 .life-lab-flag { font-size: 11px; font-weight: 700; white-space: nowrap; text-align: right; }
 .life-lab-group tr.is-flagged .life-lab-value, .life-lab-group tr.is-flagged .life-lab-flag { color: var(--life-magenta); }
 @media (max-width: 620px) { .life-lab-ref { display: none; } .life-lab-analyte { width: auto; } }
+.life-lab-trends { margin-top: 16px; border-top: 1px solid var(--life-line-soft); padding-top: 12px; }
+.life-lab-trend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px 20px; margin-top: 8px; }
+.life-lab-trend { min-width: 0; }

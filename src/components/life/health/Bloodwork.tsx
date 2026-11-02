@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Labs } from '@/lib/life/labs';
 import { rangeLabel, type LabRow } from '@/lib/life/labs';
 import { formatDate, trendTone } from '@/lib/life/metrics';
+import { LineChart } from '@/components/life/charts';
 
 // Lab values keep the lab's precision (6.63, not 6.6).
 const fmt = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 3 });
@@ -123,7 +124,34 @@ export function Bloodwork({ labs, goals, today }: { labs: Labs; goals: Goal[]; t
           );
         })}
       </ul>
+      <Trends labs={labs} goals={goals} />
       {labs.rows.length > 0 && <FullPanel rows={labs.rows} />}
+    </div>
+  );
+}
+
+// One small line per tracked marker with two or more panels, goal dashed in.
+function Trends({ labs, goals }: { labs: Labs; goals: Goal[] }) {
+  const multi = labs.readings.filter((r) => r.series.length >= 2);
+  if (multi.length === 0) return null;
+  return (
+    <div className="life-lab-trends">
+      <p className="life-stat-k">Across {labs.panelDates.length} panels, {formatDate(labs.panelDates[labs.panelDates.length - 1], { month: 'short', year: 'numeric' })} to {formatDate(labs.panelDates[0], { month: 'short', year: 'numeric' })}</p>
+      <div className="life-lab-trend-grid">
+        {multi.map((r) => {
+          const goal = goals.find((g) => g.metricSlug === r.metric.slug);
+          const pts = r.series.map((p) => ({ x: formatDate(p.date, { month: 'short', year: '2-digit' }), value: p.value, t: Date.parse(`${p.date}T00:00:00Z`) }));
+          return (
+            <div key={r.metric.id} className="life-lab-trend">
+              <p className="text-xs font-semibold text-navy">
+                {r.metric.name}
+                {r.metric.unit ? <span className="text-muted font-normal"> · {r.metric.unit}</span> : null}
+              </p>
+              <LineChart points={pts} label={`${r.metric.name} across panels`} target={goal?.target ?? null} domain={[0, null]} size="compact" />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

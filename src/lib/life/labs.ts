@@ -21,6 +21,7 @@ export type LabReading = {
   latest: DailyPoint | null;
   previous: DailyPoint | null;
   band: Band | null;
+  series: DailyPoint[]; // every reading, oldest first
 };
 
 export type LabRow = {
@@ -97,8 +98,9 @@ export async function getLabs(db: Db): Promise<Labs> {
   }
 
   const readings: LabReading[] = metrics.map((metric) => {
-    const [latest = null, previous = null] = byMetric.get(metric.id) ?? [];
-    return { metric, latest, previous, band: latest ? bandOf(metric, latest.value) : null };
+    const points = byMetric.get(metric.id) ?? []; // newest first
+    const [latest = null, previous = null] = points;
+    return { metric, latest, previous, band: latest ? bandOf(metric, latest.value) : null, series: [...points].reverse() };
   });
 
   const panelDate = readings.reduce<string | null>((d, r) => (r.latest && (!d || r.latest.date > d) ? r.latest.date : d), null);
