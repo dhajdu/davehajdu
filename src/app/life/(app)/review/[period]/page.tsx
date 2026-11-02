@@ -2,41 +2,26 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, Chip, EmptyState, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
-import { METRIC_COLUMNS, formatDate, formatValue, getAreas, isPeriod, periodEnd, periodLabel, periodStart, shiftPeriod, type MetricDef } from '@/lib/life/metrics';
-import { renderEoMarkdown, type AutoSummary, type AutoSummaryMetric } from '@/lib/life/review';
-import { addGoal, createReview, finishReview, reopenReview, saveReview, setGoalStatus } from './actions';
+import { formatValue, isPeriod, periodLabel, shiftPeriod } from '@/lib/life/metrics';
+import { EO_MERPS, EO_SECTIONS, GOAL_STATUSES, renderEoMarkdown, type AutoSummary, type EoUpdate } from '@/lib/life/review';
+import { createReview, finishReview, redraftReview, reopenReview, saveReview } from './actions';
 import CopyEoButton from './CopyEoButton';
 
-type ScoreRow = { area_id: string; score: number | string | null; feelings: string | null; headline: string | null; impact: string | null };
-type GoalRow = {
-  id: string;
-  area_id: string;
-  title: string;
-  horizon: string;
-  metric_id: string | null;
-  target_value: number | string | null;
-  due_on: string | null;
-  status: 'open' | 'hit' | 'missed' | 'dropped';
-  review_id: string | null;
-};
+// Drafting calls Claude, which can take a minute.
+export const maxDuration = 300;
 
 const input = 'w-full text-sm border border-border rounded-lg px-3 py-1.5 text-navy bg-white';
 const label = 'block text-xs font-semibold text-muted mb-1';
 
-function change(m: AutoSummaryMetric) {
-  if (m.value === null) return null;
-  const parts: string[] = [];
-  const d = (ref: number | null, name: string) => {
-    if (ref === null) return;
-    const diff = m.value! - ref;
-    parts.push(`${diff > 0 ? '▲' : diff < 0 ? '▼' : '='}${formatValue(Math.abs(diff), m.unit === 'count' ? null : m.unit)} ${name}`);
-  };
-  d(m.prev, 'vs last month');
-  d(m.avg12, 'vs 12-mo avg');
-  return parts.join(', ');
-}
+// Selected status pill: life.css ok/warn/pink tones.
+const STATUS_STYLE = {
+  green: 'has-checked:bg-[var(--life-ok-bg)] has-checked:text-[var(--life-ok-ink)] has-checked:border-transparent',
+  yellow: 'has-checked:bg-[var(--life-warn-bg)] has-checked:text-[var(--life-warn-ink)] has-checked:border-transparent',
+  red: 'has-checked:bg-[var(--life-pink-bg)] has-checked:text-[var(--life-pink-ink)] has-checked:border-transparent',
+} as const;
 
-const statusTone = { open: 'gray', hit: 'mint', missed: 'magenta', dropped: 'gray' } as const;
+// The few numbers worth seeing next to the update, in this order.
+const STRIP = ['whoop_recovery', 'whoop_sleep_hours', 'whoop_hrv_ms', 'whoop_strain', 'workouts', 'steps', 'weight_kg'];
 
 export default async function ReviewPage({ params }: { params: Promise<{ period: string }> }) {
   const { period } = await params;
@@ -45,95 +30,59 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
 
   const { data: review } = await supabase
     .from('reviews')
-    .select('id, period, one_word, headline, status, auto_summary, entry_id')
+    .select('id, period, status, auto_summary, entry_id, eo')
     .eq('period', period)
     .maybeSingle();
 
   if (!review) {
     return (
       <div className="max-w-3xl">
-        <PageHeader title={`${periodLabel(period)} review`} />
+        <PageHeader title={`${periodLabel(period)} update`} />
         <EmptyState>
-          No review for this month yet. The draft is built automatically on the 1st.
+          No update for this month yet. Claude drafts it automatically on the 1st.
           <form action={createReview} className="mt-4">
             <input type="hidden" name="period" value={period} />
-            <button type="submit" className={primaryButtonClass}>Start it now</button>
+            <button type="submit" className={primaryButtonClass}>Draft it now</button>
           </form>
         </EmptyState>
       </div>
     );
   }
 
-  const prevPeriod = shiftPeriod(period, -1);
-  const [areas, scoresRes, metricsRes, prevReviewRes, goalsRes] = await Promise.all([
-    getAreas(supabase),
-    supabase.from('review_scores').select('area_id, score, feelings, headline, impact').eq('review_id', review.id),
-    supabase.from('metrics').select(METRIC_COLUMNS).order('name'),
-    supabase.from('reviews').select('id').eq('period', prevPeriod).maybeSingle(),
-    supabase.from('goals').select('id, area_id, title, horizon, metric_id, target_value, due_on, status, review_id').order('due_on'),
-  ]);
-
-  const scores = new Map(((scoresRes.data ?? []) as ScoreRow[]).map((s) => [s.area_id, s]));
-  const metrics = (metricsRes.data ?? []) as MetricDef[];
-  const metricById = new Map(metrics.map((m) => [m.id, m]));
-  const areaById = new Map(areas.map((a) => [a.id, a]));
-  const prevReviewId = prevReviewRes.data?.id as string | undefined;
-  const allGoals = (goalsRes.data ?? []) as GoalRow[];
-  const from = periodStart(period);
-  const to = periodEnd(period);
-  const lastMonthGoals = allGoals.filter(
-    (g) => g.review_id !== review.id && ((prevReviewId && g.review_id === prevReviewId) || (g.due_on && g.due_on >= from && g.due_on <= to))
-  );
-  const newGoals = allGoals.filter((g) => g.review_id === review.id);
-
+  const eo = (review.eo ?? {}) as EoUpdate;
   const summary = (review.auto_summary ?? {}) as AutoSummary;
   const done = review.status === 'done';
+  const prevPeriod = shiftPeriod(period, -1);
+  const lastGoals = [...(eo.last_goals ?? []), { title: '', status: '' as const }];
 
-  const markdown = renderEoMarkdown({
-    period,
-    oneWord: review.one_word,
-    headline: review.headline,
-    scores: Object.fromEntries(
-      areas.map((a) => {
-        const s = scores.get(a.id);
-        return [a.slug, s ? { score: s.score === null ? null : Number(s.score), feelings: s.feelings, headline: s.headline, impact: s.impact } : undefined];
-      })
-    ),
-    goals: newGoals.filter((g) => g.status !== 'dropped').map((g) => ({ title: g.title, horizon: g.horizon })),
+  const imported = review.entry_id
+    ? ((await supabase.from('entries').select('title, body_md').eq('id', review.entry_id).maybeSingle()).data as { title: string | null; body_md: string } | null)
+    : null;
+
+  const strip = STRIP.flatMap((slug) => {
+    const m = (summary.metrics ?? []).find((x) => x.slug === slug && x.value !== null);
+    return m ? [{ name: m.name.replace(' (Whoop)', ''), value: formatValue(m.value!, m.unit === 'count' ? null : m.unit) }] : [];
   });
-
-  // Auto-filled panels, one per area with something to say.
-  const panels = areas
-    .map((a) => {
-      const lines: string[] = [];
-      for (const m of summary.metrics ?? []) {
-        if (m.area !== a.slug || m.value === null) continue;
-        const c = change(m);
-        lines.push(`${m.name} ${formatValue(m.value, m.unit)}${c ? ` (${c})` : ''}`);
-      }
-      if (a.slug === 'mind' && summary.journal && summary.journal.value > 0 && !(summary.metrics ?? []).some((m) => m.slug === 'journal_entries' && m.value !== null)) {
-        const j = summary.journal;
-        lines.push(`${j.value} journal ${j.value === 1 ? 'entry' : 'entries'}${j.avg12 !== null ? ` (12-mo avg ${formatValue(j.avg12)})` : ''}`);
-      }
-      if (a.slug === 'places' && summary.places) {
-        const t = summary.places.trips;
-        lines.push(t.length ? `${t.map((x) => x.title).join(', ')} · ${summary.places.nights_away} nights away` : 'No trips');
-      }
-      for (const r of (summary.records ?? []).filter((r) => r.area === a.slug)) lines.push(`${r.title} (${r.kind})`);
-      const highlight = summary.highlights?.[a.slug];
-      return { area: a, lines, highlight };
-    })
-    .filter((p) => p.lines.length || p.highlight);
+  if (summary.journal && summary.journal.value > 0) strip.push({ name: 'Journal entries', value: String(summary.journal.value) });
+  if (summary.places?.trips.length) strip.push({ name: 'Nights away', value: String(summary.places.nights_away) });
 
   return (
     <div className="max-w-5xl">
       <PageHeader
-        title={`${periodLabel(period)} review`}
-        subtitle={review.entry_id ? 'Imported from an EO update' : undefined}
+        title={`${periodLabel(period)} update`}
+        subtitle={
+          imported
+            ? 'Imported from your forum update'
+            : eo.edited_at
+              ? 'Your edits'
+              : eo.drafted_at
+                ? 'Drafted by Claude from your data. Fix what is wrong, then finish.'
+                : undefined
+        }
         actions={
           <>
             <Chip tone={done ? 'mint' : 'gray'}>{done ? 'Done' : 'Draft'}</Chip>
-            <CopyEoButton markdown={markdown} />
+            <CopyEoButton markdown={renderEoMarkdown(eo)} />
             {done ? (
               <form action={reopenReview}>
                 <input type="hidden" name="review_id" value={review.id} />
@@ -155,193 +104,133 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
       </div>
 
       <div className="grid lg:grid-cols-5 gap-4">
-        <form id="review-form" action={saveReview} className="lg:col-span-3 space-y-4">
-          <input type="hidden" name="review_id" value={review.id} />
-          <input type="hidden" name="period" value={period} />
+        {imported ? (
+          <Card title={imported.title ?? 'Forum update'} className="lg:col-span-3">
+            <div className="text-sm text-body-text whitespace-pre-wrap">{imported.body_md}</div>
+          </Card>
+        ) : (
+          <form id="review-form" action={saveReview} className="lg:col-span-3 space-y-4">
+            <input type="hidden" name="review_id" value={review.id} />
+            <input type="hidden" name="period" value={period} />
 
-          <Card title="Scores · you set these">
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-              {areas.map((a) => {
-                const s = scores.get(a.id);
-                return (
-                  <label key={a.id} className="block">
-                    <span className={label}>{a.name}</span>
-                    <input
-                      type="number"
-                      name={`score_${a.id}`}
-                      min={0}
-                      max={10}
-                      step={0.5}
-                      inputMode="decimal"
-                      defaultValue={s?.score === null || s?.score === undefined ? '' : Number(s.score)}
-                      className={`${input} text-center font-bold`}
-                    />
+            <Card title="Merps">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                {EO_MERPS.map(([key, name]) => (
+                  <label key={key} className="block">
+                    <span className={label}>{name}</span>
+                    <input name={`merp_${key}`} defaultValue={eo.merps?.[key] ?? ''} className={input} maxLength={40} />
                   </label>
-                );
-              })}
-            </div>
-          </Card>
+                ))}
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3 mt-3">
+                <label className="block">
+                  <span className={label}>Struggle</span>
+                  <input name="struggle" defaultValue={eo.struggle ?? ''} className={input} />
+                </label>
+                <label className="block">
+                  <span className={label}>Success</span>
+                  <input name="success" defaultValue={eo.success ?? ''} className={input} />
+                </label>
+              </div>
+            </Card>
 
-          <Card>
-            <div className="grid sm:grid-cols-3 gap-3">
-              <label className="block">
-                <span className={label}>One word</span>
-                <input name="one_word" defaultValue={review.one_word ?? ''} className={input} maxLength={40} />
-              </label>
-              <label className="block sm:col-span-2">
-                <span className={label}>Headline</span>
-                <input name="headline" defaultValue={review.headline ?? ''} placeholder="What defined this month" className={input} />
-              </label>
-            </div>
-          </Card>
+            {EO_SECTIONS.map(([key, name]) => {
+              const u = eo.updates?.[key];
+              return (
+                <Card key={key} title={name}>
+                  <div className="grid gap-2">
+                    <label className="block">
+                      <span className={label}>Feelings</span>
+                      <input name={`feelings_${key}`} defaultValue={u?.feelings ?? ''} className={input} />
+                    </label>
+                    <label className="block">
+                      <span className={label}>Headline</span>
+                      <input name={`headline_${key}`} defaultValue={u?.headline ?? ''} className={input} />
+                    </label>
+                    <label className="block">
+                      <span className={label}>Impact</span>
+                      <textarea name={`impact_${key}`} defaultValue={u?.impact ?? ''} rows={5} className={input} />
+                    </label>
+                  </div>
+                </Card>
+              );
+            })}
 
-          <Card title="By area">
-            <div className="divide-y divide-border">
-              {areas.map((a) => {
-                const s = scores.get(a.id);
-                const filled = !!(s?.headline || s?.feelings || s?.impact);
-                return (
-                  <details key={a.id} className="py-2" open={filled}>
-                    <summary className="cursor-pointer text-sm font-semibold text-navy">
-                      {a.name}
-                      {s?.headline ? <span className="font-normal text-muted"> · {s.headline}</span> : null}
-                    </summary>
-                    <div className="grid gap-2 mt-2">
-                      <label className="block">
-                        <span className={label}>Headline</span>
-                        <input name={`headline_${a.id}`} defaultValue={s?.headline ?? ''} className={input} />
-                      </label>
-                      <label className="block">
-                        <span className={label}>Feelings</span>
-                        <textarea name={`feelings_${a.id}`} defaultValue={s?.feelings ?? ''} rows={2} className={input} />
-                      </label>
-                      <label className="block">
-                        <span className={label}>Impact</span>
-                        <textarea name={`impact_${a.id}`} defaultValue={s?.impact ?? ''} rows={2} className={input} />
-                      </label>
+            <Card title="Last 30 day goals">
+              <div className="grid gap-2">
+                {lastGoals.map((g, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <input name="last_title" defaultValue={g.title} placeholder={i === lastGoals.length - 1 ? 'Add a goal' : undefined} className={input} />
+                    <div className="flex gap-1 shrink-0">
+                      {GOAL_STATUSES.map((st) => (
+                        <label
+                          key={st}
+                          className={`cursor-pointer text-xs font-semibold px-2 py-1 rounded-full border border-border text-muted capitalize ${STATUS_STYLE[st]}`}
+                        >
+                          <input type="radio" name={`last_status_${i}`} value={st} defaultChecked={g.status === st} className="sr-only" />
+                          {st}
+                        </label>
+                      ))}
                     </div>
-                  </details>
-                );
-              })}
-            </div>
-          </Card>
+                  </div>
+                ))}
+              </div>
+            </Card>
 
-          <div className="flex gap-2">
-            <button type="submit" className={primaryButtonClass}>Save</button>
-            {!done && (
-              <button type="submit" formAction={finishReview} className={buttonClass}>
-                Save and finish
-              </button>
-            )}
-          </div>
-        </form>
+            <Card title="Next 30 day goals">
+              <div className="grid gap-2">
+                <label className="block">
+                  <span className={label}>Personal</span>
+                  <input name="next_personal" defaultValue={eo.next_goals?.personal ?? ''} className={input} />
+                </label>
+                <label className="block">
+                  <span className={label}>Business</span>
+                  <input name="next_business" defaultValue={eo.next_goals?.business ?? ''} className={input} />
+                </label>
+              </div>
+            </Card>
+
+            <div className="flex gap-2">
+              <button type="submit" className={primaryButtonClass}>Save</button>
+              {!done && (
+                <button type="submit" formAction={finishReview} className={buttonClass}>
+                  Save and finish
+                </button>
+              )}
+            </div>
+          </form>
+        )}
 
         <div className="lg:col-span-2 space-y-4">
-          <Card title="Auto-filled from your data">
-            {panels.length === 0 ? (
-              <p className="text-sm text-muted">
-                {summary.generated_at ? 'No data for this month.' : 'Not generated yet. The draft runs on the 1st of the month.'}
-              </p>
+          <Card title="This month in numbers">
+            {strip.length === 0 ? (
+              <p className="text-sm text-muted">No numbers for this month yet.</p>
             ) : (
-              <ul className="space-y-3">
-                {panels.map((p) => (
-                  <li key={p.area.id}>
-                    <p className="text-sm font-semibold text-navy">{p.area.name}</p>
-                    {p.lines.map((l, i) => (
-                      <p key={i} className="text-xs text-body-text">{l}</p>
-                    ))}
-                    {p.highlight && <p className="text-xs text-body-text mt-1 italic">{p.highlight}</p>}
-                  </li>
+              <dl className="grid grid-cols-2 gap-3">
+                {strip.map((s) => (
+                  <div key={s.name}>
+                    <dt className="text-xs text-muted">{s.name}</dt>
+                    <dd className="text-lg font-bold text-navy">{s.value}</dd>
+                  </div>
                 ))}
-              </ul>
+              </dl>
             )}
-            {summary.generated_at && (
-              <p className="text-xs text-muted mt-3">
-                Generated {new Date(summary.generated_at).toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', dateStyle: 'medium', timeStyle: 'short' })}
-              </p>
-            )}
+            {summary.places?.trips.length ? (
+              <p className="text-xs text-body-text mt-3">{summary.places.trips.map((t) => t.title).join(', ')}</p>
+            ) : null}
           </Card>
 
-          <Card title="Last month's goals">
-            {lastMonthGoals.length === 0 ? (
-              <p className="text-sm text-muted">No goals were set for this month.</p>
-            ) : (
-              <ul className="space-y-3">
-                {lastMonthGoals.map((g) => (
-                  <li key={g.id} className="text-sm">
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="font-semibold text-navy">{g.title}</span>
-                      <Chip tone={statusTone[g.status]}>{g.status}</Chip>
-                    </div>
-                    <GoalMeta g={g} metric={g.metric_id ? metricById.get(g.metric_id) : undefined} area={areaById.get(g.area_id)?.name} />
-                    <div className="flex gap-1 mt-1">
-                      {(['hit', 'missed', 'dropped'] as const)
-                        .filter((s) => s !== g.status)
-                        .map((s) => (
-                          <form key={s} action={setGoalStatus}>
-                            <input type="hidden" name="goal_id" value={g.id} />
-                            <input type="hidden" name="period" value={period} />
-                            <input type="hidden" name="status" value={s} />
-                            <button type="submit" className="text-xs text-blue font-semibold px-1">Mark {s}</button>
-                          </form>
-                        ))}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Card>
-
-          <Card title="Next 30 and 60 days">
-            {newGoals.length > 0 && (
-              <ul className="space-y-2 mb-4">
-                {newGoals.map((g) => (
-                  <li key={g.id} className="text-sm">
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="font-semibold text-navy">{g.title}</span>
-                      <Chip>{g.horizon}</Chip>
-                    </div>
-                    <GoalMeta g={g} metric={g.metric_id ? metricById.get(g.metric_id) : undefined} area={areaById.get(g.area_id)?.name} />
-                  </li>
-                ))}
-              </ul>
-            )}
-            <form action={addGoal} className="grid gap-2">
-              <input type="hidden" name="review_id" value={review.id} />
-              <input type="hidden" name="period" value={period} />
-              <input name="title" required placeholder="Add a goal" className={input} />
-              <div className="grid grid-cols-2 gap-2">
-                <select name="area_id" required className={input} defaultValue="">
-                  <option value="" disabled>Area</option>
-                  {areas.map((a) => (
-                    <option key={a.id} value={a.id}>{a.name}</option>
-                  ))}
-                </select>
-                <select name="horizon" className={input} defaultValue="30d">
-                  <option value="30d">30 days</option>
-                  <option value="60d">60 days</option>
-                </select>
-                <select name="metric_id" className={input} defaultValue="">
-                  <option value="">No metric</option>
-                  {metrics.map((m) => (
-                    <option key={m.id} value={m.id}>{m.name}{m.unit ? ` (${m.unit})` : ''}</option>
-                  ))}
-                </select>
-                <input name="target_value" type="number" step="any" inputMode="decimal" placeholder="Target" className={input} />
-              </div>
-              <div>
-                <button type="submit" className={buttonClass}>Add goal</button>
-              </div>
-            </form>
-          </Card>
+          {!imported && !done && (
+            <Card title="Start over">
+              <p className="text-sm text-body-text mb-3">Have Claude draft this month again from your latest data. This replaces what is in the form.</p>
+              <form action={redraftReview}>
+                <input type="hidden" name="period" value={period} />
+                <button type="submit" className={buttonClass}>Redraft with Claude</button>
+              </form>
+            </Card>
+          )}
         </div>
       </div>
     </div>
   );
-}
-
-function GoalMeta({ g, metric, area }: { g: GoalRow; metric?: MetricDef; area?: string }) {
-  const parts = [area, g.due_on ? `due ${formatDate(g.due_on)}` : null];
-  if (metric && g.target_value !== null) parts.push(`${metric.name} target ${formatValue(Number(g.target_value), metric.unit)}`);
-  return <p className="text-xs text-muted">{parts.filter(Boolean).join(' · ')}</p>;
 }
