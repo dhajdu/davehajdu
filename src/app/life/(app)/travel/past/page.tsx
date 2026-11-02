@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, EmptyState, PageHeader } from '@/components/life/ui';
 import { TravelTabs } from '@/components/life/travel/TravelTabs';
@@ -7,6 +8,8 @@ import { allTrips, fetchAll } from '@/components/life/travel/data';
 import { km } from '@/components/life/travel/geo';
 import { isHome, localDateKey, nightsOf, todayKey } from '@/components/life/travel/format';
 import type { Trip } from '@/components/life/travel/types';
+
+export const metadata: Metadata = { title: 'Travel', robots: { index: false, follow: false } };
 
 type LegPlace = { country: string | null; iata: string | null; kind: string; lat: number | null; lng: number | null };
 type LegStat = {
@@ -111,9 +114,9 @@ export default async function TravelPastPage() {
 
       <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {stats.map((s) => (
-          <div key={s.label} className="border border-border rounded-xl p-3 bg-white">
-            <dt className="text-xs font-semibold text-muted">{s.label}</dt>
-            <dd className="text-2xl font-bold text-navy tabular-nums">{s.value.toLocaleString('en-US')}</dd>
+          <div key={s.label} className="life-stat">
+            <dt className="life-stat-k">{s.label}</dt>
+            <dd className="life-stat-v text-2xl">{s.value.toLocaleString('en-US')}</dd>
           </div>
         ))}
       </dl>

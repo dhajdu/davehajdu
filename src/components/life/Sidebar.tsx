@@ -4,16 +4,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-const MORE_AREAS = ['people', 'money', 'work', 'time', 'direction', 'admin', 'legacy'];
+// Body lives at /life/health, Direction at /life/goals, Places at /life/travel.
+const MORE_AREAS = ['mind', 'people', 'money', 'work', 'time', 'admin', 'legacy'];
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 type Item = { href: string; label: string };
 
-const SECTIONS: { label?: string; items: Item[] }[] = [
-  { items: [{ href: '/life', label: 'This month' }, { href: '/life/review', label: 'Review' }, { href: '/life/timeline', label: 'Timeline' }] },
-  { label: 'Areas', items: [{ href: '/life/area/body', label: 'Body' }, { href: '/life/area/mind', label: 'Mind' }, { href: '/life/travel', label: 'Places' }] },
-  { label: 'More areas', items: MORE_AREAS.map((a) => ({ href: `/life/area/${a}`, label: cap(a) })) },
-  { label: 'System', items: [{ href: '/life/inbox', label: 'Inbox' }, { href: '/life/sources', label: 'Sources' }, { href: '/life/ask', label: 'Ask' }] },
+const SECTIONS: { label?: string; items: Item[]; collapsible?: boolean }[] = [
+  { items: [{ href: '/life', label: 'Today' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/health', label: 'Health' }] },
+  { label: 'Looking back', items: [{ href: '/life/review', label: 'Review' }, { href: '/life/timeline', label: 'Timeline' }, { href: '/life/travel', label: 'Travel' }] },
+  { label: 'Areas', items: MORE_AREAS.map((a) => ({ href: `/life/area/${a}`, label: cap(a) })), collapsible: true },
+  { label: 'Behind the scenes', items: [{ href: '/life/inbox', label: 'Inbox' }, { href: '/life/sources', label: 'Sources' }, { href: '/life/ask', label: 'Ask' }] },
 ];
 
 export default function Sidebar({ pending }: { pending: number }) {
@@ -47,12 +48,11 @@ export default function Sidebar({ pending }: { pending: number }) {
 
         <div className="life-nav">
           {SECTIONS.map((section, si) => {
-            const collapsible = section.label === 'More areas';
-            const shown = !collapsible || moreShown;
+            const shown = !section.collapsible || moreShown;
             return (
               <div className="life-nav-group" key={section.label ?? si}>
                 {section.label &&
-                  (collapsible ? (
+                  (section.collapsible ? (
                     <button type="button" className="life-nav-label" aria-expanded={shown} onClick={() => setMoreOpen(!shown)}>
                       {section.label}
                       <span aria-hidden>{shown ? '▾' : '▸'}</span>

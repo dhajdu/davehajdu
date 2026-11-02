@@ -198,9 +198,13 @@ Port from `~/code-projects/8edges`: `lib/admin-chat/` (`tools.ts`, `schema.ts`, 
 ```
 src/app/life/
   layout.tsx            requireOwner(), sidebar, noindex
-  page.tsx              Home: this month, ten areas
+  page.tsx              Today: the One Thing ladder, the health foundation, month goals
+  goals/                Five-year vision and year goals (goals table), month goals and
+                        track record (journal), the ladder
+  health/               Whoop recovery, sleep, strain, HRV, resting HR, weight
   review/[period]/      Monthly review
-  area/[slug]/          Area page (metrics, records, goals, sources)
+  area/[slug]/          Area page (metrics, records, goals, sources); body → health,
+                        direction → goals, places → travel
   timeline/
   travel/               Upcoming (default), past, map
   travel/[id]/
@@ -221,6 +225,21 @@ supabase/life/migrations/
 ```
 
 Supabase migrations live in `supabase/life/` so they never mix with the leads project.
+
+### The focus ladder
+
+The app answers one question, "Am I living the life I intend to live?", on one ladder: today, this week, this month, this year, five years. Health is the foundation under it. Where each rung comes from:
+
+| Rung | Source | Parser |
+|---|---|---|
+| Today | Latest journal entry, `# ❶ The One Thing` → `**Today**: …` | `src/lib/life/focus-parse.ts` `parseOneThing` |
+| Week, month | Latest journal entry with a `# ❸ {Month}` block: numbered goals, `**Week N:**` lines, `**Deals that should close**`, `**{Month} Moves**`; ✅ ❌ 🟡 marks become statuses | `parseMonthBlock` |
+| Track record | The `Historical` reference entry (template block), one `###` section per month | `parseHistory` |
+| Year, five years | `goals` rows with `horizon` `year` / `vision`, managed on `/life/goals` | `src/lib/life/focus.ts` `getLongGoals` |
+
+Month and week goals are never edited in the app: Dave writes them in Notion and the nightly sync carries them in. The first vision and year rows were seeded from journal passages (the One Thing, the "Dealing with Age" forum presentation, the October 2026 EO update) and are meant to be rewritten in the app.
+
+Health reads the `whoop_*` metrics plus `weight_kg` (`src/lib/life/health.ts`). Whoop zones: recovery 67% and up is green, 34 to 66% yellow, under 34% red.
 
 ## PR slices (Phase 1)
 

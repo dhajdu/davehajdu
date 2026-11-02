@@ -1,6 +1,9 @@
+import type { Metadata } from 'next';
 import { requireOwner } from '@/lib/life/auth';
 import { PageHeader, Chip, EmptyState, buttonClass, primaryButtonClass } from '@/components/life/ui';
 import { approveItem, rejectItem } from './actions';
+
+export const metadata: Metadata = { title: 'Inbox', robots: { index: false, follow: false } };
 
 type Item = {
   id: string;
@@ -61,14 +64,14 @@ export default async function InboxPage() {
       <div className="space-y-8">
         {sorted.map(([area, g]) => (
           <section key={area}>
-            <h2 className="text-xs font-semibold text-muted mb-3">{area}</h2>
+            <h2 className="life-stat-k mb-3">{area}</h2>
             <div className="space-y-3">
               {g.items.map((item) => {
                 const payload = item.source_items?.payload;
                 const subject = show(payload?.subject);
                 const from = show(payload?.from);
                 return (
-                  <article key={item.id} className="border border-border rounded-xl p-4 bg-white">
+                  <article key={item.id} className="life-card">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <Chip>{item.kind}</Chip>
                       {item.confidence !== null && <span className="text-xs text-muted">{Math.round(Number(item.confidence) * 100)}% confident</span>}
@@ -80,7 +83,7 @@ export default async function InboxPage() {
                     {(subject || from) && (
                       <details className="mt-3 text-sm">
                         <summary className="cursor-pointer text-blue text-xs font-semibold">View source</summary>
-                        <div className="mt-2 rounded-lg bg-light-gray p-3 space-y-1">
+                        <div className="mt-2 rounded-lg p-3 space-y-1" style={{ background: 'var(--life-surface-2)' }}>
                           {subject && <p><span className="text-muted">Subject </span><span className="text-navy">{subject}</span></p>}
                           {from && <p><span className="text-muted">From </span><span className="text-navy">{from}</span></p>}
                         </div>

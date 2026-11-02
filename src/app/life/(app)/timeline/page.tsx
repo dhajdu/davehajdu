@@ -1,7 +1,10 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { requireOwner } from '@/lib/life/auth';
 import { Chip, EmptyState, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
 import { formatDate, getAreas } from '@/lib/life/metrics';
+
+export const metadata: Metadata = { title: 'Timeline', robots: { index: false, follow: false } };
 
 const PAGE = 50;
 type Zoom = 'decade' | 'year' | 'month';
@@ -148,13 +151,12 @@ export default async function TimelinePage({
   const groupHref = (k: string) => {
     if (zoom === 'decade') return href({ zoom: 'year', at: k, page: undefined });
     if (zoom === 'year') return href({ zoom: 'month', at: k, page: undefined });
-    return `/life?month=${k}`;
+    return `/life/review/${k}`;
   };
 
   const windowLabel = from && to ? (zoom === 'year' ? `${from.slice(0, 4)}s` : from.slice(0, 4)) : null;
 
-  const chip = (active: boolean) =>
-    `text-xs font-semibold px-2.5 py-1 rounded-full border ${active ? 'bg-navy border-navy text-white' : 'bg-white border-border text-navy'}`;
+  const chip = (active: boolean) => `life-pill${active ? ' is-active' : ''}`;
 
   return (
     <div className="max-w-4xl">
@@ -162,13 +164,7 @@ export default async function TimelinePage({
 
       <form action="/life/timeline" className="flex gap-2 mb-4">
         {area && <input type="hidden" name="area" value={area.slug} />}
-        <input
-          type="search"
-          name="q"
-          defaultValue={q}
-          placeholder="Search your life…"
-          className="flex-1 min-w-0 text-sm border border-border rounded-lg px-3 py-1.5 text-navy"
-        />
+        <input type="search" name="q" defaultValue={q} placeholder="Search your life…" className="flex-1 min-w-0 text-sm" />
         <button type="submit" className={primaryButtonClass}>Search</button>
         {q && <Link href={href({ q: undefined, page: undefined })} className={buttonClass}>Clear</Link>}
       </form>
@@ -204,9 +200,9 @@ export default async function TimelinePage({
               <h2 className="text-sm font-bold text-navy mb-2">
                 <Link href={groupHref(g.key)} className="hover:text-blue">{groupLabel(g.key)}</Link>
               </h2>
-              <ul className="border border-border rounded-xl divide-y divide-border">
+              <ul className="life-list">
                 {g.items.map((it) => (
-                  <li key={it.key} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-3 py-2">
+                  <li key={it.key} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-3.5 py-2.5">
                     <span className="text-xs text-muted w-full sm:w-36 shrink-0">
                       {formatDate(it.date)}
                       {it.end && it.end !== it.date ? ` to ${formatDate(it.end, { month: 'short', day: 'numeric' })}` : ''}

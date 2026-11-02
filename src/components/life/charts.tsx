@@ -1,5 +1,5 @@
 // Hand-written SVG charts. Token hexes only: navy #04102D, blue #287BE8,
-// border #D4D9E0, muted #6B7280.
+// magenta #D1458B, border #D4D9E0, muted #6B7280.
 
 type Point = { x: string; value: number };
 
@@ -7,8 +7,8 @@ const W = 600;
 const H = 180;
 const PAD = { top: 12, right: 8, bottom: 22, left: 40 };
 
-function scale(points: Point[], zeroBased: boolean) {
-  const vals = points.map((p) => p.value);
+function scale(points: Point[], zeroBased: boolean, extra: number[] = []) {
+  const vals = [...points.map((p) => p.value), ...extra];
   let min = zeroBased ? 0 : Math.min(...vals);
   let max = Math.max(...vals);
   if (min === max) {
@@ -43,9 +43,10 @@ function Axis({ min, max, y, first, last }: { min: number; max: number; y: (v: n
   );
 }
 
-export function LineChart({ points, label }: { points: Point[]; label: string }) {
+// `target` draws a dashed magenta line (a goal) and keeps it inside the scale.
+export function LineChart({ points, label, target }: { points: Point[]; label: string; target?: number | null }) {
   if (points.length === 0) return null;
-  const { min, max, y } = scale(points, false);
+  const { min, max, y } = scale(points, false, target != null ? [target] : []);
   const innerW = W - PAD.left - PAD.right;
   const x = (i: number) => PAD.left + (points.length === 1 ? innerW / 2 : (i / (points.length - 1)) * innerW);
   const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
@@ -53,6 +54,12 @@ export function LineChart({ points, label }: { points: Point[]; label: string })
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" role="img" aria-label={label}>
       <Axis min={min} max={max} y={y} first={points[0].x} last={lastP.x} />
+      {target != null && (
+        <g>
+          <line x1={PAD.left} x2={W - PAD.right} y1={y(target)} y2={y(target)} stroke="#D1458B" strokeWidth="1.5" strokeDasharray="4 4" />
+          <text x={W - PAD.right} y={y(target) - 4} textAnchor="end" fontSize="10" fill="#D1458B" fontWeight="700">goal {fmt(target)}</text>
+        </g>
+      )}
       <path d={d} fill="none" stroke="#287BE8" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
       <circle cx={x(points.length - 1)} cy={y(lastP.value)} r="3.5" fill="#04102D" />
     </svg>
