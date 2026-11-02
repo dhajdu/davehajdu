@@ -28,9 +28,9 @@ export const POSTS: Post[] = [
   },
   {
     slug: 'building-a-database-for-my-life',
-    title: 'My Life Lives in Twenty Apps. None of Them Talk. So I\'m Building a Database.',
+    title: 'Am I Living the Life I Intend To? I Built a Database to Find Out',
     excerpt:
-      'Blood tests in a portal, surgeries in old emails, five years of journals in Notion, twenty years of trips in Gmail. An ocean of data, and not one drop can tell me if I\'m living the life I intend to. So I\'m building a personal operating system, in public.',
+      'Am I living the life I intend to? Twenty apps couldn\'t tell me. So I put my whole life in one database, connected my Whoop data and Grokbot, and finally got an answer.',
     date: 'Nov 1, 2026',
     readTime: '6 min',
     category: 'AI In Business',
@@ -209,11 +209,23 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
   ],
 
   'building-a-database-for-my-life': [
-    { tag: 'p', text: "This morning I asked my own life a simple question. It did not answer." },
-    { tag: 'p', text: "When was my last surgery? Somewhere in an email from years ago. How many times have I been to Australia this year? Ask Gmail. Ask TripIt. Ask my calendar. How has my energy trended since I started tracking it? Great question. It lives in five years of Notion pages that nobody, including me, will ever read again." },
-    { tag: 'p', text: "<strong>My life is spread across twenty systems, and not one of them can tell me whether I'm living the life I intend to.</strong>" },
-    { tag: 'p', text: "So I'm building a database for it. Private. On my own website. Filling itself from the apps I already use. And I'm doing it in public, so you get to watch." },
-    { tag: 'video', images: ['/videos/building-a-database-for-my-life.mp4', '/images/database-for-my-life-poster.webp'], caption: 'The 60-second version, narrated by me. Well, by an AI clone of my voice.' },
+    { tag: 'p', text: "For years I've asked myself one question: am I living the life I intend to? I never had a real answer. Just a feeling." },
+    { tag: 'p', text: "Part of the problem was where my life actually lived. When was my last surgery? Somewhere in an email from years ago. How many times have I been to Australia this year? Ask Gmail. Ask TripIt. Ask my calendar. How has my energy trended since I started tracking it? Great question. It lives in five years of Notion pages that nobody, including me, will ever read again." },
+    { tag: 'p', text: "<strong>My life was spread across twenty systems, and not one of them could tell me whether I'm living the life I intend to.</strong>" },
+    { tag: 'p', text: "So I built a database for it. Private. On my own website. Filling itself from the apps I already use. I never thought I needed my personal life in a database. Now I can't imagine going back." },
+    { tag: 'video', images: ['/videos/building-a-database-for-my-life.mp4', '/images/database-for-my-life-poster.webp'], caption: 'The 70-second version, narrated by me. Well, by an AI clone of my voice.' },
+
+    { tag: 'h2', text: 'What changes when your life is in one place' },
+    { tag: 'p', text: "The most enlightening piece has been my <strong>Whoop</strong> data. Sleep, recovery and strain, sitting right next to my journal, my travel and my goals. Biometrics on their own are a dashboard. Next to the rest of your life, they start explaining it." },
+    { tag: 'p', text: "Cross-referencing Whoop with my journal has been phenomenal. It's the Johari window's <strong>blind spot</strong>, made visible: the stuff that's true about you that you can't see yourself. The entry where I wrote I was fine, sitting next to the recovery score that says I wasn't. You stop guessing how a month went. The data and the journal tell you together." },
+    { tag: 'p', text: "Then I connected <strong>Grokbot</strong> to it, and it started doing the work for me:" },
+    { tag: 'li', text: "Keeps me at inbox zero." },
+    { tag: 'li', text: "Makes sure every trip is on my calendar." },
+    { tag: 'li', text: "Cleans up my browser history and links, so what's in front of me is what I actually care about, not distractions." },
+    { tag: 'li', text: "Shows it all beautifully in the life app I built for myself." },
+    { tag: 'p', text: "Goals, tasks, health. I stay on top of all of it without digging through twenty apps to figure out where I stand." },
+    { tag: 'blockquote', text: "You don't live the life you intend to by setting goals once a year. You live it by reflecting on them, again and again, with an honest look at what actually happened." },
+    { tag: 'p', text: "That's the big takeaway for me. The database just makes that reflection easy enough that I actually do it. Here's how it came together." },
 
     { tag: 'h2', text: 'Twenty apps, zero conversations' },
     { tag: 'figure', images: ['/images/personal-os-sources.webp'], caption: 'Where my life lives today: 20+ apps across eight areas, and not one group chat between them.' },
@@ -225,7 +237,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'li', text: "<strong>People:</strong> conversations in WhatsApp, Messages and Zalo." },
     { tag: 'li', text: "<strong>Money:</strong> bank statements, credit card statements and QuickBooks." },
     { tag: 'li', text: "<strong>Everything else:</strong> photos in Google Photos, documents in Google Drive." },
-    { tag: 'p', text: "Every app holds a slice. My watch knows my sleep. My bank knows my money. WhatsApp knows who I actually talk to. Google Photos holds tens of thousands of pictures I will never scroll back through. Notion holds every journal entry and every monthly update I've written for my EO forum since 2021." },
+    { tag: 'p', text: "Every app holds a slice. My Whoop knows my sleep. My bank knows my money. WhatsApp knows who I actually talk to. Google Photos holds tens of thousands of pictures I will never scroll back through. Notion holds every journal entry and every monthly update I've written for my EO forum since 2021." },
     { tag: 'p', text: "None of them talk to each other. And the good stuff lives in the gaps. Sleep against mood. Travel against happiness. Money stress against relationships. You feel those patterns. You never see them." },
     { tag: 'p', text: "It's an ocean of data. And you can't drink any of it." },
 
@@ -265,7 +277,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
     { tag: 'li', text: "One login, and only my email can use it." },
     { tag: 'li', text: "Its own database, separate from everything else." },
     { tag: 'li', text: "Every row locked to my account." },
-    { tag: 'li', text: "An AI that can read everything and change nothing." },
+    { tag: 'li', text: "An AI that can read the database and change nothing in it." },
     { tag: 'li', text: "Bank data from statements only. No passwords stored. Ever." },
 
     { tag: 'h2', text: 'Read the full plan' },
