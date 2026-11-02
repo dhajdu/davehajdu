@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, Chip, EmptyState, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
-import { formatValue, isPeriod, periodLabel, shiftPeriod } from '@/lib/life/metrics';
+import { formatDate, formatValue, isPeriod, periodLabel, shiftPeriod } from '@/lib/life/metrics';
 import { EO_MERPS, EO_SECTIONS, GOAL_STATUSES, renderEoMarkdown, type AutoSummary, type EoUpdate } from '@/lib/life/review';
 import { createReview, finishReview, redraftReview, reopenReview, saveReview } from './actions';
 import CopyEoButton from './CopyEoButton';
@@ -55,9 +55,12 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
   const prevPeriod = shiftPeriod(period, -1);
   const lastGoals = [...(eo.last_goals ?? []), { title: '', status: '' as const }];
 
-  const imported = review.entry_id
-    ? ((await supabase.from('entries').select('title, body_md').eq('id', review.entry_id).maybeSingle()).data as { title: string | null; body_md: string } | null)
-    : null;
+  // A month with a forum update you wrote shows it, until Claude drafts what came after it.
+  const hasDraft = !!(eo.drafted_at || eo.edited_at);
+  const imported =
+    review.entry_id && !hasDraft
+      ? ((await supabase.from('entries').select('title, body_md').eq('id', review.entry_id).maybeSingle()).data as { title: string | null; body_md: string } | null)
+      : null;
 
   const strip = STRIP.flatMap((slug) => {
     const m = (summary.metrics ?? []).find((x) => x.slug === slug && x.value !== null);
@@ -76,7 +79,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
             : eo.edited_at
               ? 'Your edits'
               : eo.drafted_at
-                ? 'Drafted by Claude from your data. Fix what is wrong, then finish.'
+                ? `Drafted by Claude from your data${eo.since ? ` since your ${formatDate(eo.since)} forum update` : ''}. Fix what is wrong, then finish.`
                 : undefined
         }
         actions={
@@ -220,14 +223,24 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
             ) : null}
           </Card>
 
-          {!imported && !done && (
-            <Card title="Start over">
-              <p className="text-sm text-body-text mb-3">Have Claude draft this month again from your latest data. This replaces what is in the form.</p>
+          {imported ? (
+            <Card title="What came after">
+              <p className="text-sm text-body-text mb-3">Have Claude draft a new update from everything since this forum update.</p>
               <form action={redraftReview}>
                 <input type="hidden" name="period" value={period} />
-                <button type="submit" className={buttonClass}>Redraft with Claude</button>
+                <button type="submit" className={buttonClass}>Draft with Claude</button>
               </form>
             </Card>
+          ) : (
+            !done && (
+              <Card title="Start over">
+                <p className="text-sm text-body-text mb-3">Have Claude draft this month again from your latest data. This replaces what is in the form.</p>
+                <form action={redraftReview}>
+                  <input type="hidden" name="period" value={period} />
+                  <button type="submit" className={buttonClass}>Redraft with Claude</button>
+                </form>
+              </Card>
+            )
           )}
         </div>
       </div>
