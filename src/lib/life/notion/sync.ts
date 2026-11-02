@@ -5,7 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { NBlock, NPage } from './client';
 import { EO_DATA_SOURCE, JOURNAL_DATA_SOURCE, NotionClient, pageTitle, propMulti, propNumber, propText } from './client';
 import { blocksToMarkdown } from './markdown';
-import { normaliseMd, stripTemplates, toTopBlocks } from './template';
+import { dropCopiedLines, normaliseMd, stripTemplates, toTopBlocks } from './template';
 import type { TemplateBlock } from './template';
 import { parseTitleDate } from './dates';
 import type { ParsedDate } from './dates';
@@ -211,12 +211,16 @@ export async function runNotionSync(ctx: SyncContext, opts: SyncOptions = {}): P
     { threshold: TEMPLATE_THRESHOLD, known }
   );
   addTemplates(journalStrip.templates);
+  const journalOrder = journalPages
+    .map((p, i) => ({ id: p.id, body: journalStrip.bodies.get(p.id) ?? '', key: journalDates[i].date + p.created_time }))
+    .sort((a, b) => a.key.localeCompare(b.key));
+  const journalBodies = dropCopiedLines(journalOrder);
 
   journalPages.forEach((p, i) => {
     const title = pageTitle(p);
     const d = journalDates[i];
     const tags = propMulti(p, 'Tag');
-    const body = journalStrip.bodies.get(p.id) ?? '';
+    const body = journalBodies.get(p.id) ?? '';
     entries.push({ kind: 'journal', external_id: p.id, entry_date: d.date, title, body_md: body, notion_tags: tags, area: journalArea(tags) });
     const w = propNumber(p, 'Weight');
     if (w !== null && w >= 30 && w <= 250) weights.push({ metric: 'weight_kg', measured_on: d.date, value: w, pageId: p.id });
@@ -224,7 +228,7 @@ export async function runNotionSync(ctx: SyncContext, opts: SyncOptions = {}): P
     if (q) queue.push({ ...q, area: 'mind' });
   });
   report.samples = journalPages
-    .map((p, i) => ({ title: pageTitle(p), date: journalDates[i].date, body: journalStrip.bodies.get(p.id) ?? '' }))
+    .map((p, i) => ({ title: pageTitle(p), date: journalDates[i].date, body: journalBodies.get(p.id) ?? '' }))
     .filter((s) => s.body.length > 200)
     .sort((a, b) => b.date.localeCompare(a.date))
     .filter((_, i) => i % 40 === 0)
