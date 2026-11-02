@@ -69,6 +69,7 @@
 .life-nav-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; margin: 1px 0; border-radius: 8px; color: var(--life-sidebar-ink); text-decoration: none; font-size: 13px; transition: background 0.15s, color 0.15s; }
 .life-nav-link:hover { background: var(--life-on-dark-hover); color: #fff; }
 .life-nav-link.is-active { background: var(--life-blue); color: #fff; font-weight: 600; }
+.life-nav-inbox { margin-top: 6px; font-weight: 600; color: #fff; }
 .life-nav-count { font-size: 11px; font-weight: 700; background: var(--life-mint); color: var(--life-navy); border-radius: 9999px; padding: 1px 7px; }
 .life-nav-foot { border-top: 1px solid var(--life-on-dark-line); padding: 12px; }
 .life-nav-foot button { width: 100%; text-align: left; background: none; border: 0; color: var(--life-sidebar-muted); font: inherit; font-size: 13px; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
@@ -463,7 +464,9 @@ button.life-vision-text:focus-visible { outline: none; box-shadow: var(--life-fo
 .life-md { font-size: 14px; line-height: 1.5; color: var(--life-body); display: grid; gap: 6px; }
 .life-md h4 { font-size: 13px; font-weight: 700; color: var(--life-ink); margin: 8px 0 0; }
 .life-md p { margin: 0; }
-.life-md ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.life-md ul, .life-md ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.life-md ol { counter-reset: move; }
+.life-md ol li::before { counter-increment: move; content: counter(move); color: var(--life-magenta); font-weight: 800; font-size: 12px; min-width: 16px; }
 .life-md li { display: flex; gap: 8px; align-items: flex-start; }
 .life-md li .life-mark { margin-top: 2px; }
 .life-md li::before { content: "•"; color: var(--life-faint); }
@@ -561,3 +564,45 @@ button.life-vision-text:focus-visible { outline: none; box-shadow: var(--life-fo
 .life-eo-scores span.is-low { background: var(--life-pink-bg); color: var(--life-pink-ink); }
 .life-eo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
 .life-eo-grid .life-stat.is-low .life-stat-v { color: var(--life-pink-ink); }
+.life-journal .life-card { padding: 16px 18px; border-left: 4px solid var(--life-blue); }
+.life-journal .life-card:nth-child(2) { border-left-color: var(--life-mint); }
+.life-journal .life-card:nth-child(3) { border-left-color: var(--life-magenta); }
+.life-main .life-journal-one { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; padding: 12px 14px; border-color: var(--life-line); }
+.life-main .life-journal-one::placeholder { font-weight: 600; color: var(--life-faint); }
+.life-journal-grat-row { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: center; gap: 8px; }
+.life-journal-grat-row span { width: 24px; height: 24px; border-radius: 50%; background: var(--life-ok-bg); color: var(--life-ok-ink); font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+.life-main .life-journal-grat-row input { border-color: var(--life-line); }
+.life-main .life-journal-nhb { border-color: var(--life-line); font-size: 15px; }
+.life-main .life-journal input:focus, .life-main .life-journal textarea:focus { border-color: var(--life-blue); }
+.life-routine { list-style: none; margin: 0; padding: 0 0 0 10px; border-left: 2px solid var(--life-light-gray); display: grid; gap: 8px; }
+.life-routine li { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 8px; align-items: baseline; position: relative; font-size: 13px; }
+.life-routine li::before { content: ""; position: absolute; left: -16px; top: 5px; width: 8px; height: 8px; border-radius: 50%; background: var(--life-blue); }
+.life-routine-time { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 11px; font-weight: 700; color: var(--life-muted); }
+.life-routine-what { color: var(--life-ink); font-weight: 600; }
+.life-rung-item.is-focus { font-weight: 700; color: #fff; }
+
+/* ── Month-end review ──────────────────────────────────────────────────── */
+.life-grades { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 16px 22px; align-items: center; background: var(--life-surface); border: 1px solid var(--life-line); border-radius: 16px; box-shadow: var(--life-shadow); padding: 18px 22px; }
+.life-grade { display: grid; justify-items: center; gap: 2px; }
+.life-grade-letter { font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -1px; font-variant-numeric: tabular-nums; color: var(--life-ink); }
+.life-grade.is-good .life-grade-letter { color: var(--life-ok-ink); }
+.life-grade.is-warn .life-grade-letter { color: var(--life-warn-ink); }
+.life-grade.is-bad .life-grade-letter { color: var(--life-magenta); }
+.life-grade-label { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--life-muted); }
+.life-grades-note { font-size: 14px; color: var(--life-body); margin: 0; }
+@media (max-width: 620px) { .life-grades { grid-template-columns: auto auto; } .life-grades-note { grid-column: 1 / -1; } }
+.life-review-health { border-left: 4px solid var(--life-ok-ink); background: var(--life-ok-bg); }
+.life-review-health .life-md b { color: var(--life-ink); }
+.life-numbers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.life-number-chip { background: var(--life-surface-2); border: 1px solid var(--life-line); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 700; color: var(--life-ink); font-variant-numeric: tabular-nums; }
+.life-review-close { font-size: 15px; font-style: italic; color: var(--life-body); border-top: 1px solid var(--life-line); padding-top: 14px; margin: 0; }
+.life-grades-mini { display: inline-flex; gap: 6px; }
+.life-grades-mini span { min-width: 30px; text-align: center; font-size: 12px; font-weight: 800; padding: 2px 6px; border-radius: 6px; background: var(--life-muted-bg); color: var(--life-muted-ink); }
+.life-grades-mini span.is-good { background: var(--life-ok-bg); color: var(--life-ok-ink); }
+.life-grades-mini span.is-warn { background: var(--life-warn-bg); color: var(--life-warn-ink); }
+.life-grades-mini span.is-bad { background: var(--life-pink-bg); color: var(--life-pink-ink); }
+.life-arc.is-eo { stroke: var(--life-magenta); opacity: 0.6; }
+.life-map-legend i.is-eo { background: var(--life-magenta); }
+.life-postcard-stamp.is-eo { color: var(--life-magenta); }
+.life-postcard-stamp.is-personal { color: var(--life-ok-ink); }
+.life-postcard-stamp.is-unknown { color: var(--life-muted); }

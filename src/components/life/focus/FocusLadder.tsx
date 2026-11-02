@@ -12,8 +12,11 @@ export function FocusLadder({ focus, goals, today }: { focus: Focus; goals: Goal
   const weekNo = Math.min(5, Math.ceil(dayOfMonth / 7));
   const weeks = focus.month?.weeks ?? [];
   const week = weeks.find((w) => w.week === weekNo) ?? weeks[weeks.length - 1];
+  const period = today.slice(0, 7);
+  const appMonth = goals.filter((g) => g.horizon === 'month' && g.period === period);
   const monthGoals = focus.month?.goals.length ? focus.month.goals : (focus.month?.moves ?? []);
   const yearGoals = goals.filter((g) => g.horizon === 'year');
+  const monthLabel = appMonth.length ? new Date(`${period}-01T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }) : (focus.month?.month ?? 'This month');
   const vision = goals.filter((g) => g.horizon === 'vision');
   const short = (d: string) => formatDate(d, { month: 'short', day: 'numeric' });
 
@@ -62,11 +65,18 @@ export function FocusLadder({ focus, goals, today }: { focus: Focus; goals: Goal
         <div className="life-rung">
           <span className="life-rung-dot" />
           <span className="life-rung-label">
-            {focus.month?.month ?? 'This month'}
-            {focus.month && <small>from {short(focus.month.date)}</small>}
+            {monthLabel}
+            {!appMonth.length && focus.month && <small>from {short(focus.month.date)}</small>}
           </span>
           <div className="life-rung-body">
-            {monthGoals.length ? (
+            {appMonth.length ? (
+              appMonth.map((g) => (
+                <p key={g.id} className={`life-rung-item is-${goalStatus(g.status)}${g.focus ? ' is-focus' : ''}`}>
+                  <StatusMark status={goalStatus(g.status)} />
+                  <span>{g.title}</span>
+                </p>
+              ))
+            ) : monthGoals.length ? (
               monthGoals.map((g, i) => (
                 <p key={i} className={`life-rung-item is-${g.status}`}>
                   <StatusMark status={g.status} />
@@ -74,7 +84,9 @@ export function FocusLadder({ focus, goals, today }: { focus: Focus; goals: Goal
                 </p>
               ))
             ) : (
-              <p className="life-rung-empty">No month goals under ❸ yet.</p>
+              <p className="life-rung-empty">
+                No month goals yet. <Link href="/life/goals">Set them</Link>
+              </p>
             )}
           </div>
         </div>

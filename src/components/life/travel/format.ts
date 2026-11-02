@@ -95,15 +95,17 @@ export function isHome(p: Pick<Place, 'iata' | 'kind'>): boolean {
   return p.kind === 'home' || p.iata === HOME_IATA;
 }
 
-export const purposeTone: Record<Purpose, 'navy' | 'mint' | 'gray'> = {
+export const purposeTone: Record<Purpose, 'navy' | 'magenta' | 'mint' | 'gray'> = {
   business: 'navy',
+  eo: 'magenta',
   personal: 'mint',
   unknown: 'gray',
 };
 
 export const purposeLabel: Record<Purpose, string> = {
   business: 'Business',
-  personal: 'Personal',
+  eo: 'EO',
+  personal: 'Holiday',
   unknown: 'Unsorted',
 };
 

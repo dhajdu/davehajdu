@@ -20,13 +20,14 @@ function inline(text: string): React.ReactNode[] {
   return out;
 }
 
-const MARKS = /[✅❌🟡]/g;
+const MARKS = /[✅❌🟡]/gu;
 
 export function Markdown({ lines }: { lines: string[] }) {
   const blocks: React.ReactNode[] = [];
   let list: React.ReactNode[] = [];
+  let ordered = false;
   const flush = () => {
-    if (list.length) blocks.push(<ul key={`l${blocks.length}`}>{list}</ul>);
+    if (list.length) blocks.push(ordered ? <ol key={`l${blocks.length}`}>{list}</ol> : <ul key={`l${blocks.length}`}>{list}</ul>);
     list = [];
   };
   let table: string[][] | null = null;
@@ -67,6 +68,9 @@ export function Markdown({ lines }: { lines: string[] }) {
     }
     const item = line.match(/^(?:[-*]|\d+\.)\s+(.*)$/);
     if (item) {
+      const isOrdered = /^\d+\./.test(line);
+      if (list.length && isOrdered !== ordered) flush();
+      ordered = isOrdered;
       const status: Status = statusOf(item[1]);
       const checked = /^\[x\]/i.test(item[1]);
       const marked = status !== 'open' || checked;

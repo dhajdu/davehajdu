@@ -1,249 +1,162 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireOwner } from '@/lib/life/auth';
-import { Card, Chip, EmptyState, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
-import { formatDate, formatValue, isPeriod, periodLabel, shiftPeriod } from '@/lib/life/metrics';
-import { EO_MERPS, EO_SECTIONS, GOAL_STATUSES, renderEoMarkdown, type AutoSummary, type EoUpdate } from '@/lib/life/review';
-import { createReview, finishReview, redraftReview, reopenReview, saveReview } from './actions';
-import CopyEoButton from './CopyEoButton';
+import { Card, Chip, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
+import { Markdown } from '@/components/life/Markdown';
+import { getMonthReview, gradeTone } from '@/lib/life/month-review';
+import { formatValue, isPeriod, periodLabel, shiftPeriod } from '@/lib/life/metrics';
+import { saveMonthReview } from '../actions';
 
-// Drafting calls Claude, which can take a minute.
-export const maxDuration = 300;
+export const metadata: Metadata = { title: 'Review', robots: { index: false, follow: false } };
 
-const input = 'w-full text-sm border border-border rounded-lg px-3 py-1.5 text-navy bg-white';
+const input = 'w-full text-sm';
 const label = 'block text-xs font-semibold text-muted mb-1';
 
-// Selected status pill: life.css ok/warn/pink tones.
-const STATUS_STYLE = {
-  green: 'has-checked:bg-[var(--life-ok-bg)] has-checked:text-[var(--life-ok-ink)] has-checked:border-transparent',
-  yellow: 'has-checked:bg-[var(--life-warn-bg)] has-checked:text-[var(--life-warn-ink)] has-checked:border-transparent',
-  red: 'has-checked:bg-[var(--life-pink-bg)] has-checked:text-[var(--life-pink-ink)] has-checked:border-transparent',
-} as const;
-
-// The few numbers worth seeing next to the update, in this order.
-const STRIP = ['whoop_recovery', 'whoop_sleep_hours', 'whoop_hrv_ms', 'whoop_strain', 'workouts', 'steps', 'weight_kg'];
-
-export default async function ReviewPage({ params }: { params: Promise<{ period: string }> }) {
+export default async function MonthReviewPage({ params }: { params: Promise<{ period: string }> }) {
   const { period } = await params;
   if (!isPeriod(period)) notFound();
   const { supabase } = await requireOwner();
 
-  const { data: review } = await supabase
-    .from('reviews')
-    .select('id, period, status, auto_summary, entry_id, eo')
-    .eq('period', period)
-    .maybeSingle();
-
-  if (!review) {
-    return (
-      <div className="max-w-3xl">
-        <PageHeader title={`${periodLabel(period)} update`} />
-        <EmptyState>
-          No update for this month yet. Claude drafts it automatically on the 1st.
-          <form action={createReview} className="mt-4">
-            <input type="hidden" name="period" value={period} />
-            <button type="submit" className={primaryButtonClass}>Draft it now</button>
-          </form>
-        </EmptyState>
-      </div>
-    );
-  }
-
-  const eo = (review.eo ?? {}) as EoUpdate;
-  const summary = (review.auto_summary ?? {}) as AutoSummary;
-  const done = review.status === 'done';
-  const prevPeriod = shiftPeriod(period, -1);
-  const lastGoals = [...(eo.last_goals ?? []), { title: '', status: '' as const }];
-
-  // A month with a forum update you wrote shows it, until Claude drafts what came after it.
-  const hasDraft = !!(eo.drafted_at || eo.edited_at);
-  const imported =
-    review.entry_id && !hasDraft
-      ? ((await supabase.from('entries').select('title, body_md').eq('id', review.entry_id).maybeSingle()).data as { title: string | null; body_md: string } | null)
-      : null;
-
-  const strip = STRIP.flatMap((slug) => {
-    const m = (summary.metrics ?? []).find((x) => x.slug === slug && x.value !== null);
-    return m ? [{ name: m.name.replace(' (Whoop)', ''), value: formatValue(m.value!, m.unit === 'count' ? null : m.unit) }] : [];
-  });
-  if (summary.journal && summary.journal.value > 0) strip.push({ name: 'Journal entries', value: String(summary.journal.value) });
-  if (summary.places?.trips.length) strip.push({ name: 'Nights away', value: String(summary.places.nights_away) });
+  const [review, autoRes] = await Promise.all([
+    getMonthReview(supabase, period),
+    supabase.from('reviews').select('auto_summary').eq('period', period).maybeSingle(),
+  ]);
+  type Auto = { metrics?: { slug: string; name: string; unit: string | null; value: number | null; prev: number | null }[]; highlights?: Record<string, string> };
+  const auto = ((autoRes.data as { auto_summary: Auto | null } | null)?.auto_summary ?? null) as Auto | null;
+  const monthName = periodLabel(period, 'long').split(' ')[0];
+  const prev = shiftPeriod(period, -1);
+  const next = shiftPeriod(period, 1);
+  const numbers = (auto?.metrics ?? []).filter((m) => m.value !== null);
 
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-3xl">
       <PageHeader
-        title={`${periodLabel(period)} update`}
-        subtitle={
-          imported
-            ? 'Imported from your forum update'
-            : eo.edited_at
-              ? 'Your edits'
-              : eo.drafted_at
-                ? `Drafted by Claude from your data${eo.since ? ` since your ${formatDate(eo.since)} forum update` : ''}. Fix what is wrong, then finish.`
-                : undefined
-        }
+        eyebrow={`Monthly review · ${periodLabel(period)}`}
+        title={review?.headline ?? `${monthName}, honestly`}
+        subtitle={review?.summary ?? undefined}
         actions={
-          <>
-            <Chip tone={done ? 'mint' : 'gray'}>{done ? 'Done' : 'Draft'}</Chip>
-            <CopyEoButton markdown={renderEoMarkdown(eo)} />
-            {done ? (
-              <form action={reopenReview}>
-                <input type="hidden" name="review_id" value={review.id} />
-                <input type="hidden" name="period" value={period} />
-                <button type="submit" className={buttonClass}>Reopen</button>
-              </form>
-            ) : (
-              <button type="submit" form="review-form" formAction={finishReview} className={primaryButtonClass}>
-                Finish
-              </button>
-            )}
-          </>
+          <div className="flex items-center gap-2">
+            {review && <Chip tone={review.status === 'done' ? 'mint' : 'gray'}>{review.status === 'done' ? 'Done' : 'Draft'}</Chip>}
+            <Link href={`/life/review/${prev}`} className={buttonClass} aria-label="Previous month">‹</Link>
+            <Link href={`/life/review/${next}`} className={buttonClass} aria-label="Next month">›</Link>
+          </div>
         }
       />
 
-      <div className="flex gap-3 text-xs font-semibold mb-4">
-        <Link href={`/life/review/${prevPeriod}`} className="text-blue">‹ {periodLabel(prevPeriod, 'short')}</Link>
-        <Link href={`/life/review/${shiftPeriod(period, 1)}`} className="text-blue">{periodLabel(shiftPeriod(period, 1), 'short')} ›</Link>
-      </div>
-
-      <div className="grid lg:grid-cols-5 gap-4">
-        {imported ? (
-          <Card title={imported.title ?? 'Forum update'} className="lg:col-span-3">
-            <div className="text-sm text-body-text whitespace-pre-wrap">{imported.body_md}</div>
-          </Card>
-        ) : (
-          <form id="review-form" action={saveReview} className="lg:col-span-3 space-y-4">
-            <input type="hidden" name="review_id" value={review.id} />
-            <input type="hidden" name="period" value={period} />
-
-            <Card title="Merps">
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                {EO_MERPS.map(([key, name]) => (
-                  <label key={key} className="block">
-                    <span className={label}>{name}</span>
-                    <input name={`merp_${key}`} defaultValue={eo.merps?.[key] ?? ''} className={input} maxLength={40} />
-                  </label>
-                ))}
-              </div>
-              <div className="grid sm:grid-cols-2 gap-3 mt-3">
-                <label className="block">
-                  <span className={label}>Struggle</span>
-                  <input name="struggle" defaultValue={eo.struggle ?? ''} className={input} />
-                </label>
-                <label className="block">
-                  <span className={label}>Success</span>
-                  <input name="success" defaultValue={eo.success ?? ''} className={input} />
-                </label>
-              </div>
-            </Card>
-
-            {EO_SECTIONS.map(([key, name]) => {
-              const u = eo.updates?.[key];
-              return (
-                <Card key={key} title={name}>
-                  <div className="grid gap-2">
-                    <label className="block">
-                      <span className={label}>Feelings</span>
-                      <input name={`feelings_${key}`} defaultValue={u?.feelings ?? ''} className={input} />
-                    </label>
-                    <label className="block">
-                      <span className={label}>Headline</span>
-                      <input name={`headline_${key}`} defaultValue={u?.headline ?? ''} className={input} />
-                    </label>
-                    <label className="block">
-                      <span className={label}>Impact</span>
-                      <textarea name={`impact_${key}`} defaultValue={u?.impact ?? ''} rows={5} className={input} />
-                    </label>
-                  </div>
-                </Card>
-              );
-            })}
-
-            <Card title="Last 30 day goals">
-              <div className="grid gap-2">
-                {lastGoals.map((g, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <input name="last_title" defaultValue={g.title} placeholder={i === lastGoals.length - 1 ? 'Add a goal' : undefined} className={input} />
-                    <div className="flex gap-1 shrink-0">
-                      {GOAL_STATUSES.map((st) => (
-                        <label
-                          key={st}
-                          className={`cursor-pointer text-xs font-semibold px-2 py-1 rounded-full border border-border text-muted capitalize ${STATUS_STYLE[st]}`}
-                        >
-                          <input type="radio" name={`last_status_${i}`} value={st} defaultChecked={g.status === st} className="sr-only" />
-                          {st}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-            <Card title="Next 30 day goals">
-              <div className="grid gap-2">
-                <label className="block">
-                  <span className={label}>Personal</span>
-                  <input name="next_personal" defaultValue={eo.next_goals?.personal ?? ''} className={input} />
-                </label>
-                <label className="block">
-                  <span className={label}>Business</span>
-                  <input name="next_business" defaultValue={eo.next_goals?.business ?? ''} className={input} />
-                </label>
-              </div>
-            </Card>
-
-            <div className="flex gap-2">
-              <button type="submit" className={primaryButtonClass}>Save</button>
-              {!done && (
-                <button type="submit" formAction={finishReview} className={buttonClass}>
-                  Save and finish
-                </button>
-              )}
+      {review ? (
+        <div className="space-y-5">
+          <section className="life-grades">
+            <div className={`life-grade is-${gradeTone(review.grade_health)}`}>
+              <span className="life-grade-letter">{review.grade_health ?? '–'}</span>
+              <span className="life-grade-label">Health</span>
             </div>
-          </form>
-        )}
+            <div className={`life-grade is-${gradeTone(review.grade_business)}`}>
+              <span className="life-grade-letter">{review.grade_business ?? '–'}</span>
+              <span className="life-grade-label">Business</span>
+            </div>
+            <p className="life-grades-note">Health is the priority, so it is graded first. The gap between the two grades is the lesson for next month.</p>
+          </section>
 
-        <div className="lg:col-span-2 space-y-4">
-          <Card title="This month in numbers">
-            {strip.length === 0 ? (
-              <p className="text-sm text-muted">No numbers for this month yet.</p>
-            ) : (
-              <dl className="grid grid-cols-2 gap-3">
-                {strip.map((s) => (
-                  <div key={s.name}>
-                    <dt className="text-xs text-muted">{s.name}</dt>
-                    <dd className="text-lg font-bold text-navy">{s.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-            {summary.places?.trips.length ? (
-              <p className="text-xs text-body-text mt-3">{summary.places.trips.map((t) => t.title).join(', ')}</p>
-            ) : null}
+          <Card title="Health, top priority" className="life-review-health">
+            <Markdown lines={review.health_md.split('\n')} />
           </Card>
 
-          {imported ? (
-            <Card title="What came after">
-              <p className="text-sm text-body-text mb-3">Have Claude draft a new update from everything since this forum update.</p>
-              <form action={redraftReview}>
-                <input type="hidden" name="period" value={period} />
-                <button type="submit" className={buttonClass}>Draft with Claude</button>
-              </form>
-            </Card>
-          ) : (
-            !done && (
-              <Card title="Start over">
-                <p className="text-sm text-body-text mb-3">Have Claude draft this month again from your latest data. This replaces what is in the form.</p>
-                <form action={redraftReview}>
-                  <input type="hidden" name="period" value={period} />
-                  <button type="submit" className={buttonClass}>Redraft with Claude</button>
-                </form>
-              </Card>
-            )
-          )}
+          <Card title="Business, what I actually did">
+            <Markdown lines={review.business_md.split('\n')} />
+          </Card>
+
+          <Card title={`${periodLabel(next, 'long').split(' ')[0]}, the moves, health first`}>
+            <Markdown lines={review.moves_md.split('\n')} />
+            {review.numbers.length > 0 && (
+              <div className="life-numbers">
+                {review.numbers.map((n) => (
+                  <span key={n} className="life-number-chip">{n}</span>
+                ))}
+              </div>
+            )}
+          </Card>
+
+          {review.closing && <p className="life-review-close">{review.closing}</p>}
         </div>
-      </div>
+      ) : (
+        <div className="space-y-5">
+          <Card title="Material">
+            {numbers.length === 0 ? (
+              <p className="text-sm text-muted">No numbers gathered for this month yet. The draft runs on the 1st.</p>
+            ) : (
+              <ul className="life-goals">
+                {numbers.map((m) => (
+                  <li key={m.slug} className="life-goal">
+                    <span className="life-goal-text">
+                      {m.name} {formatValue(m.value, m.unit)}
+                      {m.prev !== null ? <span className="text-muted"> · last month {formatValue(m.prev, m.unit)}</span> : null}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {auto?.highlights && Object.keys(auto.highlights).length > 0 && (
+              <div className="mt-3 space-y-2">
+                {Object.entries(auto.highlights).map(([area, text]) => (
+                  <p key={area} className="text-xs text-body-text"><b className="text-navy">{area}</b> · {text}</p>
+                ))}
+              </div>
+            )}
+          </Card>
+        </div>
+      )}
+
+      <details className="life-card mt-5" open={!review}>
+        <summary className="cursor-pointer text-sm font-semibold text-navy">{review ? 'Edit this review' : `Write the ${monthName} review`}</summary>
+        <form action={saveMonthReview} className="grid gap-3 mt-4">
+          <input type="hidden" name="period" value={period} />
+          <div className="grid sm:grid-cols-[1fr_90px_90px] gap-3">
+            <label className="block">
+              <span className={label}>Headline</span>
+              <input name="headline" defaultValue={review?.headline ?? `${monthName}, honestly`} maxLength={200} className={input} />
+            </label>
+            <label className="block">
+              <span className={label}>Health grade</span>
+              <input name="grade_health" defaultValue={review?.grade_health ?? ''} maxLength={3} placeholder="C+" className={`${input} text-center font-bold`} />
+            </label>
+            <label className="block">
+              <span className={label}>Business grade</span>
+              <input name="grade_business" defaultValue={review?.grade_business ?? ''} maxLength={3} placeholder="A-" className={`${input} text-center font-bold`} />
+            </label>
+          </div>
+          <label className="block">
+            <span className={label}>Summary, two sentences</span>
+            <textarea name="summary" defaultValue={review?.summary ?? ''} rows={2} className={input} />
+          </label>
+          <label className="block">
+            <span className={label}>Health: what you set, what you logged, the honest read (markdown)</span>
+            <textarea name="health_md" defaultValue={review?.health_md ?? ''} rows={8} className={input} />
+          </label>
+          <label className="block">
+            <span className={label}>Business: what got done, what was missed (markdown)</span>
+            <textarea name="business_md" defaultValue={review?.business_md ?? ''} rows={8} className={input} />
+          </label>
+          <label className="block">
+            <span className={label}>Next month&apos;s moves, health first (numbered list)</span>
+            <textarea name="moves_md" defaultValue={review?.moves_md ?? ''} rows={6} className={input} />
+          </label>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <label className="block">
+              <span className={label}>Targets, one per line</span>
+              <textarea name="numbers" defaultValue={review?.numbers.join('\n') ?? ''} rows={3} className={input} />
+            </label>
+            <label className="block">
+              <span className={label}>Closing line</span>
+              <textarea name="closing" defaultValue={review?.closing ?? ''} rows={3} className={input} />
+            </label>
+          </div>
+          <div className="flex gap-2">
+            <button type="submit" name="status" value="draft" className={buttonClass}>Save draft</button>
+            <button type="submit" name="status" value="done" className={primaryButtonClass}>Save and finish</button>
+          </div>
+        </form>
+      </details>
     </div>
   );
 }

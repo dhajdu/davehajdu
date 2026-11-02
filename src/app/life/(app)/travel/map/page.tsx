@@ -64,6 +64,7 @@ export default async function TravelMapPage() {
   // One arc per route per year, from every leg that moves between two known points.
   const byId = new Map(places.map((p) => [p.id, p]));
   const business = new Set(trips.filter((t) => t.purpose === 'business').map((t) => t.id));
+  const eo = new Set(trips.filter((t) => t.purpose === 'eo').map((t) => t.id));
   const arcMap = new Map<string, MapArc>();
   legs.forEach((l, i) => {
     const a = l.origin_place_id ? byId.get(l.origin_place_id) : undefined;
@@ -77,6 +78,7 @@ export default async function TravelMapPage() {
       to: { lat: b.lat, lng: b.lng },
       year,
       business: !!l.trip_id && business.has(l.trip_id),
+      eo: !!l.trip_id && eo.has(l.trip_id),
       count: 0,
       trips: [],
     };

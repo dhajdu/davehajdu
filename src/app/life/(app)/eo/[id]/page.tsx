@@ -40,7 +40,7 @@ export default async function EoUpdatePage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="max-w-3xl">
-      <Link href="/life/eo" className="inline-block text-xs font-semibold text-blue mb-3">← EO updates</Link>
+      <Link href="/life/eo" className="inline-block text-xs font-semibold text-blue mb-3">← Forum</Link>
       <PageHeader
         eyebrow={formatDate(e.entry_date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
         title={e.title ?? 'EO update'}

@@ -85,7 +85,7 @@ export function AwayStrip({ years }: { years: AwayYear[] }) {
       <p className="life-away-legend">
         <span><i className="is-1" />Away a night or two</span>
         <span><i className="is-3" />Away most of the week</span>
-        <span><i className="is-business" />Mostly business</span>
+        <span><i className="is-business" />Mostly business or EO</span>
       </p>
     </div>
   );

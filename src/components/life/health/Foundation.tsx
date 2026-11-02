@@ -54,7 +54,7 @@ export function Foundation({ health, today, weightTarget, hba1c, hba1cTarget }: 
           </span>
           <span className="life-dots-label">Recovery, last 14 days</span>
         </div>
-        <Link href="/life/health" className="text-xs font-semibold text-blue">Health</Link>
+        <Link href="/life/health" className="text-xs font-semibold text-blue">Fitness</Link>
       </div>
     </div>
   );

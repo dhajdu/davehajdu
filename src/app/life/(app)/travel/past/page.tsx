@@ -100,7 +100,7 @@ export default async function TravelPastPage() {
         const t = started.find((t) => day >= t.start_on && day < (t.end_on ?? t.start_on) && day < today);
         if (t) {
           away++;
-          if (t.purpose === 'business') business++;
+          if (t.purpose === 'business' || t.purpose === 'eo') business++;
         }
       }
       return { away, business, current };

@@ -1,4 +1,4 @@
-export type Purpose = 'business' | 'personal' | 'unknown';
+export type Purpose = 'business' | 'eo' | 'personal' | 'unknown';
 export type LegKind = 'flight' | 'hotel' | 'train' | 'car' | 'event';
 export type LegStatus = 'confirmed' | 'changed' | 'cancelled';
 

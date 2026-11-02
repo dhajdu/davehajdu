@@ -129,5 +129,23 @@ export async function getPinnedReferences(db: Db): Promise<Reference[]> {
   return out;
 }
 
+// The daily routine table → time and activity, for the reminder in the rail.
+export type RoutineStep = { time: string; activity: string };
+export function parseRoutine(lines: string[]): RoutineStep[] {
+  const out: RoutineStep[] = [];
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line.startsWith('|') || /^\|\s*-{2,}/.test(line)) continue;
+    const cells = line.replace(/^\||\|$/g, '').split('|').map((c) => c.trim().replace(/\*\*/g, ''));
+    if (cells.length < 2) continue;
+    if (/^time$/i.test(cells[0])) continue;
+    const time = cells[0].replace(/\s+/g, '');
+    const activity = cells[1].replace(/[✅❌🟡]/g, '').trim();
+    if (!activity) continue;
+    out.push({ time, activity });
+  }
+  return out;
+}
+
 export const prevDay = (d: string) => addDays(d, -1);
 export const nextDay = (d: string) => addDays(d, 1);
