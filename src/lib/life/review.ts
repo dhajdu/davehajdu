@@ -74,7 +74,7 @@ export type EoUpdate = {
   success?: string;
   updates?: Partial<Record<EoSectionKey, EoSection>>;
   last_goals?: { title: string; status: GoalStatus | '' }[]; // last month's 30 day goals, rated
-  next_goals?: string[]; // the next 30 days
+  next_goals?: { personal?: string; business?: string }; // one of each for the next 30 days
   drafted_at?: string;
   edited_at?: string;
 };
@@ -104,7 +104,7 @@ export function renderEoMarkdown(eo: EoUpdate): string {
   lines.push('## Last 30 day goals', '');
   lines.push(...(eo.last_goals?.length ? eo.last_goals.map((g) => `- ${dot[g.status]} ${g.title}`) : ['-']), '');
   lines.push('## Next 30 day goals', '');
-  lines.push(...(eo.next_goals?.length ? eo.next_goals.map((g) => `- ${g}`) : ['-']), '');
+  lines.push(`- Personal: ${eo.next_goals?.personal ?? ''}`.trimEnd(), `- Business: ${eo.next_goals?.business ?? ''}`.trimEnd(), '');
   return lines.join('\n').trimEnd() + '\n';
 }
 
@@ -158,7 +158,12 @@ async function draftEo(period: string, material: string, examples: string[], las
                 properties: { title: { type: 'string' }, status: { type: 'string', enum: [...GOAL_STATUSES] } },
               },
             },
-            next_goals: { type: 'array', items: { type: 'string' } },
+            next_goals: {
+              type: 'object',
+              additionalProperties: false,
+              required: ['personal', 'business'],
+              properties: { personal: { type: 'string' }, business: { type: 'string' } },
+            },
           },
         },
       },
@@ -172,7 +177,7 @@ async function draftEo(period: string, material: string, examples: string[], las
       'feelings is two to four comma-separated feeling words; headline is one sentence; impact is one or two short paragraphs on why it matters. ' +
       'Last 30 day goals: rate each of last month\'s goals green (done), yellow (partly) or red (missed) from the evidence in the material; ' +
       'if you cannot tell, use yellow. Keep the goal wording as given. If no goals are given, use the 30 day goals in the most recent past update, or return an empty list. ' +
-      'Next 30 day goals: three to five short, concrete goals that follow from this month, in his words. ' +
+      'Next 30 day goals: exactly one personal goal and one business goal, each short and concrete, following from this month, in his words. ' +
       'Use only facts in the material. Never invent numbers, names or events. ' +
       'If the material says nothing about a section, return empty strings for it rather than guessing. Do not use em dashes.',
     messages: [
@@ -253,7 +258,10 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
   if (entriesRes.error) throw new Error(entriesRes.error.message);
   if (recordsRes.error) throw new Error(recordsRes.error.message);
   if (pastRes.error) throw new Error(pastRes.error.message);
-  const lastGoals = ((prevRes.data?.eo as EoUpdate | undefined)?.next_goals ?? []).filter(Boolean);
+  const prevNext = (prevRes.data?.eo as EoUpdate | undefined)?.next_goals;
+  const lastGoals = [prevNext?.personal && `Personal: ${prevNext.personal}`, prevNext?.business && `Business: ${prevNext.business}`].filter(
+    (g): g is string => !!g
+  );
 
   const entries = (entriesRes.data ?? []) as { area_id: string | null; kind: string; entry_date: string; title: string | null; body_md: string }[];
   const records = (recordsRes.data ?? []) as { area_id: string; kind: string; title: string; started_on: string | null }[];

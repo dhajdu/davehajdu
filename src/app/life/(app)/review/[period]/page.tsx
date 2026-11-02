@@ -54,8 +54,6 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
   const done = review.status === 'done';
   const prevPeriod = shiftPeriod(period, -1);
   const lastGoals = [...(eo.last_goals ?? []), { title: '', status: '' as const }];
-  const nextGoals = [...(eo.next_goals ?? [])];
-  while (nextGoals.length < 5) nextGoals.push('');
 
   const imported = review.entry_id
     ? ((await supabase.from('entries').select('title, body_md').eq('id', review.entry_id).maybeSingle()).data as { title: string | null; body_md: string } | null)
@@ -181,9 +179,14 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
 
             <Card title="Next 30 day goals">
               <div className="grid gap-2">
-                {nextGoals.map((g, i) => (
-                  <input key={i} name="next_goal" defaultValue={g} className={input} />
-                ))}
+                <label className="block">
+                  <span className={label}>Personal</span>
+                  <input name="next_personal" defaultValue={eo.next_goals?.personal ?? ''} className={input} />
+                </label>
+                <label className="block">
+                  <span className={label}>Business</span>
+                  <input name="next_business" defaultValue={eo.next_goals?.business ?? ''} className={input} />
+                </label>
               </div>
             </Card>
 

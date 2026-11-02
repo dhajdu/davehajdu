@@ -58,10 +58,7 @@ async function save(formData: FormData) {
       .map((t, i) => ({ title: String(t).trim(), status: str(formData, `last_status_${i}`) ?? '' }))
       .filter((g) => g.title)
       .map((g) => ({ title: g.title, status: (GOAL_STATUSES as readonly string[]).includes(g.status) ? (g.status as GoalStatus) : '' })),
-    next_goals: formData
-      .getAll('next_goal')
-      .map((t) => String(t).trim())
-      .filter(Boolean),
+    next_goals: { personal: text('next_personal'), business: text('next_business') },
     drafted_at: (current?.eo as EoUpdate | null)?.drafted_at,
     edited_at: new Date().toISOString(),
   };
