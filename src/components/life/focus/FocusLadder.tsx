@@ -34,7 +34,9 @@ export function FocusLadder({ focus, goals, today }: { focus: Focus; goals: Goal
             {focus.oneThing ? (
               <p className="life-rung-text">{focus.oneThing.text}</p>
             ) : (
-              <p className="life-rung-empty">No One Thing in the journal yet. Write it under ❶ and it lands here.</p>
+              <p className="life-rung-empty">
+                No One Thing yet. <Link href="/life/journal">Write today</Link>
+              </p>
             )}
           </div>
         </div>

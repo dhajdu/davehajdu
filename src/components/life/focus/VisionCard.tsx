@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react';
 import type { GoalRow } from '@/lib/life/focus';
-import { formatValue } from '@/lib/life/metrics';
+import { formatValue } from '@/lib/life/format';
 import { GOAL_WORD, type GoalStatus } from './StatusMark';
 
 type Action = (formData: FormData) => Promise<void>;

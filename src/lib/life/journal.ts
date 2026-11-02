@@ -1,0 +1,133 @@
+import 'server-only';
+import { addDays, daysBetween, type Db } from './metrics';
+import { parseRoutineDay } from './focus-parse';
+
+// The journal, written in the app. A day is four things: the One Thing,
+// three gratitudes, No Holds Barred, and the to-do list. The first three are
+// stored as `entries.fields` and rendered to body_md in the same shape as
+// the Notion template, so the ladder, search and Ask read one format.
+export type DayFields = { one_thing: string; gratitude: string[]; nhb: string };
+
+export type JournalEntry = {
+  id: string;
+  entry_date: string;
+  title: string | null;
+  body_md: string;
+  external_id: string | null;
+  fields: DayFields | null;
+};
+
+export type Todo = {
+  id: string;
+  parent_id: string | null;
+  title: string;
+  added_on: string;
+  done_on: string | null;
+  dropped_on: string | null;
+  sort_order: number;
+};
+
+export type TodoNode = Todo & { children: Todo[] };
+
+export const EMPTY_FIELDS: DayFields = { one_thing: '', gratitude: ['', '', ''], nhb: '' };
+
+export function renderDay(f: DayFields): string {
+  const lines: string[] = ['### **Morning Gratitude **🙏🏽', ''];
+  for (const g of f.gratitude.map((s) => s.trim()).filter(Boolean)) lines.push(`- ${g}`);
+  lines.push('');
+  if (f.nhb.trim()) lines.push('**General Journal: No Holds Barred**', '', f.nhb.trim(), '');
+  lines.push('#  ❶ **The One Thing**', '', `**Today**: ${f.one_thing.trim()}`, '');
+  return lines.join('\n');
+}
+
+export function dayTitle(dayNo: number | null, f: DayFields): string {
+  const head = dayNo ? `Day ${dayNo}` : 'Journal';
+  return f.one_thing.trim() ? `${head} - ${f.one_thing.trim()}` : head;
+}
+
+export function isDateKey(s: unknown): s is string {
+  return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(`${s}T00:00:00Z`));
+}
+
+// Day N of the routine: the latest titled day on or before `date`, carried forward.
+export async function getDayNumber(db: Db, date: string): Promise<number | null> {
+  const { data } = await db
+    .from('entries')
+    .select('entry_date, title')
+    .eq('kind', 'journal')
+    .lte('entry_date', date)
+    .ilike('title', 'Day %')
+    .order('entry_date', { ascending: false })
+    .limit(1);
+  const row = data?.[0] as { entry_date: string; title: string } | undefined;
+  if (!row) return null;
+  const n = parseRoutineDay(row.title);
+  return n === null ? null : n + daysBetween(row.entry_date, date);
+}
+
+// The day's entry: the one written in the app if there is one, else the Notion one.
+export async function getDay(db: Db, date: string): Promise<JournalEntry | null> {
+  const { data, error } = await db
+    .from('entries')
+    .select('id, entry_date, title, body_md, external_id, fields')
+    .eq('kind', 'journal')
+    .eq('entry_date', date)
+    .order('created_at', { ascending: false });
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as JournalEntry[];
+  return rows.find((r) => r.fields) ?? rows[0] ?? null;
+}
+
+// What was open on `date` (added by then, not yet done or dropped) and what got done that day.
+export async function getTodos(db: Db, date: string): Promise<{ open: TodoNode[]; done: TodoNode[] }> {
+  const { data, error } = await db
+    .from('todos')
+    .select('id, parent_id, title, added_on, done_on, dropped_on, sort_order')
+    .lte('added_on', date)
+    .or(`done_on.is.null,done_on.gte.${date}`)
+    .or(`dropped_on.is.null,dropped_on.gt.${date}`)
+    .order('sort_order')
+    .order('created_at');
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as Todo[];
+  const openOn = (t: Todo) => (t.done_on === null || t.done_on > date) && (t.dropped_on === null || t.dropped_on > date);
+  const doneOn = (t: Todo) => t.done_on === date;
+
+  const byParent = new Map<string | null, Todo[]>();
+  for (const t of rows) byParent.set(t.parent_id, [...(byParent.get(t.parent_id) ?? []), t]);
+  const roots = rows.filter((t) => t.parent_id === null || !rows.some((p) => p.id === t.parent_id));
+  const nodes: TodoNode[] = roots.map((t) => ({ ...t, children: byParent.get(t.id) ?? [] }));
+
+  const open = nodes
+    .filter((n) => openOn(n) || n.children.some(openOn))
+    .map((n) => ({ ...n, children: n.children.filter(openOn) }));
+  const done = nodes
+    .filter((n) => doneOn(n) || n.children.some(doneOn))
+    .map((n) => ({ ...n, children: n.children.filter(doneOn) }));
+  return { open, done };
+}
+
+// Reference blocks from the Notion template that stay in view while writing:
+// the latest version of each, by title.
+// Learnings are a separate thing (their own table, with the source), not a rail block.
+export const PINNED_REFERENCES: { key: string; title: string; match: string }[] = [
+  { key: 'routine', title: 'Daily routine', match: 'daily routine%' },
+];
+
+export type Reference = { key: string; title: string; entry_date: string; lines: string[] };
+
+export async function getPinnedReferences(db: Db): Promise<Reference[]> {
+  const out: Reference[] = [];
+  for (const ref of PINNED_REFERENCES) {
+    const { data } = await db.from('entries').select('entry_date, body_md').eq('kind', 'reference').ilike('title', ref.match).order('entry_date', { ascending: false }).limit(1);
+    const row = data?.[0] as { entry_date: string; body_md: string } | undefined;
+    if (!row) continue;
+    // Drop the block's own heading; the rail supplies one.
+    const lines = row.body_md.split('\n').filter((l, i) => !(i === 0 && /^#{1,4}\s/.test(l)));
+    out.push({ key: ref.key, title: ref.title, entry_date: row.entry_date, lines });
+  }
+  return out;
+}
+
+export const prevDay = (d: string) => addDays(d, -1);
+export const nextDay = (d: string) => addDays(d, 1);
