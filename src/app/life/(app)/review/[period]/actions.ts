@@ -60,6 +60,7 @@ async function save(formData: FormData) {
       .map((g) => ({ title: g.title, status: (GOAL_STATUSES as readonly string[]).includes(g.status) ? (g.status as GoalStatus) : '' })),
     next_goals: { personal: text('next_personal'), business: text('next_business') },
     drafted_at: (current?.eo as EoUpdate | null)?.drafted_at,
+    since: (current?.eo as EoUpdate | null)?.since,
     edited_at: new Date().toISOString(),
   };
   const { error } = await supabase.from('reviews').update({ eo }).eq('id', reviewId);

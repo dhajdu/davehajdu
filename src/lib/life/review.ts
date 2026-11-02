@@ -75,6 +75,7 @@ export type EoUpdate = {
   updates?: Partial<Record<EoSectionKey, EoSection>>;
   last_goals?: { title: string; status: GoalStatus | '' }[]; // last month's 30 day goals, rated
   next_goals?: { personal?: string; business?: string }; // one of each for the next 30 days
+  since?: string; // drafted from what came after this month's forum update (its date)
   drafted_at?: string;
   edited_at?: string;
 };
@@ -252,7 +253,7 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
       .lte('entry_date', to)
       .order('entry_date'),
     db.from('records').select('area_id, kind, title, started_on').gte('started_on', from).lte('started_on', to).order('started_on'),
-    db.from('entries').select('body_md').eq('kind', 'eo_update').lt('entry_date', from).order('entry_date', { ascending: false }).limit(6),
+    db.from('entries').select('entry_date, body_md').eq('kind', 'eo_update').lte('entry_date', to).order('entry_date', { ascending: false }).limit(8),
     db.from('reviews').select('eo').eq('owner_id', owner).eq('period', shiftPeriod(period, -1)).maybeSingle(),
   ]);
   if (entriesRes.error) throw new Error(entriesRes.error.message);
@@ -263,7 +264,10 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
     (g): g is string => !!g
   );
 
-  const entries = (entriesRes.data ?? []) as { area_id: string | null; kind: string; entry_date: string; title: string | null; body_md: string }[];
+  const monthEntries = (entriesRes.data ?? []) as { area_id: string | null; kind: string; entry_date: string; title: string | null; body_md: string }[];
+  // If a forum update was already written this month, draft only what came after it.
+  const since = monthEntries.filter((e) => e.kind === 'eo_update').at(-1)?.entry_date ?? null;
+  const entries = since ? monthEntries.filter((e) => e.entry_date > since) : monthEntries;
   const records = (recordsRes.data ?? []) as { area_id: string; kind: string; title: string; started_on: string | null }[];
   const nightsAway = trips.reduce((n, t) => n + nightsInRange(t, from, to), 0);
 
@@ -279,7 +283,8 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
   ]
     .filter(Boolean)
     .join('\n\n');
-  const examples = ((pastRes.data ?? []) as { body_md: string }[])
+  const examples = ((pastRes.data ?? []) as { entry_date: string; body_md: string }[])
+    .filter((e) => (since ? e.entry_date <= since : e.entry_date < from))
     .map((e) => eoExample(e.body_md))
     .filter((e): e is string => !!e)
     .slice(0, 3);
@@ -316,7 +321,7 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
 
   const base = { period, reviewId: (existing?.id as string | undefined) ?? null, goalsChecked: goalsChecked.length };
 
-  if (existing?.entry_id) {
+  if (existing?.entry_id && !force) {
     // Imported from an EO update: keep everything the owner wrote, merge numbers in.
     const merged = { ...((existing.auto_summary as object) ?? {}), ...autoSummary };
     const { error } = await db.from('reviews').update({ auto_summary: merged }).eq('id', existing.id);
@@ -328,7 +333,7 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
   // Never overwrite the owner's edits unless asked to.
   const edited = !!(existing?.eo as EoUpdate | undefined)?.edited_at;
   const eo = edited && !force ? null : await draftEo(period, material, examples, lastGoals);
-  const patch = { auto_summary: autoSummary, ...(eo ? { eo } : {}) };
+  const patch = { auto_summary: autoSummary, ...(eo ? { eo: since ? { ...eo, since } : eo, status: 'draft' } : {}) };
 
   if (!existing) {
     const { data, error } = await db
