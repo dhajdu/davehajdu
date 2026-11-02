@@ -8,10 +8,10 @@ import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { Foundation } from '@/components/life/health/Foundation';
 import { NextTripPass } from '@/components/life/travel/NextTripPass';
 import { Postcard } from '@/components/life/travel/Postcard';
-import { TRIP_SELECT, legsForTrips } from '@/components/life/travel/data';
+import { LEG_SELECT, TRIP_SELECT } from '@/components/life/travel/data';
 import { passPropsFor } from '@/components/life/travel/pass';
 import { daysBetween } from '@/components/life/travel/format';
-import type { Trip } from '@/components/life/travel/types';
+import type { Leg, Trip } from '@/components/life/travel/types';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
 import { getHealth, WEIGHT } from '@/lib/life/health';
 import { getLabs } from '@/lib/life/labs';
@@ -24,7 +24,7 @@ export default async function TodayPage() {
   const today = ictToday();
   const now = currentPeriod();
 
-  const [focus, goals, health, labs, draftRes, pendingRes, currentRes, upcomingRes] = await Promise.all([
+  const [focus, goals, health, labs, draftRes, pendingRes, currentRes, currentLegsRes, upcomingRes] = await Promise.all([
     getFocus(supabase, today),
     getLongGoals(supabase, now),
     getHealth(supabase, today, 30),
@@ -32,12 +32,14 @@ export default async function TodayPage() {
     supabase.from('reviews').select('period').eq('status', 'draft').lte('period', now).order('period', { ascending: false }).limit(1),
     supabase.from('review_queue').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     supabase.from('trips').select(TRIP_SELECT).lte('start_on', today).gte('end_on', today).order('start_on', { ascending: false }).limit(1),
+    // Legs of whatever trip is underway, fetched alongside the trip rather than after it.
+    supabase.from('trip_legs').select(`${LEG_SELECT}, trips!inner(start_on, end_on)`).lte('trips.start_on', today).gte('trips.end_on', today).order('starts_at'),
     supabase.from('trips').select(TRIP_SELECT).gt('start_on', today).order('start_on').limit(3),
   ]);
 
   // The trip underway, if any, as the boarding pass in its on-the-road state.
   const current = (currentRes.data?.[0] ?? null) as Trip | null;
-  const currentLegs = current ? await legsForTrips(supabase, [current.id]) : [];
+  const currentLegs = current ? ((currentLegsRes.data ?? []) as unknown as Leg[]).filter((l) => l.trip_id === current.id) : [];
 
   const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
   const monthGoals = goals.filter((g) => g.horizon === 'month' && g.period === now);

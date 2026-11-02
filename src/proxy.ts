@@ -22,9 +22,12 @@ export async function proxy(request: NextRequest) {
       },
     }
   );
-  const { data: { user } } = await supabase.auth.getUser();
+  // Reads the session from the cookie without a network call; only an expired
+  // token goes to the auth server (and the refreshed cookie is written back).
+  // Verification happens once per request, in getOwnerContext().
+  const { data: { session } } = await supabase.auth.getSession();
 
-  if (!user && pathname.startsWith('/life') && !pathname.startsWith('/life/login') && !pathname.startsWith('/life/auth')) {
+  if (!session && pathname.startsWith('/life') && !pathname.startsWith('/life/login') && !pathname.startsWith('/life/auth')) {
     return NextResponse.redirect(new URL('/life/login', request.url));
   }
 

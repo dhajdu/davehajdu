@@ -66,32 +66,42 @@ export const RETEST_DAYS: [number, number] = [30, 60];
 
 const ORDER = ['hba1c', 'glucose_fasting', 'ldl', 'cholesterol_total', 'triglycerides', 'hdl', 'hs_crp', 'egfr', 'vitamin_d'];
 
+// Two round trips: the lab metrics (joined to their source) and the panel
+// dates first, then the readings, the latest report and its rows together.
 export async function getLabs(db: Db): Promise<Labs> {
-  const { data: src } = await db.from('sources').select('id').eq('slug', 'lab').maybeSingle();
   const empty: Labs = { readings: [], panelDate: null, retest: null, report: null, rows: [], panelDates: [] };
-  if (!src) return empty;
 
-  const { data: mRows, error: mErr } = await db
-    .from('metrics')
-    .select('id, slug, name, unit, direction, ref_low, ref_high, ref_note')
-    .eq('source_id', src.id);
-  if (mErr) throw new Error(mErr.message);
-  const metrics = ((mRows ?? []) as LabMetric[]).sort((a, b) => {
+  const [mRes, datesRes] = await Promise.all([
+    db.from('metrics').select('id, slug, name, unit, direction, ref_low, ref_high, ref_note, sources!inner(slug)').eq('sources.slug', 'lab'),
+    db.from('lab_results').select('tested_on').order('tested_on', { ascending: false }),
+  ]);
+  if (mRes.error) throw new Error(mRes.error.message);
+  const metrics = ((mRes.data ?? []) as unknown as LabMetric[]).sort((a, b) => {
     const ia = ORDER.indexOf(a.slug);
     const ib = ORDER.indexOf(b.slug);
     return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.name.localeCompare(b.name);
   });
-  if (metrics.length === 0) return empty;
+  const panelDates = [...new Set(((datesRes.data ?? []) as { tested_on: string }[]).map((r) => r.tested_on))];
+  const panelDate = panelDates[0] ?? null;
+  if (metrics.length === 0) return { ...empty, panelDates };
 
-  const { data: rows, error } = await db
-    .from('measurements')
-    .select('metric_id, measured_on, value')
-    .in('metric_id', metrics.map((m) => m.id))
-    .order('measured_on', { ascending: false });
-  if (error) throw new Error(error.message);
+  const [rowsRes, docRes, labRowsRes] = await Promise.all([
+    db
+      .from('measurements')
+      .select('metric_id, measured_on, value')
+      .in('metric_id', metrics.map((m) => m.id))
+      .order('measured_on', { ascending: false }),
+    panelDate
+      ? db.from('documents').select('id, title').eq('doc_date', panelDate).order('created_at', { ascending: false }).limit(1).maybeSingle()
+      : Promise.resolve({ data: null }),
+    panelDate
+      ? db.from('lab_results').select('id, category, panel, analyte, value, value_text, unit, ref_text, flag, sort_order').eq('tested_on', panelDate).order('sort_order')
+      : Promise.resolve({ data: [] }),
+  ]);
+  if (rowsRes.error) throw new Error(rowsRes.error.message);
 
   const byMetric = new Map<string, DailyPoint[]>();
-  for (const r of (rows ?? []) as { metric_id: string; measured_on: string; value: number | string }[]) {
+  for (const r of (rowsRes.data ?? []) as { metric_id: string; measured_on: string; value: number | string }[]) {
     const list = byMetric.get(r.metric_id) ?? [];
     list.push({ date: r.measured_on, value: Number(r.value) });
     byMetric.set(r.metric_id, list);
@@ -103,23 +113,12 @@ export async function getLabs(db: Db): Promise<Labs> {
     return { metric, latest, previous, band: latest ? bandOf(metric, latest.value) : null, series: [...points].reverse() };
   });
 
-  const panelDate = readings.reduce<string | null>((d, r) => (r.latest && (!d || r.latest.date > d) ? r.latest.date : d), null);
-  const [docRes, rowsRes, datesRes] = await Promise.all([
-    panelDate
-      ? db.from('documents').select('id, title').eq('doc_date', panelDate).order('created_at', { ascending: false }).limit(1).maybeSingle()
-      : Promise.resolve({ data: null }),
-    panelDate
-      ? db.from('lab_results').select('id, category, panel, analyte, value, value_text, unit, ref_text, flag, sort_order').eq('tested_on', panelDate).order('sort_order')
-      : Promise.resolve({ data: [] }),
-    db.from('lab_results').select('tested_on').order('tested_on', { ascending: false }),
-  ]);
-
   return {
     readings,
     panelDate,
     retest: panelDate ? { from: addDays(panelDate, RETEST_DAYS[0]), to: addDays(panelDate, RETEST_DAYS[1]) } : null,
     report: (docRes.data as { id: string; title: string | null } | null) ?? null,
-    rows: (rowsRes.data ?? []) as LabRow[],
-    panelDates: [...new Set(((datesRes.data ?? []) as { tested_on: string }[]).map((r) => r.tested_on))],
+    rows: (labRowsRes.data ?? []) as LabRow[],
+    panelDates,
   };
 }

@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { redirect } from 'next/navigation';
 import { createLifeClient } from './supabase-server';
 
@@ -8,12 +9,13 @@ function isOwnerEmail(email: string | undefined) {
 
 // Returns the session client if the caller is the signed-in owner, otherwise
 // null. Use in route handlers: `if (!ctx) return 401`.
-export async function getOwnerContext() {
+// Memoised per request: the layout and the page share one auth round trip.
+export const getOwnerContext = cache(async () => {
   const supabase = await createLifeClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !isOwnerEmail(user.email)) return null;
   return { supabase, user };
-}
+});
 
 // For pages, layouts and server actions. Redirects anyone who is not the
 // fully-authenticated owner. This is the authoritative check; proxy.ts is UX only.

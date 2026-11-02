@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 // Metric helpers shared by the /life pages (session client, RLS) and the
@@ -104,11 +105,13 @@ export async function fetchAll<T>(
   return rows;
 }
 
-export async function getMetrics(db: Db): Promise<MetricDef[]> {
+// Memoised per request (keyed on the client): pages ask for the metric list
+// from several loaders at once.
+export const getMetrics = cache(async (db: Db): Promise<MetricDef[]> => {
   const { data, error } = await db.from('metrics').select(METRIC_COLUMNS).order('slug');
   if (error) throw new Error(error.message);
   return (data ?? []) as MetricDef[];
-}
+});
 
 // Daily values per metric id, ordered by date. `from`/`to` inclusive, either may be null.
 export async function getDailySeries(
@@ -264,8 +267,8 @@ export const AREA_PHASE: Record<string, number> = {
 
 export type AreaRow = { id: string; slug: string; name: string; sort_order: number; description: string | null };
 
-export async function getAreas(db: Db): Promise<AreaRow[]> {
+export const getAreas = cache(async (db: Db): Promise<AreaRow[]> => {
   const { data, error } = await db.from('areas').select('id, slug, name, sort_order, description').order('sort_order');
   if (error) throw new Error(error.message);
   return (data ?? []) as AreaRow[];
-}
+});
