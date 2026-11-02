@@ -5,12 +5,25 @@
 // source and metrics so it never overwrites Apple Health. Idempotent: re-running
 // a newer export updates the same rows.
 //   node --experimental-strip-types scripts/life/import-whoop.ts <export.zip|dir> [--dry-run]
+import * as nodeModule from 'node:module';
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const { loadEnv, adminFromEnv, ownerIdFrom } = await import('./_shared.ts');
+// Resolve extensionless imports for scripts.
+type Next = (spec: string, ctx: { parentURL?: string }) => unknown;
+(nodeModule as unknown as { registerHooks(h: { resolve: (s: string, c: { parentURL?: string }, n: Next) => unknown }): void }).registerHooks({
+  resolve(spec, ctx, next) {
+    if ((spec.startsWith('.') || spec.startsWith('/')) && !/\.[cm]?[jt]s$/.test(spec) && ctx.parentURL) {
+      const u = new URL(spec + '.ts', ctx.parentURL);
+      if (existsSync(fileURLToPath(u))) return next(u.href, ctx);
+    }
+    return next(spec, ctx);
+  },
+});
+const { loadEnv, adminFromEnv, ownerIdFrom } = await import('./_shared');
 
 const input = process.argv[2];
 const dryRun = process.argv.includes('--dry-run');
