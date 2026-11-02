@@ -29,9 +29,36 @@ export function Markdown({ lines }: { lines: string[] }) {
     if (list.length) blocks.push(<ul key={`l${blocks.length}`}>{list}</ul>);
     list = [];
   };
+  let table: string[][] | null = null;
+  const flushTable = () => {
+    if (!table) return;
+    const rows = table;
+    table = null;
+    blocks.push(
+      <table key={`t${blocks.length}`} className="life-md-table">
+        <tbody>
+          {rows.map((cells, ri) => (
+            <tr key={ri}>
+              {cells.map((c, ci) => (
+                <td key={ci}>{inline(c.replace(MARKS, (m) => m))}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
   lines.forEach((raw, i) => {
     const line = raw.trim();
     if (!line) return;
+    if (line.startsWith('|')) {
+      flush();
+      if (/^\|\s*-{2,}/.test(line)) return; // header separator
+      const cells = line.replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
+      table = [...(table ?? []), cells];
+      return;
+    }
+    flushTable();
     const h = line.match(/^#{1,4}\s+(.*)$/);
     if (h) {
       flush();
@@ -65,5 +92,6 @@ export function Markdown({ lines }: { lines: string[] }) {
     );
   });
   flush();
+  flushTable();
   return <div className="life-md">{blocks}</div>;
 }

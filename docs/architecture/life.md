@@ -199,6 +199,11 @@ Port from `~/code-projects/8edges`: `lib/admin-chat/` (`tools.ts`, `schema.ts`, 
 src/app/life/
   layout.tsx            requireOwner(), sidebar, noindex
   page.tsx              Today: the One Thing ladder, the health foundation, month goals
+  journal/[date]/       The day, written in the app: One Thing, gratitude, No Holds Barred,
+                        the to-do list (todos table), weight; a rail with vision, year, month
+                        and the pinned reference blocks. Notion-synced days show read-only
+  eo/, eo/[id]/         EO updates: the forum updates with scores and presentations, apart
+                        from the journal and the month-end review
   goals/                Five-year vision and year goals (goals table), month goals and
                         track record (journal), the ladder
   health/               Whoop recovery, sleep, strain, HRV, resting HR, weight
@@ -237,7 +242,11 @@ The app answers one question, "Am I living the life I intend to live?", on one l
 | Track record | The `Historical` reference entry (template block), one `###` section per month | `parseHistory` |
 | Year, five years | `goals` rows with `horizon` `year` / `vision`, managed on `/life/goals` | `src/lib/life/focus.ts` `getLongGoals` |
 
-Month and week goals are never edited in the app: Dave writes them in Notion and the nightly sync carries them in. The first vision and year rows were seeded from journal passages (the One Thing, the "Dealing with Age" forum presentation, the October 2026 EO update) and are meant to be rewritten in the app.
+Month and week goals are never edited in the app yet: Dave writes them in Notion and the nightly sync carries them in.
+
+### The journal in the app
+
+A day written on `/life/journal/[date]` is an `entries` row (`kind=journal`) with `fields` `{one_thing, gratitude, nhb}` and `body_md` rendered from them in the Notion template's shape (migration `20261103000000_journal_todos.sql`), so the ladder's parser, search and Ask read app-written and Notion-written days alike. The day's weight goes to `measurements`. To-dos are `todos` rows: open from `added_on` until `done_on` or `dropped_on`, one level of nesting, so any day shows what was open then and what got done that day. The Notion sync keeps running; where a day exists in both, the app-written row wins on the page. The first vision and year rows were seeded from journal passages (the One Thing, the "Dealing with Age" forum presentation, the October 2026 EO update) and are meant to be rewritten in the app.
 
 Health reads the `whoop_*` metrics plus `weight_kg` (`src/lib/life/health.ts`). Whoop zones: recovery 67% and up is green, 34 to 66% yellow, under 34% red.
 

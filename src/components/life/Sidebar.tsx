@@ -11,8 +11,9 @@ const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 type Item = { href: string; label: string };
 
 const SECTIONS: { label?: string; items: Item[]; collapsible?: boolean }[] = [
-  { items: [{ href: '/life', label: 'Today' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/health', label: 'Health' }, { href: '/life/travel', label: 'Travel' }] },
+  { items: [{ href: '/life', label: 'Today' }, { href: '/life/journal', label: 'Journal' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/health', label: 'Health' }, { href: '/life/travel', label: 'Travel' }] },
   { label: 'Looking back', items: [{ href: '/life/review', label: 'Review' }, { href: '/life/timeline', label: 'Timeline' }] },
+  { label: 'EO', items: [{ href: '/life/eo', label: 'EO updates' }] },
   { label: 'Areas', items: MORE_AREAS.map((a) => ({ href: `/life/area/${a}`, label: cap(a) })), collapsible: true },
   { label: 'Behind the scenes', items: [{ href: '/life/inbox', label: 'Inbox' }, { href: '/life/sources', label: 'Sources' }, { href: '/life/ask', label: 'Ask' }] },
 ];

@@ -511,3 +511,53 @@ button.life-vision-text:focus-visible { outline: none; box-shadow: var(--life-fo
 .life-lab-trends { margin-top: 16px; border-top: 1px solid var(--life-line-soft); padding-top: 12px; }
 .life-lab-trend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px 20px; margin-top: 8px; }
 .life-lab-trend { min-width: 0; }
+
+/* ── Journal ───────────────────────────────────────────────────────────── */
+.life-journal-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr); gap: 20px; align-items: start; }
+@media (max-width: 960px) { .life-journal-grid { grid-template-columns: 1fr; } }
+.life-journal { display: grid; gap: 14px; }
+.life-journal .life-card { display: grid; gap: 8px; }
+.life-main .life-journal-one { font-size: 20px; font-weight: 700; padding: 10px 12px; }
+.life-journal-grat { display: grid; gap: 8px; }
+.life-main .life-journal-nhb { min-height: 150px; line-height: 1.5; resize: vertical; }
+.life-journal-foot { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+.life-journal-weight { display: grid; gap: 4px; }
+.life-main .life-journal-weight input { width: 110px; }
+.life-todos { display: grid; gap: 12px; }
+.life-todo-add { display: flex; gap: 8px; }
+.life-main .life-todo-add input { flex: 1; min-width: 0; }
+.life-todo-list, .life-todo-group { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.life-todo-list > li + li { border-top: 1px solid var(--life-line-soft); padding-top: 6px; }
+.life-todo { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.4; min-height: 28px; }
+.life-todo.is-child { padding-left: 28px; font-size: 13px; }
+.life-todo.is-done .life-todo-title { color: var(--life-muted); text-decoration: line-through; text-decoration-color: var(--life-faint); }
+.life-todo.is-dim .life-todo-title { color: var(--life-muted); }
+.life-todo-check { display: flex; }
+.life-todo-check button.life-mark { width: 20px; height: 20px; cursor: pointer; margin-top: 3px; background: var(--life-surface); }
+.life-todo-check button.life-mark:hover { border-color: var(--life-blue); }
+.life-todo-title { flex: 1; min-width: 0; overflow-wrap: anywhere; color: var(--life-ink); padding-top: 3px; }
+.life-todo-title small { display: block; font-size: 11px; color: var(--life-muted); }
+.life-todo-x { background: none; border: 0; color: var(--life-faint); font-size: 18px; line-height: 1; cursor: pointer; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
+.life-todo-x:hover { background: var(--life-pink-bg); color: var(--life-magenta); }
+.life-todo-sub { padding-left: 30px; }
+.life-todo-sub details > summary { font-size: 11px; color: var(--life-muted); cursor: pointer; list-style: none; }
+.life-todo-sub details[open] > summary { margin-bottom: 6px; }
+.life-todo-done-head { margin-top: 6px; }
+.life-rail { display: grid; gap: 8px; position: sticky; top: 20px; }
+.life-rail > details { background: var(--life-surface); border: 1px solid var(--life-line); border-radius: 12px; box-shadow: var(--life-shadow); padding: 10px 14px; }
+.life-rail > details > summary { cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--life-muted); }
+.life-rail > details[open] > summary { margin-bottom: 8px; }
+.life-rail .life-goal { font-size: 13px; }
+.life-rail .life-md { font-size: 13px; }
+.life-rail-foot { font-size: 12px; text-align: right; }
+.life-main .life-rail-foot a { color: var(--life-blue); font-weight: 600; }
+@media (max-width: 960px) { .life-rail { position: static; } }
+.life-md-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 4px 0; }
+.life-main .life-md-table td { padding: 3px 6px; border-bottom: 1px solid var(--life-line-soft); vertical-align: top; }
+.life-md-table tr:first-child td { font-weight: 700; color: var(--life-ink); }
+.life-eo-scores { display: inline-flex; gap: 4px; }
+.life-eo-scores span { min-width: 22px; text-align: center; font-size: 11px; font-weight: 700; padding: 2px 4px; border-radius: 6px; background: var(--life-muted-bg); color: var(--life-muted-ink); font-variant-numeric: tabular-nums; }
+.life-eo-scores span.is-good { background: var(--life-ok-bg); color: var(--life-ok-ink); }
+.life-eo-scores span.is-low { background: var(--life-pink-bg); color: var(--life-pink-ink); }
+.life-eo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.life-eo-grid .life-stat.is-low .life-stat-v { color: var(--life-pink-ink); }
