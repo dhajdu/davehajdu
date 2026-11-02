@@ -90,3 +90,41 @@ export function stripTemplates(
   }
   return { bodies, templates };
 }
+
+const MD_HEADING = /^(#{1,3}) /;
+const BOLD_LABEL = /^\*\*[^*]+\*\*:?\s*$/; // "**General Journal**" works like a sub-heading
+
+// Journal pages copy the previous day's page forward, so most lines repeat with small edits.
+// Pages go in date order; a line already seen on an earlier page is dropped, leaving only
+// what was new that day. Headings stay only when something new sits under them.
+export function dropCopiedLines(pages: { id: string; body: string }[]): Map<string, string> {
+  const seen = new Set<string>();
+  const out = new Map<string, string>();
+  for (const p of pages) {
+    const kept: string[] = [];
+    let pending: { level: number; line: string }[] = [];
+    const fresh: string[] = [];
+    for (const line of p.body.split('\n')) {
+      const norm = normaliseMd(line);
+      const h = MD_HEADING.exec(line);
+      if (h || BOLD_LABEL.test(line.trim())) {
+        const level = h ? h[1].length : 4;
+        pending = pending.filter((x) => x.level < level);
+        pending.push({ level, line });
+      } else if (!norm) {
+        if (kept.length && kept[kept.length - 1] !== '') kept.push('');
+      } else if (!seen.has(norm)) {
+        for (const x of pending) {
+          if (kept.length && kept[kept.length - 1] !== '') kept.push('');
+          kept.push(x.line, '');
+        }
+        pending = [];
+        kept.push(line);
+      }
+      if (norm) fresh.push(norm);
+    }
+    for (const n of fresh) seen.add(n);
+    out.set(p.id, kept.join('\n').replace(/\n{3,}/g, '\n\n').trim());
+  }
+  return out;
+}
