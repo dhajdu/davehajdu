@@ -7,6 +7,8 @@ import { Ring } from '@/components/life/health/Ring';
 import { Stat } from '@/components/life/health/Stat';
 import { RecoveryHeat } from '@/components/life/health/RecoveryHeat';
 import { StrainHeat } from '@/components/life/health/StrainHeat';
+import { Bloodwork } from '@/components/life/health/Bloodwork';
+import { getLabs } from '@/lib/life/labs';
 import { getLongGoals } from '@/lib/life/focus';
 import { ZONE_WORD, getHealth, WEIGHT, zone } from '@/lib/life/health';
 import { addDays, aggregate, formatDate, ictToday, toMonthly, type Aggregation, type DailyPoint } from '@/lib/life/metrics';
@@ -41,11 +43,15 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
   const today = ictToday();
   const days = RANGES[range][1];
 
-  const [health, goals, sourceRes] = await Promise.all([
+  const [health, goals, labs, sourceRes] = await Promise.all([
     getHealth(supabase, today, days),
     getLongGoals(supabase),
+    getLabs(supabase),
     supabase.from('sources').select('name, last_run_at, last_status').eq('slug', 'whoop').maybeSingle(),
   ]);
+  const labGoals = goals
+    .filter((g) => g.status === 'open' && g.metric && g.target_value !== null)
+    .map((g) => ({ metricSlug: g.metric!.slug, target: Number(g.target_value) }));
   const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
   const target = weightTarget === undefined || weightTarget === null ? null : Number(weightTarget);
   const s = health.stats;
@@ -96,6 +102,10 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
             <Stat stat={s.weight} target={target} label="Weight" />
           </div>
         </section>
+
+        <Card title="Bloodwork">
+          <Bloodwork labs={labs} goals={labGoals} today={today} />
+        </Card>
 
         <div className="grid md:grid-cols-2 gap-4">
           <Card title="Recovery by day">

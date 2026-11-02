@@ -241,6 +241,10 @@ Month and week goals are never edited in the app: Dave writes them in Notion and
 
 Health reads the `whoop_*` metrics plus `weight_kg` (`src/lib/life/health.ts`). Whoop zones: recovery 67% and up is green, 34 to 66% yellow, under 34% red.
 
+### Bloodwork
+
+A lab panel is four things: every analyte as a `lab_results` row (numeric or text result, unit, reference range, flag; migration `20261102120000_lab_results.sql`), the PDF in the private bucket (`documents` row, opened through `/api/life/documents/[id]`, which mints a five-minute signed URL after the owner check), a Body `records` row (`kind=lab`, linked `attached` to the document) and one `measurements` row per tracked marker. Markers are `metrics` on the `lab` source with `ref_low` / `ref_high` / `ref_note` for the reference range (migration `20261102110000_metric_ranges.sql`), so `src/lib/life/labs.ts` can read every value as in or out of range. The full analyte list goes in `documents.text` for Ask. Tracked today: HbA1c, fasting glucose, LDL, total cholesterol, triglycerides, HDL, hs-CRP, eGFR, vitamin D. A new panel is a JSON transcription of the report run through `scripts/life/import-lab.ts` (see its header for the shape); it writes all four and is idempotent on date and analyte. Transcriptions stay outside the repo (`context/Heath Data/`).
+
 ## PR slices (Phase 1)
 
 Each slice is a branch and PR into `main`. Gate = what must be true to merge.
