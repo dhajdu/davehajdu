@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, Chip, EmptyState, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
 import { formatValue, isPeriod, periodLabel, shiftPeriod } from '@/lib/life/metrics';
-import { EO_MERPS, EO_SECTIONS, renderEoMarkdown, type AutoSummary, type EoUpdate } from '@/lib/life/review';
+import { EO_MERPS, EO_SECTIONS, GOAL_STATUSES, renderEoMarkdown, type AutoSummary, type EoUpdate } from '@/lib/life/review';
 import { createReview, finishReview, redraftReview, reopenReview, saveReview } from './actions';
 import CopyEoButton from './CopyEoButton';
 
@@ -12,6 +12,13 @@ export const maxDuration = 300;
 
 const input = 'w-full text-sm border border-border rounded-lg px-3 py-1.5 text-navy bg-white';
 const label = 'block text-xs font-semibold text-muted mb-1';
+
+// Selected status pill: life.css ok/warn/pink tones.
+const STATUS_STYLE = {
+  green: 'has-checked:bg-[var(--life-ok-bg)] has-checked:text-[var(--life-ok-ink)] has-checked:border-transparent',
+  yellow: 'has-checked:bg-[var(--life-warn-bg)] has-checked:text-[var(--life-warn-ink)] has-checked:border-transparent',
+  red: 'has-checked:bg-[var(--life-pink-bg)] has-checked:text-[var(--life-pink-ink)] has-checked:border-transparent',
+} as const;
 
 // The few numbers worth seeing next to the update, in this order.
 const STRIP = ['whoop_recovery', 'whoop_sleep_hours', 'whoop_hrv_ms', 'whoop_strain', 'workouts', 'steps', 'weight_kg'];
@@ -46,6 +53,9 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
   const summary = (review.auto_summary ?? {}) as AutoSummary;
   const done = review.status === 'done';
   const prevPeriod = shiftPeriod(period, -1);
+  const lastGoals = [...(eo.last_goals ?? []), { title: '', status: '' as const }];
+  const nextGoals = [...(eo.next_goals ?? [])];
+  while (nextGoals.length < 5) nextGoals.push('');
 
   const imported = review.entry_id
     ? ((await supabase.from('entries').select('title, body_md').eq('id', review.entry_id).maybeSingle()).data as { title: string | null; body_md: string } | null)
@@ -147,6 +157,35 @@ export default async function ReviewPage({ params }: { params: Promise<{ period:
                 </Card>
               );
             })}
+
+            <Card title="Last 30 day goals">
+              <div className="grid gap-2">
+                {lastGoals.map((g, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <input name="last_title" defaultValue={g.title} placeholder={i === lastGoals.length - 1 ? 'Add a goal' : undefined} className={input} />
+                    <div className="flex gap-1 shrink-0">
+                      {GOAL_STATUSES.map((st) => (
+                        <label
+                          key={st}
+                          className={`cursor-pointer text-xs font-semibold px-2 py-1 rounded-full border border-border text-muted capitalize ${STATUS_STYLE[st]}`}
+                        >
+                          <input type="radio" name={`last_status_${i}`} value={st} defaultChecked={g.status === st} className="sr-only" />
+                          {st}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Card title="Next 30 day goals">
+              <div className="grid gap-2">
+                {nextGoals.map((g, i) => (
+                  <input key={i} name="next_goal" defaultValue={g} className={input} />
+                ))}
+              </div>
+            </Card>
 
             <div className="flex gap-2">
               <button type="submit" className={primaryButtonClass}>Save</button>

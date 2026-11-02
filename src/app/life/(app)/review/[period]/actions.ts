@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { requireOwner } from '@/lib/life/auth';
 import { isPeriod } from '@/lib/life/metrics';
-import { EO_MERPS, EO_SECTIONS, buildReviewDraft, type EoUpdate } from '@/lib/life/review';
+import { EO_MERPS, EO_SECTIONS, GOAL_STATUSES, buildReviewDraft, type EoUpdate, type GoalStatus } from '@/lib/life/review';
 
 function str(fd: FormData, key: string): string | null {
   const v = fd.get(key);
@@ -53,6 +53,15 @@ async function save(formData: FormData) {
     updates: Object.fromEntries(
       EO_SECTIONS.map(([k]) => [k, { feelings: text(`feelings_${k}`), headline: text(`headline_${k}`), impact: text(`impact_${k}`) }])
     ),
+    last_goals: formData
+      .getAll('last_title')
+      .map((t, i) => ({ title: String(t).trim(), status: str(formData, `last_status_${i}`) ?? '' }))
+      .filter((g) => g.title)
+      .map((g) => ({ title: g.title, status: (GOAL_STATUSES as readonly string[]).includes(g.status) ? (g.status as GoalStatus) : '' })),
+    next_goals: formData
+      .getAll('next_goal')
+      .map((t) => String(t).trim())
+      .filter(Boolean),
     drafted_at: (current?.eo as EoUpdate | null)?.drafted_at,
     edited_at: new Date().toISOString(),
   };

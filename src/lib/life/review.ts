@@ -66,11 +66,15 @@ export const EO_SECTIONS = [
 export type EoMerp = (typeof EO_MERPS)[number][0];
 export type EoSectionKey = (typeof EO_SECTIONS)[number][0];
 export type EoSection = { feelings: string; headline: string; impact: string };
+export const GOAL_STATUSES = ['green', 'yellow', 'red'] as const;
+export type GoalStatus = (typeof GOAL_STATUSES)[number];
 export type EoUpdate = {
   merps?: Partial<Record<EoMerp, string>>;
   struggle?: string;
   success?: string;
   updates?: Partial<Record<EoSectionKey, EoSection>>;
+  last_goals?: { title: string; status: GoalStatus | '' }[]; // last month's 30 day goals, rated
+  next_goals?: string[]; // the next 30 days
   drafted_at?: string;
   edited_at?: string;
 };
@@ -96,6 +100,11 @@ export function renderEoMarkdown(eo: EoUpdate): string {
     lines.push(`**${label}**`, '', `**Feelings:** ${u?.feelings ?? ''}`.trimEnd(), '', `**Headline:** ${u?.headline ?? ''}`.trimEnd(), '', '**Impact:**', '');
     if (u?.impact) lines.push(u.impact, '');
   }
+  const dot = { green: '🟢', yellow: '🟡', red: '🔴', '': '⚪' } as const;
+  lines.push('## Last 30 day goals', '');
+  lines.push(...(eo.last_goals?.length ? eo.last_goals.map((g) => `- ${dot[g.status]} ${g.title}`) : ['-']), '');
+  lines.push('## Next 30 day goals', '');
+  lines.push(...(eo.next_goals?.length ? eo.next_goals.map((g) => `- ${g}`) : ['-']), '');
   return lines.join('\n').trimEnd() + '\n';
 }
 
@@ -108,7 +117,7 @@ const sectionSchema = {
   properties: { feelings: { type: 'string' }, headline: { type: 'string' }, impact: { type: 'string' } },
 };
 
-async function draftEo(period: string, material: string, examples: string[]): Promise<EoUpdate | null> {
+async function draftEo(period: string, material: string, examples: string[], lastGoals: string[]): Promise<EoUpdate | null> {
   if (!process.env.ANTHROPIC_API_KEY || !material.trim()) return null;
   const client = new Anthropic();
 
@@ -124,7 +133,7 @@ async function draftEo(period: string, material: string, examples: string[]): Pr
         schema: {
           type: 'object',
           additionalProperties: false,
-          required: ['merps', 'struggle', 'success', 'updates'],
+          required: ['merps', 'struggle', 'success', 'updates', 'last_goals', 'next_goals'],
           properties: {
             merps: {
               type: 'object',
@@ -140,6 +149,16 @@ async function draftEo(period: string, material: string, examples: string[]): Pr
               required: EO_SECTIONS.map(([k]) => k),
               properties: Object.fromEntries(EO_SECTIONS.map(([k]) => [k, sectionSchema])),
             },
+            last_goals: {
+              type: 'array',
+              items: {
+                type: 'object',
+                additionalProperties: false,
+                required: ['title', 'status'],
+                properties: { title: { type: 'string' }, status: { type: 'string', enum: [...GOAL_STATUSES] } },
+              },
+            },
+            next_goals: { type: 'array', items: { type: 'string' } },
           },
         },
       },
@@ -151,6 +170,9 @@ async function draftEo(period: string, material: string, examples: string[]): Pr
       'Struggle and success: one short line each. ' +
       'Four updates (business, family = family and friends, personal = health and habits, community = EO and wider community): ' +
       'feelings is two to four comma-separated feeling words; headline is one sentence; impact is one or two short paragraphs on why it matters. ' +
+      'Last 30 day goals: rate each of last month\'s goals green (done), yellow (partly) or red (missed) from the evidence in the material; ' +
+      'if you cannot tell, use yellow. Keep the goal wording as given. If no goals are given, use the 30 day goals in the most recent past update, or return an empty list. ' +
+      'Next 30 day goals: three to five short, concrete goals that follow from this month, in his words. ' +
       'Use only facts in the material. Never invent numbers, names or events. ' +
       'If the material says nothing about a section, return empty strings for it rather than guessing. Do not use em dashes.',
     messages: [
@@ -158,6 +180,7 @@ async function draftEo(period: string, material: string, examples: string[]): Pr
         role: 'user',
         content:
           `<past_updates>\n${examples.map((e) => `<update>\n${e}\n</update>`).join('\n')}\n</past_updates>\n\n` +
+          (lastGoals.length ? `<last_month_goals>\n${lastGoals.map((g) => `- ${g}`).join('\n')}\n</last_month_goals>\n\n` : '') +
           `<month name="${periodLabel(period)}">\n${material}\n</month>\n\nDraft the update for ${periodLabel(period)}.`,
       },
     ],
@@ -166,7 +189,7 @@ async function draftEo(period: string, material: string, examples: string[]): Pr
   if (response.stop_reason === 'refusal') return null;
   const text = response.content.flatMap((b) => (b.type === 'text' ? [b.text] : [])).join('');
   try {
-    const parsed = JSON.parse(text) as Required<Pick<EoUpdate, 'merps' | 'struggle' | 'success' | 'updates'>>;
+    const parsed = JSON.parse(text) as Required<Pick<EoUpdate, 'merps' | 'struggle' | 'success' | 'updates' | 'last_goals' | 'next_goals'>>;
     return { ...parsed, drafted_at: new Date().toISOString() };
   } catch {
     return null;
@@ -212,7 +235,7 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
   const [areas, metrics] = await Promise.all([getAreas(db), getMetrics(db)]);
   const areaSlug = new Map(areas.map((a) => [a.id, a.slug]));
 
-  const [summaries, trips, journalCounts, entriesRes, recordsRes, pastRes] = await Promise.all([
+  const [summaries, trips, journalCounts, entriesRes, recordsRes, pastRes, prevRes] = await Promise.all([
     getMetricSummaries(db, metrics, period),
     tripsOverlapping(db, from, to),
     countEntriesByMonth(db, 'journal', shiftPeriod(period, -12), period),
@@ -225,10 +248,12 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
       .order('entry_date'),
     db.from('records').select('area_id, kind, title, started_on').gte('started_on', from).lte('started_on', to).order('started_on'),
     db.from('entries').select('body_md').eq('kind', 'eo_update').lt('entry_date', from).order('entry_date', { ascending: false }).limit(6),
+    db.from('reviews').select('eo').eq('owner_id', owner).eq('period', shiftPeriod(period, -1)).maybeSingle(),
   ]);
   if (entriesRes.error) throw new Error(entriesRes.error.message);
   if (recordsRes.error) throw new Error(recordsRes.error.message);
   if (pastRes.error) throw new Error(pastRes.error.message);
+  const lastGoals = ((prevRes.data?.eo as EoUpdate | undefined)?.next_goals ?? []).filter(Boolean);
 
   const entries = (entriesRes.data ?? []) as { area_id: string | null; kind: string; entry_date: string; title: string | null; body_md: string }[];
   const records = (recordsRes.data ?? []) as { area_id: string; kind: string; title: string; started_on: string | null }[];
@@ -294,7 +319,7 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
 
   // Never overwrite the owner's edits unless asked to.
   const edited = !!(existing?.eo as EoUpdate | undefined)?.edited_at;
-  const eo = edited && !force ? null : await draftEo(period, material, examples);
+  const eo = edited && !force ? null : await draftEo(period, material, examples, lastGoals);
   const patch = { auto_summary: autoSummary, ...(eo ? { eo } : {}) };
 
   if (!existing) {
