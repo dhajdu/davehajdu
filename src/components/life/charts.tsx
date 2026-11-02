@@ -7,7 +7,11 @@ const W = 600;
 const H = 180;
 const PAD = { top: 12, right: 8, bottom: 22, left: 40 };
 
-function scale(points: Point[], zeroBased: boolean, extra: number[] = []) {
+// `domain` pins the axis: [0, 100] for a percentage, [0, null] to stop a
+// non-negative signal from dipping below zero after padding.
+export type Domain = [number | null, number | null];
+
+function scale(points: Point[], zeroBased: boolean, extra: number[] = [], domain: Domain = [null, null]) {
   const vals = [...points.map((p) => p.value), ...extra];
   let min = zeroBased ? 0 : Math.min(...vals);
   let max = Math.max(...vals);
@@ -18,6 +22,8 @@ function scale(points: Point[], zeroBased: boolean, extra: number[] = []) {
   const pad = zeroBased ? 0 : (max - min) * 0.1;
   min -= pad;
   max += pad;
+  if (domain[0] !== null) min = Math.max(min, domain[0]);
+  if (domain[1] !== null) max = Math.min(max, domain[1]);
   const innerH = H - PAD.top - PAD.bottom;
   const y = (v: number) => PAD.top + innerH - ((v - min) / (max - min)) * innerH;
   return { min, max, y };
@@ -44,9 +50,9 @@ function Axis({ min, max, y, first, last }: { min: number; max: number; y: (v: n
 }
 
 // `target` draws a dashed magenta line (a goal) and keeps it inside the scale.
-export function LineChart({ points, label, target }: { points: Point[]; label: string; target?: number | null }) {
+export function LineChart({ points, label, target, domain }: { points: Point[]; label: string; target?: number | null; domain?: Domain }) {
   if (points.length === 0) return null;
-  const { min, max, y } = scale(points, false, target != null ? [target] : []);
+  const { min, max, y } = scale(points, false, target != null ? [target] : [], domain);
   const innerW = W - PAD.left - PAD.right;
   const x = (i: number) => PAD.left + (points.length === 1 ? innerW / 2 : (i / (points.length - 1)) * innerW);
   const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');

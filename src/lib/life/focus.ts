@@ -62,7 +62,7 @@ export type GoalRow = {
   id: string;
   title: string;
   horizon: 'vision' | 'year' | '30d' | '60d';
-  status: 'open' | 'hit' | 'missed' | 'dropped';
+  status: 'open' | 'hit' | 'missed' | 'dropped' | 'behind';
   due_on: string | null;
   target_value: number | string | null;
   area: { slug: string; name: string } | null;

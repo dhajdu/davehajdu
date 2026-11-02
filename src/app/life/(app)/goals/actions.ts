@@ -47,7 +47,7 @@ export async function setLongGoalStatus(formData: FormData) {
   const { supabase } = await requireOwner();
   const id = str(formData, 'goal_id');
   const status = str(formData, 'status');
-  if (!id || !status || !['open', 'hit', 'missed', 'dropped'].includes(status)) throw new Error('Bad status');
+  if (!id || !status || !['open', 'behind', 'hit', 'missed', 'dropped'].includes(status)) throw new Error('Bad status');
   const { error } = await supabase.from('goals').update({ status }).eq('id', id);
   if (error) throw new Error(error.message);
   refresh();
