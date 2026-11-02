@@ -72,7 +72,7 @@ export default function AskChat() {
                 key={s}
                 type="button"
                 onClick={() => ask(s)}
-                className="text-left text-sm text-navy border border-border rounded-xl px-3 py-2 hover:bg-light-gray"
+                className="life-btn text-left font-medium"
               >
                 {s}
               </button>
@@ -84,15 +84,13 @@ export default function AskChat() {
       <div className="flex flex-col gap-3">
         {messages.map((m, i) =>
           m.role === 'user' ? (
-            <div key={i} className="self-end max-w-[85%] rounded-2xl rounded-br-sm bg-navy text-white px-4 py-2.5 text-sm whitespace-pre-wrap break-words">
+            <div key={i} className="life-bubble is-user">
               {m.content}
             </div>
           ) : (
             <div
               key={i}
-              className={`self-start max-w-[92%] rounded-2xl rounded-bl-sm px-4 py-3 text-sm whitespace-pre-wrap break-words ${
-                m.error ? 'bg-white border border-magenta text-magenta' : 'bg-light-gray text-body-text'
-              }`}
+              className={`life-bubble${m.error ? ' is-error' : ''}`}
             >
               {m.content}
               {m.sources.length > 0 && (
@@ -101,7 +99,7 @@ export default function AskChat() {
                     <Link
                       key={`${s.table}:${s.id}`}
                       href={s.href}
-                      className="inline-block max-w-full truncate text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white border border-border text-navy hover:border-blue hover:text-blue"
+                      className="life-pill max-w-full truncate"
                       title={s.label}
                     >
                       {s.label}
@@ -113,7 +111,7 @@ export default function AskChat() {
           ),
         )}
         {busy && (
-          <div className="self-start rounded-2xl rounded-bl-sm bg-light-gray text-muted px-4 py-3 text-sm">
+          <div className="life-bubble is-busy">
             Looking through your records…
           </div>
         )}
@@ -125,14 +123,14 @@ export default function AskChat() {
           e.preventDefault();
           ask(input);
         }}
-        className="flex gap-2 sticky bottom-0 bg-white py-2"
+        className="life-ask-form"
       >
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask anything…"
           maxLength={2000}
-          className="flex-1 min-w-0 rounded-xl border border-border px-3 py-2 text-sm text-navy placeholder:text-muted focus:outline-none focus:border-blue"
+          className="flex-1 min-w-0"
         />
         <button type="submit" disabled={busy || !input.trim()} className={primaryButtonClass}>
           Ask

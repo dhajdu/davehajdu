@@ -13,7 +13,7 @@ import {
   toMonthly,
   type MetricDef,
 } from '@/lib/life/metrics';
-import { BarChart, LineChart } from './charts';
+import { BarChart, LineChart } from '@/components/life/charts';
 
 const RANGES = { '1y': '1Y', '5y': '5Y', all: 'All' } as const;
 type Range = keyof typeof RANGES;
@@ -51,6 +51,8 @@ export default async function AreaPage({
 }) {
   const { slug } = await params;
   if (slug === 'places') redirect('/life/travel');
+  if (slug === 'body') redirect('/life/health');
+  if (slug === 'direction') redirect('/life/goals');
   const { supabase } = await requireOwner();
   const sp = await searchParams;
   const range: Range = typeof sp.range === 'string' && sp.range in RANGES ? (sp.range as Range) : '1y';
@@ -99,19 +101,13 @@ export default async function AreaPage({
         title={area.name}
         subtitle={area.description ?? undefined}
         actions={
-          <div className="flex gap-1">
+          <nav className="life-seg" aria-label="Range">
             {(Object.keys(RANGES) as Range[]).map((r) => (
-              <Link
-                key={r}
-                href={`/life/area/${area.slug}?range=${r}`}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-lg border-[1.5px] ${
-                  r === range ? 'bg-navy border-navy text-white' : 'bg-white border-navy text-navy'
-                }`}
-              >
+              <Link key={r} href={`/life/area/${area.slug}?range=${r}`} aria-current={r === range ? 'page' : undefined}>
                 {RANGES[r]}
               </Link>
             ))}
-          </div>
+          </nav>
         }
       />
 

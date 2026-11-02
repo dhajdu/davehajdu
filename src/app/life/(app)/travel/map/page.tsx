@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, EmptyState, PageHeader } from '@/components/life/ui';
 import { TravelTabs } from '@/components/life/travel/TravelTabs';
@@ -5,6 +6,8 @@ import { WorldMap, type MapArc, type MapPin } from '@/components/life/travel/Wor
 import { fetchAll } from '@/components/life/travel/data';
 import { isHome } from '@/components/life/travel/format';
 import type { Place } from '@/components/life/travel/types';
+
+export const metadata: Metadata = { title: 'Travel', robots: { index: false, follow: false } };
 
 type Ref = { trip_id: string | null; kind: string; starts_at: string; origin_place_id: string | null; destination_place_id: string | null };
 

@@ -1,0 +1,125 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { requireOwner } from '@/lib/life/auth';
+import { Card, PageHeader } from '@/components/life/ui';
+import { LineChart, BarChart } from '@/components/life/charts';
+import { Ring } from '@/components/life/health/Ring';
+import { Stat } from '@/components/life/health/Stat';
+import { RecoveryHeat } from '@/components/life/health/RecoveryHeat';
+import { getLongGoals } from '@/lib/life/focus';
+import { ZONE_WORD, getHealth, WEIGHT, zone } from '@/lib/life/health';
+import { formatDate, ictToday, toMonthly, type DailyPoint } from '@/lib/life/metrics';
+
+export const metadata: Metadata = { title: 'Health', robots: { index: false, follow: false } };
+
+const RANGES = { '90d': ['90 days', 90], '1y': ['1 year', 365], all: ['All', 3650] } as const;
+type Range = keyof typeof RANGES;
+
+function series(points: DailyPoint[], daily: boolean, agg: 'avg' | 'last' = 'avg') {
+  if (daily) return points.map((p) => ({ x: formatDate(p.date, { month: 'short', day: 'numeric' }), value: p.value }));
+  return toMonthly(points, agg).map((p) => ({ x: formatDate(`${p.period}-01`, { month: 'short', year: '2-digit' }), value: p.value }));
+}
+
+export default async function HealthPage({ searchParams }: { searchParams: Promise<{ range?: string | string[] }> }) {
+  const { supabase } = await requireOwner();
+  const sp = await searchParams;
+  const range: Range = typeof sp.range === 'string' && sp.range in RANGES ? (sp.range as Range) : '90d';
+  const today = ictToday();
+  const days = RANGES[range][1];
+
+  const [health, goals, sourceRes] = await Promise.all([
+    getHealth(supabase, today, days),
+    getLongGoals(supabase),
+    supabase.from('sources').select('name, last_run_at, last_status').eq('slug', 'whoop').maybeSingle(),
+  ]);
+  const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
+  const target = weightTarget === undefined || weightTarget === null ? null : Number(weightTarget);
+  const s = health.stats;
+  const rec = s.recovery.last;
+  const z = rec ? zone(rec.value) : null;
+  const daily = range === '90d';
+  const source = sourceRes.data as { name: string; last_run_at: string | null; last_status: string | null } | null;
+
+  const charts: { title: string; stat: typeof s.sleep; bars?: boolean; target?: number | null; agg?: 'avg' | 'last' }[] = [
+    { title: 'Sleep, hours a night', stat: s.sleep },
+    { title: 'Recovery', stat: s.recovery },
+    { title: 'HRV', stat: s.hrv },
+    { title: 'Resting heart rate', stat: s.rhr },
+    { title: 'Day strain', stat: s.strain, bars: daily },
+    { title: 'Weight', stat: s.weight, target, agg: 'last' },
+  ];
+
+  return (
+    <div className="max-w-5xl">
+      <PageHeader
+        title="Health"
+        subtitle="The foundation. Whoop supplies the signals, the journal supplies the weight."
+        actions={
+          <nav className="life-seg" aria-label="Range">
+            {(Object.keys(RANGES) as Range[]).map((r) => (
+              <Link key={r} href={`/life/health?range=${r}`} aria-current={r === range ? 'page' : undefined}>
+                {RANGES[r][0]}
+              </Link>
+            ))}
+          </nav>
+        }
+      />
+
+      <div className="space-y-5">
+        <section className="life-hero" aria-label="Latest readings">
+          <div className="life-hero-ring">
+            <Ring value={rec?.value ?? null} zone={z} />
+            <span className={`life-zone${z ? ` is-${z}` : ''}`}>{z ? ZONE_WORD[z] : 'No recovery yet'}</span>
+            {rec && <span className="life-hero-when">{rec.date === today ? 'Today' : formatDate(rec.date, { weekday: 'short', month: 'short', day: 'numeric' })}</span>}
+          </div>
+          <div className="life-hero-stats">
+            <Stat stat={s.sleep} vs="avg7" label="Sleep" />
+            <Stat stat={s.sleepPerf} vs="avg7" label="Sleep performance" />
+            <Stat stat={s.strain} vs="avg7" label="Day strain" />
+            <Stat stat={s.hrv} label="HRV" />
+            <Stat stat={s.rhr} label="Resting HR" />
+            <Stat stat={s.weight} target={target} label="Weight" />
+          </div>
+        </section>
+
+        <Card title="Recovery by day">
+          <RecoveryHeat days={health.recoveryDays.filter((p) => p.date > today.slice(0, 4) + '-00')} today={today} weeks={20} />
+        </Card>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {charts.map((c) => {
+            const pts = series(c.stat.points, daily || c.stat.key === 'weight' ? true : false, c.agg);
+            const latest = c.stat.last;
+            return (
+              <Card key={c.title}>
+                <div className="flex items-baseline justify-between gap-2 mb-2">
+                  <h2 className="text-sm font-semibold text-navy">{c.title}{!daily && c.stat.key !== 'weight' ? <span className="text-muted font-normal"> · monthly average</span> : null}</h2>
+                  {c.target != null && <span className="text-xs text-muted">goal {c.target} {c.stat.unit}</span>}
+                </div>
+                {pts.length === 0 ? (
+                  <p className="text-sm text-muted py-8 text-center">No data in this range</p>
+                ) : c.bars ? (
+                  <BarChart points={pts} label={c.title} />
+                ) : (
+                  <LineChart points={pts} label={c.title} target={c.target} />
+                )}
+                {latest && (
+                  <p className="text-xs text-muted mt-1">
+                    Latest {Math.round(latest.value * 10) / 10}{c.stat.unit && c.stat.unit !== 'count' ? ` ${c.stat.unit}` : ''} on {formatDate(latest.date)}
+                  </p>
+                )}
+              </Card>
+            );
+          })}
+        </div>
+
+        <p className="text-xs text-muted">
+          {source
+            ? `${source.name}: last sync ${source.last_run_at ? formatDate(source.last_run_at.slice(0, 10)) : 'never'}${source.last_status?.startsWith('error') ? ` · ${source.last_status}` : ''}.`
+            : 'No Whoop source registered.'}{' '}
+          <Link href="/life/sources" className="font-semibold text-blue">Sources</Link>
+        </p>
+      </div>
+    </div>
+  );
+}

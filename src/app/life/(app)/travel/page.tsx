@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { requireOwner } from '@/lib/life/auth';
 import { EmptyState, PageHeader } from '@/components/life/ui';
 import { TravelTabs } from '@/components/life/travel/TravelTabs';
@@ -19,6 +20,8 @@ import {
   todayKey,
 } from '@/components/life/travel/format';
 import type { Place, Trip } from '@/components/life/travel/types';
+
+export const metadata: Metadata = { title: 'Travel', robots: { index: false, follow: false } };
 
 const cityOf = (p: Place | null | undefined) => p?.city ?? p?.name ?? '';
 

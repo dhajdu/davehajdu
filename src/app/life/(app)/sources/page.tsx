@@ -1,5 +1,8 @@
+import type { Metadata } from 'next';
 import { requireOwner } from '@/lib/life/auth';
 import { PageHeader, Card, Chip, EmptyState } from '@/components/life/ui';
+
+export const metadata: Metadata = { title: 'Sources', robots: { index: false, follow: false } };
 
 const HOUR = 3_600_000;
 const CADENCE_MS: Record<string, number> = { hourly: HOUR, daily: 24 * HOUR, nightly: 24 * HOUR, weekly: 168 * HOUR, monthly: 744 * HOUR };
