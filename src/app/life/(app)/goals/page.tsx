@@ -4,6 +4,7 @@ import { Card, PageHeader, buttonClass, primaryButtonClass } from '@/components/
 import { FocusLadder } from '@/components/life/focus/FocusLadder';
 import { MonthGoals } from '@/components/life/focus/MonthGoals';
 import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
+import { VisionCard } from '@/components/life/focus/VisionCard';
 import { Markdown } from '@/components/life/Markdown';
 import { getFocus, getLongGoals, type GoalRow } from '@/lib/life/focus';
 import { METRIC_COLUMNS, formatValue, getAreas, ictToday, type MetricDef } from '@/lib/life/metrics';
@@ -104,16 +105,7 @@ export default async function GoalsPage() {
         ) : (
           <ul className="life-vision">
             {vision.map((g) => (
-              <li key={g.id} className={`life-vision-card is-${g.area?.slug ?? 'direction'}${g.status === 'hit' ? ' is-hit' : ''}`}>
-                <span className="life-vision-area">{g.area?.name ?? 'Direction'}{g.status !== 'open' ? ` · ${g.status}` : ''}</span>
-                <p className="life-vision-text">{g.title}</p>
-                {g.metric && g.target_value !== null && (
-                  <p className="life-goal-meta">
-                    {g.metric.name} {formatValue(Number(g.target_value), g.metric.unit)}
-                  </p>
-                )}
-                <Actions g={g} />
-              </li>
+              <VisionCard key={g.id} goal={g} rename={renameLongGoal} setStatus={setLongGoalStatus} />
             ))}
           </ul>
         )}

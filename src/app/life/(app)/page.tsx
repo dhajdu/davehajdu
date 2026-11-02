@@ -5,8 +5,10 @@ import { Card, PageHeader } from '@/components/life/ui';
 import { FocusLadder } from '@/components/life/focus/FocusLadder';
 import { MonthGoals } from '@/components/life/focus/MonthGoals';
 import { Foundation } from '@/components/life/health/Foundation';
+import { NextTripPass } from '@/components/life/travel/NextTripPass';
 import { Postcard } from '@/components/life/travel/Postcard';
-import { TRIP_SELECT } from '@/components/life/travel/data';
+import { TRIP_SELECT, legsForTrips } from '@/components/life/travel/data';
+import { passPropsFor } from '@/components/life/travel/pass';
 import { daysBetween } from '@/components/life/travel/format';
 import type { Trip } from '@/components/life/travel/types';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
@@ -20,14 +22,19 @@ export default async function TodayPage() {
   const today = ictToday();
   const now = currentPeriod();
 
-  const [focus, goals, health, draftRes, pendingRes, upcomingRes] = await Promise.all([
+  const [focus, goals, health, draftRes, pendingRes, currentRes, upcomingRes] = await Promise.all([
     getFocus(supabase, today),
     getLongGoals(supabase),
     getHealth(supabase, today, 30),
     supabase.from('reviews').select('period').eq('status', 'draft').lte('period', now).order('period', { ascending: false }).limit(1),
     supabase.from('review_queue').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-    supabase.from('trips').select(TRIP_SELECT).gte('start_on', today).order('start_on').limit(3),
+    supabase.from('trips').select(TRIP_SELECT).lte('start_on', today).gte('end_on', today).order('start_on', { ascending: false }).limit(1),
+    supabase.from('trips').select(TRIP_SELECT).gt('start_on', today).order('start_on').limit(3),
   ]);
+
+  // The trip underway, if any, as the boarding pass in its on-the-road state.
+  const current = (currentRes.data?.[0] ?? null) as Trip | null;
+  const currentLegs = current ? await legsForTrips(supabase, [current.id]) : [];
 
   const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
   const draft = draftRes.data?.[0]?.period as string | undefined;
@@ -46,6 +53,13 @@ export default async function TodayPage() {
         <Card title="The foundation">
           <Foundation health={health} today={today} weightTarget={weightTarget === undefined || weightTarget === null ? null : Number(weightTarget)} />
         </Card>
+
+        {current && (
+          <section aria-label="On the road">
+            <h2 className="life-card-title">On the road</h2>
+            <NextTripPass {...passPropsFor(current, currentLegs, today)} />
+          </section>
+        )}
 
         <div className="grid lg:grid-cols-5 gap-4">
           <Card title={focus.month ? `${focus.month.month} goals` : 'This month'} className="lg:col-span-3">

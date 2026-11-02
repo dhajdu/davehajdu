@@ -6,18 +6,32 @@ import { LineChart, BarChart } from '@/components/life/charts';
 import { Ring } from '@/components/life/health/Ring';
 import { Stat } from '@/components/life/health/Stat';
 import { RecoveryHeat } from '@/components/life/health/RecoveryHeat';
+import { StrainHeat } from '@/components/life/health/StrainHeat';
 import { getLongGoals } from '@/lib/life/focus';
 import { ZONE_WORD, getHealth, WEIGHT, zone } from '@/lib/life/health';
-import { formatDate, ictToday, toMonthly, type DailyPoint } from '@/lib/life/metrics';
+import { addDays, aggregate, formatDate, ictToday, toMonthly, type Aggregation, type DailyPoint } from '@/lib/life/metrics';
 
 export const metadata: Metadata = { title: 'Health', robots: { index: false, follow: false } };
 
 const RANGES = { '90d': ['90 days', 90], '1y': ['1 year', 365], all: ['All', 3650] } as const;
 type Range = keyof typeof RANGES;
 
-function series(points: DailyPoint[], daily: boolean, agg: 'avg' | 'last' = 'avg') {
-  if (daily) return points.map((p) => ({ x: formatDate(p.date, { month: 'short', day: 'numeric' }), value: p.value }));
-  return toMonthly(points, agg).map((p) => ({ x: formatDate(`${p.period}-01`, { month: 'short', year: '2-digit' }), value: p.value }));
+// Daily readings are noisy, so the 90-day view rolls them up by week
+// (Monday start) and the longer views by month.
+function toWeekly(points: DailyPoint[], agg: Aggregation) {
+  const byWeek = new Map<string, number[]>();
+  for (const p of points) {
+    const dow = (new Date(`${p.date}T00:00:00Z`).getUTCDay() + 6) % 7;
+    const k = addDays(p.date, -dow);
+    if (!byWeek.has(k)) byWeek.set(k, []);
+    byWeek.get(k)!.push(p.value);
+  }
+  return [...byWeek.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([week, vals]) => ({ week, value: aggregate(vals, agg)! }));
+}
+
+function series(points: DailyPoint[], by: 'week' | 'month', agg: Aggregation = 'avg') {
+  if (by === 'week') return toWeekly(points, agg).map((p) => ({ x: formatDate(p.week, { month: 'short', day: 'numeric' }), value: Math.round(p.value * 10) / 10 }));
+  return toMonthly(points, agg).map((p) => ({ x: formatDate(`${p.period}-01`, { month: 'short', year: '2-digit' }), value: Math.round(p.value * 10) / 10 }));
 }
 
 export default async function HealthPage({ searchParams }: { searchParams: Promise<{ range?: string | string[] }> }) {
@@ -40,12 +54,13 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
   const daily = range === '90d';
   const source = sourceRes.data as { name: string; last_run_at: string | null; last_status: string | null } | null;
 
-  const charts: { title: string; stat: typeof s.sleep; bars?: boolean; target?: number | null; agg?: 'avg' | 'last' }[] = [
-    { title: 'Sleep, hours a night', stat: s.sleep },
-    { title: 'Recovery', stat: s.recovery },
-    { title: 'HRV', stat: s.hrv },
-    { title: 'Resting heart rate', stat: s.rhr },
-    { title: 'Day strain', stat: s.strain, bars: daily },
+  const by = daily ? 'week' : 'month';
+  const charts: { title: string; stat: typeof s.sleep; bars?: boolean; target?: number | null; agg?: Aggregation; domain?: [number | null, number | null] }[] = [
+    { title: 'Sleep, hours a night', stat: s.sleep, domain: [0, null] },
+    { title: 'Recovery', stat: s.recovery, domain: [0, 100] },
+    { title: 'HRV', stat: s.hrv, domain: [0, null] },
+    { title: 'Resting heart rate', stat: s.rhr, domain: [0, null] },
+    { title: 'Day strain', stat: s.strain, bars: true, domain: [0, 21] },
     { title: 'Weight', stat: s.weight, target, agg: 'last' },
   ];
 
@@ -82,18 +97,26 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
           </div>
         </section>
 
-        <Card title="Recovery by day">
-          <RecoveryHeat days={health.recoveryDays.filter((p) => p.date > today.slice(0, 4) + '-00')} today={today} weeks={20} />
-        </Card>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Card title="Recovery by day">
+            <RecoveryHeat days={health.recoveryDays} today={today} weeks={20} />
+          </Card>
+          <Card title="Strain by day">
+            <StrainHeat days={s.strain.points} today={today} weeks={20} />
+          </Card>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-4">
           {charts.map((c) => {
-            const pts = series(c.stat.points, daily || c.stat.key === 'weight' ? true : false, c.agg);
+            const pts = series(c.stat.points, by, c.agg);
             const latest = c.stat.last;
             return (
               <Card key={c.title}>
                 <div className="flex items-baseline justify-between gap-2 mb-2">
-                  <h2 className="text-sm font-semibold text-navy">{c.title}{!daily && c.stat.key !== 'weight' ? <span className="text-muted font-normal"> · monthly average</span> : null}</h2>
+                  <h2 className="text-sm font-semibold text-navy">
+                    {c.title}
+                    <span className="text-muted font-normal"> · by {by}</span>
+                  </h2>
                   {c.target != null && <span className="text-xs text-muted">goal {c.target} {c.stat.unit}</span>}
                 </div>
                 {pts.length === 0 ? (
@@ -101,7 +124,7 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
                 ) : c.bars ? (
                   <BarChart points={pts} label={c.title} />
                 ) : (
-                  <LineChart points={pts} label={c.title} target={c.target} />
+                  <LineChart points={pts} label={c.title} target={c.target} domain={c.domain} />
                 )}
                 {latest && (
                   <p className="text-xs text-muted mt-1">

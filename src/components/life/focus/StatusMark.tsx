@@ -12,4 +12,7 @@ export function StatusMark({ status }: { status: Status }) {
   );
 }
 
-export const goalStatus = (s: 'open' | 'hit' | 'missed' | 'dropped'): Status => (s === 'dropped' ? 'open' : s);
+export type GoalStatus = 'open' | 'hit' | 'missed' | 'dropped' | 'behind';
+export const goalStatus = (s: GoalStatus): Status => (s === 'dropped' ? 'open' : s === 'behind' ? 'partial' : s);
+// How a vision or year goal reads to its owner.
+export const GOAL_WORD: Record<GoalStatus, string> = { open: 'On track', behind: 'Behind', hit: 'Achieved', missed: 'Missed', dropped: 'Dropped' };

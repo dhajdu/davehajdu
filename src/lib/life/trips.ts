@@ -315,8 +315,10 @@ export async function rebuildTrips(db: SupabaseClient, ownerId: string): Promise
       end_tz: r.end_tz,
       origin_iata: origin?.iata ?? null,
       destination_iata: dest?.iata ?? null,
-      // A hotel's own booking names its city; a shared place row may not.
-      city: r.kind === 'hotel' ? (r.raw?.city ?? dest?.city ?? null) : (dest?.city ?? r.raw?.city ?? null),
+      // The resolved place names the city; the raw booking is the fallback
+      // (TripIt sometimes stamps a hotel with the home city, which would read
+      // as "back home" and close the trip early).
+      city: dest?.city ?? r.raw?.city ?? null,
       trip_id: r.trip_id,
       number: r.number,
     };
