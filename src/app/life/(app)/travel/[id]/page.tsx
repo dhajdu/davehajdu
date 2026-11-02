@@ -100,7 +100,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
             <p className="text-xs text-muted">Saving a title locks it, so the trip builder will not rename it.</p>
             <form action={updateTripPurpose} className="flex flex-wrap gap-2">
               <input type="hidden" name="id" value={trip.id} />
-              {(['business', 'personal', 'unknown'] as Purpose[]).map((p) => (
+              {(['business', 'eo', 'personal'] as Purpose[]).map((p) => (
                 <button
                   key={p}
                   type="submit"

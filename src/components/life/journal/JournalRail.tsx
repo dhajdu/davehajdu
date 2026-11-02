@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Focus, GoalRow } from '@/lib/life/focus';
-import type { Reference } from '@/lib/life/journal';
+import { parseRoutine, type Reference } from '@/lib/life/journal';
 import { Markdown } from '@/components/life/Markdown';
 import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 
@@ -13,6 +13,8 @@ export function JournalRail({ focus, goals, refs, today }: { focus: Focus; goals
   const weeks = focus.month?.weeks ?? [];
   const week = weeks.find((w) => w.week === weekNo) ?? weeks[weeks.length - 1];
   const monthGoals = focus.month?.goals.length ? focus.month.goals : (focus.month?.moves ?? []);
+  const appMonth = goals.filter((g) => g.horizon === 'month' && g.period === today.slice(0, 7));
+  const monthName = new Date(`${today.slice(0, 7)}-01T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
 
   return (
     <aside className="life-rail" aria-label="Keep in mind">
@@ -49,10 +51,16 @@ export function JournalRail({ focus, goals, refs, today }: { focus: Focus; goals
       </details>
 
       <details open>
-        <summary>{focus.month?.month ?? 'This month'}</summary>
-        {monthGoals.length || week ? (
+        <summary>{appMonth.length ? monthName : (focus.month?.month ?? 'This month')}</summary>
+        {appMonth.length || monthGoals.length || week ? (
           <ul className="life-goals">
-            {monthGoals.map((g, i) => (
+            {appMonth.map((g) => (
+              <li key={g.id} className={`life-goal is-${goalStatus(g.status)}${g.focus ? ' is-now' : ''}`}>
+                <StatusMark status={goalStatus(g.status)} />
+                <span className="life-goal-text">{g.title}</span>
+              </li>
+            ))}
+            {!appMonth.length && monthGoals.map((g, i) => (
               <li key={i} className={`life-goal is-${g.status}`}>
                 <StatusMark status={g.status} />
                 <span className="life-goal-text">{g.text}</span>
@@ -73,12 +81,26 @@ export function JournalRail({ focus, goals, refs, today }: { focus: Focus; goals
         )}
       </details>
 
-      {refs.map((r) => (
-        <details key={r.key} open={r.key === 'routine'}>
-          <summary>{r.title}</summary>
-          <Markdown lines={r.lines} />
-        </details>
-      ))}
+      {refs.map((r) => {
+        const steps = r.key === 'routine' ? parseRoutine(r.lines) : [];
+        return (
+          <details key={r.key} open={r.key === 'routine'}>
+            <summary>{r.title}</summary>
+            {steps.length ? (
+              <ol className="life-routine">
+                {steps.map((st, i) => (
+                  <li key={i}>
+                    <span className="life-routine-time">{st.time}</span>
+                    <span className="life-routine-what">{st.activity}</span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <Markdown lines={r.lines} />
+            )}
+          </details>
+        );
+      })}
 
       <p className="life-rail-foot">
         <Link href="/life/goals">Goals</Link>

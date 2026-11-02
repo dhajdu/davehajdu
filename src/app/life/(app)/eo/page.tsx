@@ -4,7 +4,7 @@ import { requireOwner } from '@/lib/life/auth';
 import { EmptyState, PageHeader } from '@/components/life/ui';
 import { formatDate, getAreas } from '@/lib/life/metrics';
 
-export const metadata: Metadata = { title: 'EO updates', robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: 'Forum', robots: { index: false, follow: false } };
 
 type Update = { id: string; entry_date: string; title: string | null };
 type Review = { id: string; entry_id: string; one_word: string | null };
@@ -38,7 +38,7 @@ export default async function EoPage() {
 
   return (
     <div className="max-w-3xl">
-      <PageHeader title="EO updates" subtitle="Forum updates, scores and presentations, kept apart from the journal" />
+      <PageHeader title="Forum" subtitle="EO forum updates with their scores, kept apart from the journal" />
       {updates.length === 0 ? (
         <EmptyState>No EO updates synced yet.</EmptyState>
       ) : (

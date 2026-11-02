@@ -7,7 +7,7 @@ import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { VisionCard } from '@/components/life/focus/VisionCard';
 import { Markdown } from '@/components/life/Markdown';
 import { getFocus, getLongGoals, type GoalRow } from '@/lib/life/focus';
-import { METRIC_COLUMNS, formatValue, getAreas, ictToday, type MetricDef } from '@/lib/life/metrics';
+import { METRIC_COLUMNS, currentPeriod, formatValue, getAreas, ictToday, periodLabel, type MetricDef } from '@/lib/life/metrics';
 import { addLongGoal, renameLongGoal, setLongGoalStatus } from './actions';
 
 export const metadata: Metadata = { title: 'Goals', robots: { index: false, follow: false } };
@@ -37,13 +37,15 @@ function Actions({ g }: { g: GoalRow }) {
   );
 }
 
-function AddForm({ horizon, areas, metrics }: { horizon: 'vision' | 'year'; areas: { id: string; name: string }[]; metrics: MetricDef[] }) {
+function AddForm({ horizon, areas, metrics, period, focus, label }: { horizon: 'vision' | 'year' | 'month'; areas: { id: string; name: string }[]; metrics: MetricDef[]; period?: string; focus?: boolean; label?: string }) {
   return (
     <details className="mt-4">
-      <summary className="cursor-pointer text-xs font-semibold text-blue">Add {horizon === 'vision' ? 'a vision goal' : 'a goal for this year'}</summary>
+      <summary className="cursor-pointer text-xs font-semibold text-blue">{label ?? `Add ${horizon === 'vision' ? 'a vision goal' : horizon === 'month' ? 'a goal for this month' : 'a goal for this year'}`}</summary>
       <form action={addLongGoal} className="life-add mt-3">
         <input type="hidden" name="horizon" value={horizon} />
-        <input name="title" required maxLength={200} placeholder={horizon === 'vision' ? 'Where I want to be in five years' : 'What this year has to deliver'} className={input} />
+        {period && <input type="hidden" name="period" value={period} />}
+        {focus && <input type="hidden" name="focus" value="1" />}
+        <input name="title" required maxLength={200} placeholder={focus ? 'The one thing that makes everything else easier this month' : horizon === 'vision' ? 'Where I want to be in five years' : horizon === 'month' ? 'What this month has to deliver' : 'What this year has to deliver'} className={input} />
         <div className="life-add-row">
           <select name="area_id" required defaultValue="" className={input} aria-label="Area">
             <option value="" disabled>Area</option>
@@ -71,16 +73,19 @@ export default async function GoalsPage() {
   const { supabase } = await requireOwner();
   const today = ictToday();
   const year = today.slice(0, 4);
+  const period = currentPeriod();
 
   const [focus, goals, areas, metricsRes] = await Promise.all([
     getFocus(supabase, today),
-    getLongGoals(supabase),
+    getLongGoals(supabase, period),
     getAreas(supabase),
     supabase.from('metrics').select(METRIC_COLUMNS).order('name'),
   ]);
   const metrics = (metricsRes.data ?? []) as MetricDef[];
   const vision = goals.filter((g) => g.horizon === 'vision');
   const yearGoals = goals.filter((g) => g.horizon === 'year');
+  const monthGoals = goals.filter((g) => g.horizon === 'month');
+  const monthFocus = monthGoals.find((g) => g.focus) ?? null;
 
   const tally = (lines: string[]) => {
     const text = lines.join('\n');
@@ -136,8 +141,53 @@ export default async function GoalsPage() {
           <AddForm horizon="year" areas={areas} metrics={metrics} />
         </Card>
 
-        <Card title={focus.month ? `${focus.month.month} · from the journal` : 'This month'}>
-          <MonthGoals month={focus.month} today={today} doing={focus.doing} />
+        <Card title={periodLabel(period)}>
+          <p className="life-stat-k mb-2">The one thing this month</p>
+          {monthFocus ? (
+            <ul className="life-goals mb-3">
+              <li className={`life-goal is-${goalStatus(monthFocus.status)} is-now`}>
+                <StatusMark status={goalStatus(monthFocus.status)} />
+                <div className="min-w-0">
+                  <p className="life-goal-text">{monthFocus.title}</p>
+                  <Actions g={monthFocus} />
+                </div>
+              </li>
+            </ul>
+          ) : (
+            <p className="text-sm text-muted mb-1">Not set yet.</p>
+          )}
+          <AddForm horizon="month" areas={areas} metrics={metrics} period={period} focus label={monthFocus ? 'Replace the one thing' : 'Set the one thing'} />
+
+          <p className="life-stat-k mt-5 mb-2">Goals</p>
+          {monthGoals.filter((g) => !g.focus).length === 0 ? (
+            <p className="text-sm text-muted">No goals for {periodLabel(period, 'long').split(' ')[0]} yet.</p>
+          ) : (
+            <ul className="life-goals">
+              {monthGoals.filter((g) => !g.focus).map((g) => (
+                <li key={g.id} className={`life-goal is-${goalStatus(g.status)}`}>
+                  <StatusMark status={goalStatus(g.status)} />
+                  <div className="min-w-0">
+                    <p className="life-goal-text">{g.title}</p>
+                    <p className="life-goal-meta">
+                      {g.area?.name}
+                      {g.metric && g.target_value !== null ? ` · ${g.metric.name} ${formatValue(Number(g.target_value), g.metric.unit)}` : ''}
+                    </p>
+                    <Actions g={g} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          <AddForm horizon="month" areas={areas} metrics={metrics} period={period} />
+
+          {focus.month && (
+            <details className="mt-5">
+              <summary className="cursor-pointer text-xs font-semibold text-blue">From the journal · {focus.month.month}</summary>
+              <div className="mt-3">
+                <MonthGoals month={focus.month} today={today} doing={focus.doing} />
+              </div>
+            </details>
+          )}
         </Card>
       </div>
 

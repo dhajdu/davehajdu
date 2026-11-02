@@ -3,32 +3,34 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-
-// Body lives at /life/health, Direction at /life/goals, Places at /life/travel.
-const MORE_AREAS = ['mind', 'people', 'money', 'work', 'time', 'admin', 'legacy'];
-const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
+import { Inbox } from 'lucide-react';
 
 type Item = { href: string; label: string };
 
-const SECTIONS: { label?: string; items: Item[]; collapsible?: boolean }[] = [
-  { items: [{ href: '/life', label: 'Today' }, { href: '/life/journal', label: 'Journal' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/health', label: 'Health' }, { href: '/life/travel', label: 'Travel' }] },
-  { label: 'Looking back', items: [{ href: '/life/review', label: 'Review' }, { href: '/life/timeline', label: 'Timeline' }] },
-  { label: 'EO', items: [{ href: '/life/eo', label: 'EO updates' }] },
-  { label: 'Areas', items: MORE_AREAS.map((a) => ({ href: `/life/area/${a}`, label: cap(a) })), collapsible: true },
-  { label: 'Behind the scenes', items: [{ href: '/life/inbox', label: 'Inbox' }, { href: '/life/sources', label: 'Sources' }, { href: '/life/ask', label: 'Ask' }] },
+// Inbox on top, then the groups. Areas are hidden until they hold something.
+const SECTIONS: { label: string; items: Item[] }[] = [
+  { label: 'Productivity', items: [{ href: '/life', label: 'Today' }, { href: '/life/travel', label: 'Travel' }, { href: '/life/journal', label: 'Journal' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/review', label: 'Review' }] },
+  { label: 'Health', items: [{ href: '/life/health', label: 'Fitness' }, { href: '/life/health/medical', label: 'Medical' }] },
+  { label: 'EO', items: [{ href: '/life/eo', label: 'Forum' }, { href: '/life/eo/presentations', label: 'Presentations' }] },
+  { label: 'Settings', items: [{ href: '/life/sources', label: 'Sources' }, { href: '/life/timeline', label: 'Timeline' }, { href: '/life/ask', label: 'Ask' }] },
 ];
+
+// Exact matches for pages that have their own child routes in another group.
+const EXACT = new Set(['/life', '/life/health', '/life/eo']);
 
 export default function Sidebar({ pending }: { pending: number }) {
   const path = usePathname() ?? '';
-  const is = (href: string) => (href === '/life' ? path === '/life' : path === href || path.startsWith(href + '/'));
+  const is = (href: string) => {
+    if (path === href) return true;
+    if (EXACT.has(href)) return href === '/life/eo' && /^\/life\/eo\/[0-9a-f-]{36}$/.test(path);
+    return path.startsWith(href + '/');
+  };
 
   // The drawer is open only for the path it was opened on, so navigating closes it.
   const [openOn, setOpenOn] = useState<string | null>(null);
   const open = openOn === path;
-  const [moreOpen, setMoreOpen] = useState<boolean | null>(null);
-  const moreShown = moreOpen ?? MORE_AREAS.some((a) => is(`/life/area/${a}`));
 
-  const current = SECTIONS.flatMap((s) => s.items).find((i) => is(i.href));
+  const current = [{ href: '/life/inbox', label: 'Inbox' }, ...SECTIONS.flatMap((s) => s.items)].find((i) => is(i.href));
 
   return (
     <>
@@ -48,29 +50,24 @@ export default function Sidebar({ pending }: { pending: number }) {
         </Link>
 
         <div className="life-nav">
-          {SECTIONS.map((section, si) => {
-            const shown = !section.collapsible || moreShown;
-            return (
-              <div className="life-nav-group" key={section.label ?? si}>
-                {section.label &&
-                  (section.collapsible ? (
-                    <button type="button" className="life-nav-label" aria-expanded={shown} onClick={() => setMoreOpen(!shown)}>
-                      {section.label}
-                      <span aria-hidden>{shown ? '▾' : '▸'}</span>
-                    </button>
-                  ) : (
-                    <div className="life-nav-label">{section.label}</div>
-                  ))}
-                {shown &&
-                  section.items.map((item) => (
-                    <Link key={item.href} href={item.href} className={`life-nav-link${is(item.href) ? ' is-active' : ''}`}>
-                      {item.label}
-                      {item.href === '/life/inbox' && pending > 0 && <span className="life-nav-count">{pending}</span>}
-                    </Link>
-                  ))}
-              </div>
-            );
-          })}
+          <Link href="/life/inbox" className={`life-nav-link life-nav-inbox${is('/life/inbox') ? ' is-active' : ''}`}>
+            <span className="flex items-center gap-2">
+              <Inbox size={16} strokeWidth={2.2} aria-hidden />
+              Inbox
+            </span>
+            {pending > 0 && <span className="life-nav-count">{pending}</span>}
+          </Link>
+
+          {SECTIONS.map((section) => (
+            <div className="life-nav-group" key={section.label}>
+              <div className="life-nav-label">{section.label}</div>
+              {section.items.map((item) => (
+                <Link key={item.href} href={item.href} className={`life-nav-link${is(item.href) ? ' is-active' : ''}`}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          ))}
         </div>
 
         <form action="/life/logout" method="post" className="life-nav-foot">

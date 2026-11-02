@@ -29,7 +29,7 @@ export function Postcard({ trip, daysAway }: { trip: Trip; daysAway: number }) {
             <circle cx={hx} cy={hy} r={r * 2.2} className="life-home-dot" />
             {dest && <circle cx={tx} cy={ty} r={r * 2.2} className="life-pin-dot" />}
           </svg>
-          <span className={`life-postcard-stamp ${trip.purpose === 'business' ? 'is-business' : ''}`}>{purposeLabel[trip.purpose]}</span>
+          <span className={`life-postcard-stamp is-${trip.purpose}`}>{purposeLabel[trip.purpose]}</span>
         </div>
         <div className="life-postcard-body">
           <div className="life-postcard-away">

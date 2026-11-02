@@ -4,7 +4,7 @@ import { LAND, MAP_H, MAP_W, arcPath, km, project, type LatLng } from './geo';
 
 // Dot-matrix world with an arc per route flown, filterable by year.
 export type MapPin = { id: string; label: string; code: string; lat: number; lng: number; byYear: Record<string, number>; home: boolean };
-export type MapArc = { key: string; from: LatLng; to: LatLng; year: string; business: boolean; count: number; trips: string[] };
+export type MapArc = { key: string; from: LatLng; to: LatLng; year: string; business: boolean; eo?: boolean; count: number; trips: string[] };
 
 const ALL = 'All';
 
@@ -61,7 +61,7 @@ export function WorldMap({ pins, arcs }: { pins: MapPin[]; arcs: MapArc[] }) {
                 key={a.key}
                 d={arcPath(a.from, a.to)}
                 pathLength={1}
-                className={`life-arc${a.business ? ' is-business' : ''}`}
+                className={`life-arc${a.business ? ' is-business' : a.eo ? ' is-eo' : ''}`}
                 style={{ animationDelay: `${Math.min(i * 40, 1600)}ms`, strokeWidth: 1 + Math.min(a.count - 1, 4) * 0.35 }}
               />
             ))}
@@ -94,6 +94,8 @@ export function WorldMap({ pins, arcs }: { pins: MapPin[]; arcs: MapArc[] }) {
         <span><i className="is-home" />Home</span>
         <span><i />Personal</span>
         <span><i className="is-business" />Business</span>
+        <span><i className="is-eo" />EO</span>
+        <span><i />Holiday</span>
         <span>Bigger dot means more trips</span>
       </p>
     </div>

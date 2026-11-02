@@ -4,6 +4,7 @@ import { requireOwner } from '@/lib/life/auth';
 import { Card, PageHeader } from '@/components/life/ui';
 import { FocusLadder } from '@/components/life/focus/FocusLadder';
 import { MonthGoals } from '@/components/life/focus/MonthGoals';
+import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { Foundation } from '@/components/life/health/Foundation';
 import { NextTripPass } from '@/components/life/travel/NextTripPass';
 import { Postcard } from '@/components/life/travel/Postcard';
@@ -25,7 +26,7 @@ export default async function TodayPage() {
 
   const [focus, goals, health, labs, draftRes, pendingRes, currentRes, upcomingRes] = await Promise.all([
     getFocus(supabase, today),
-    getLongGoals(supabase),
+    getLongGoals(supabase, now),
     getHealth(supabase, today, 30),
     getLabs(supabase),
     supabase.from('reviews').select('period').eq('status', 'draft').lte('period', now).order('period', { ascending: false }).limit(1),
@@ -39,6 +40,7 @@ export default async function TodayPage() {
   const currentLegs = current ? await legsForTrips(supabase, [current.id]) : [];
 
   const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
+  const monthGoals = goals.filter((g) => g.horizon === 'month' && g.period === now);
   const hba1c = labs.readings.find((r) => r.metric.slug === 'hba1c') ?? null;
   const hba1cTarget = goals.find((g) => g.metric?.slug === 'hba1c' && g.target_value !== null && g.status === 'open')?.target_value;
   const draft = draftRes.data?.[0]?.period as string | undefined;
@@ -72,8 +74,28 @@ export default async function TodayPage() {
         )}
 
         <div className="grid lg:grid-cols-5 gap-4">
-          <Card title={focus.month ? `${focus.month.month} goals` : 'This month'} className="lg:col-span-3">
-            <MonthGoals month={focus.month} today={today} />
+          <Card title={monthGoals.length ? `${periodLabel(now, 'long').split(' ')[0]} goals` : focus.month ? `${focus.month.month} goals` : 'This month'} className="lg:col-span-3">
+            {monthGoals.length > 0 && (
+              <ul className="life-goals mb-4">
+                {monthGoals.map((g) => (
+                  <li key={g.id} className={`life-goal is-${goalStatus(g.status)}${g.focus ? ' is-now' : ''}`}>
+                    <StatusMark status={goalStatus(g.status)} />
+                    <span className="life-goal-text">
+                      {g.focus && <span className="text-muted">The one thing · </span>}
+                      {g.title}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {monthGoals.length > 0 && focus.month ? (
+              <details>
+                <summary className="cursor-pointer text-xs font-semibold text-blue">From the journal · {focus.month.month}</summary>
+                <div className="mt-3"><MonthGoals month={focus.month} today={today} /></div>
+              </details>
+            ) : (
+              <MonthGoals month={focus.month} today={today} />
+            )}
             <Link href="/life/goals" className="inline-block text-xs font-semibold text-blue mt-4">All goals</Link>
           </Card>
 

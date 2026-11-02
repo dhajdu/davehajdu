@@ -13,11 +13,12 @@ export function RecoveryHeat({ days, today, weeks = 20 }: { days: DailyPoint[]; 
       weeks={weeks}
       label="Recovery by day"
       unit="%"
-      band={(v) => `is-${zone(v)}`}
+      band={(v) => (v >= 84 ? 'is-s4' : v >= 67 ? 'is-s3' : v >= 34 ? 'is-s2' : 'is-s1')}
       legend={[
-        { cls: 'is-green', label: '67% and up' },
-        { cls: 'is-yellow', label: '34 to 66%' },
-        { cls: 'is-red', label: 'under 34%' },
+        { cls: 'is-s1', label: 'under 34%' },
+        { cls: 'is-s2', label: '34 to 66%' },
+        { cls: 'is-s3', label: '67 to 83%' },
+        { cls: 'is-s4', label: '84% and up' },
       ]}
       summary={`${green} green · ${red} red of ${days.length} days`}
     />

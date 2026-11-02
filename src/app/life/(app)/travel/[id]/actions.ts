@@ -22,7 +22,7 @@ export async function updateTripTitle(formData: FormData) {
 
 export async function updateTripPurpose(formData: FormData) {
   const purpose = String(formData.get('purpose') ?? '');
-  if (!['business', 'personal', 'unknown'].includes(purpose)) return;
+  if (!['business', 'eo', 'personal', 'unknown'].includes(purpose)) return;
   await updateTrip(formData, { purpose });
 }
 
