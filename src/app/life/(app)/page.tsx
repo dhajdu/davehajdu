@@ -15,7 +15,7 @@ import type { Leg, Trip } from '@/components/life/travel/types';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
 import { getHealth, WEIGHT } from '@/lib/life/health';
 import { getLabs } from '@/lib/life/labs';
-import { currentPeriod, ictToday, periodLabel } from '@/lib/life/metrics';
+import { currentPeriod, ictToday, periodLabel, weekStart } from '@/lib/life/metrics';
 
 export const metadata: Metadata = { title: 'Today', robots: { index: false, follow: false } };
 
@@ -23,10 +23,11 @@ export default async function TodayPage() {
   const { supabase } = await requireOwner();
   const today = ictToday();
   const now = currentPeriod();
+  const week = weekStart(today);
 
   const [focus, goals, health, labs, draftRes, pendingRes, currentRes, currentLegsRes, upcomingRes] = await Promise.all([
     getFocus(supabase, today),
-    getLongGoals(supabase, now),
+    getLongGoals(supabase, now, week),
     getHealth(supabase, today, 30),
     getLabs(supabase),
     supabase.from('reviews').select('period').eq('status', 'draft').lte('period', now).order('period', { ascending: false }).limit(1),
@@ -43,6 +44,9 @@ export default async function TodayPage() {
 
   const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
   const monthGoals = goals.filter((g) => g.horizon === 'month' && g.period === now);
+  // The journal's ❸ block only speaks for the month it was written in.
+  const journalMonth = focus.month && focus.month.date.slice(0, 7) === now ? focus.month : null;
+  const monthName = periodLabel(now, 'long').split(' ')[0];
   const hba1c = labs.readings.find((r) => r.metric.slug === 'hba1c') ?? null;
   const hba1cTarget = goals.find((g) => g.metric?.slug === 'hba1c' && g.target_value !== null && g.status === 'open')?.target_value;
   const draft = draftRes.data?.[0]?.period as string | undefined;
@@ -56,7 +60,7 @@ export default async function TodayPage() {
       <PageHeader eyebrow={longDate} title="Today" subtitle={day ? `Day ${day} of the routine` : undefined} />
 
       <div className="space-y-5">
-        <FocusLadder focus={focus} goals={goals} today={today} />
+        <FocusLadder focus={focus} goals={goals} today={today} week={week} />
 
         <Card title="The foundation">
           <Foundation
@@ -76,7 +80,7 @@ export default async function TodayPage() {
         )}
 
         <div className="grid lg:grid-cols-5 gap-4">
-          <Card title={monthGoals.length ? `${periodLabel(now, 'long').split(' ')[0]} goals` : focus.month ? `${focus.month.month} goals` : 'This month'} className="lg:col-span-3">
+          <Card title={`${monthName} goals`} className="lg:col-span-3">
             {monthGoals.length > 0 && (
               <ul className="life-goals mb-4">
                 {monthGoals.map((g) => (
@@ -90,14 +94,16 @@ export default async function TodayPage() {
                 ))}
               </ul>
             )}
-            {monthGoals.length > 0 && focus.month ? (
+            {journalMonth && monthGoals.length > 0 ? (
               <details>
-                <summary className="cursor-pointer text-xs font-semibold text-blue">From the journal · {focus.month.month}</summary>
-                <div className="mt-3"><MonthGoals month={focus.month} today={today} /></div>
+                <summary className="cursor-pointer text-xs font-semibold text-blue">From the journal · {journalMonth.month}</summary>
+                <div className="mt-3"><MonthGoals month={journalMonth} today={today} /></div>
               </details>
-            ) : (
-              <MonthGoals month={focus.month} today={today} />
-            )}
+            ) : journalMonth ? (
+              <MonthGoals month={journalMonth} today={today} />
+            ) : monthGoals.length === 0 ? (
+              <p className="text-sm text-muted">No goals for {monthName} yet. The one thing goes on the ladder above; the rest on the goals page.</p>
+            ) : null}
             <Link href="/life/goals" className="inline-block text-xs font-semibold text-blue mt-4">All goals</Link>
           </Card>
 

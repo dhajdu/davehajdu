@@ -15,6 +15,18 @@ const SECTIONS: { label: string; items: Item[] }[] = [
   { label: 'Settings', items: [{ href: '/life/sources', label: 'Sources' }, { href: '/life/timeline', label: 'Timeline' }, { href: '/life/ask', label: 'Ask' }] },
 ];
 
+// The mark: the ladder, with the one thing at the top of it.
+function Mark() {
+  return (
+    <svg className="life-brand-mark" viewBox="0 0 32 32" width="32" height="32" aria-hidden>
+      <rect width="32" height="32" rx="9" fill="currentColor" />
+      <path d="M11.5 9.5v14M20.5 9.5v14" stroke="var(--life-navy)" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M11.5 15h9M11.5 20.5h9" stroke="var(--life-navy)" strokeWidth="2.2" strokeLinecap="round" opacity="0.4" />
+      <circle cx="16" cy="9.5" r="2.7" fill="var(--life-navy)" />
+    </svg>
+  );
+}
+
 // Exact matches for pages that have their own child routes in another group.
 const EXACT = new Set(['/life', '/life/health', '/life/eo']);
 
@@ -41,23 +53,21 @@ export default function Sidebar({ pending }: { pending: number }) {
       <div className={`life-scrim${open ? ' is-open' : ''}`} onClick={() => setOpenOn(null)} />
 
       <nav className={`life-sidebar${open ? ' is-open' : ''}`} aria-label="/life">
-        <Link href="/life" className="life-brand">
-          <span className="life-brand-mark">L</span>
-          <span>
-            <span className="life-brand-name block">/life</span>
-            <span className="life-brand-sub block">Dave Hajdu</span>
-          </span>
-        </Link>
-
-        <div className="life-nav">
-          <Link href="/life/inbox" className={`life-nav-link life-nav-inbox${is('/life/inbox') ? ' is-active' : ''}`}>
-            <span className="flex items-center gap-2">
-              <Inbox size={16} strokeWidth={2.2} aria-hidden />
-              Inbox
+        <div className="life-brand-row">
+          <Link href="/life" className="life-brand">
+            <Mark />
+            <span>
+              <span className="life-brand-name block">/life</span>
+              <span className="life-brand-sub block">Dave Hajdu</span>
             </span>
+          </Link>
+          <Link href="/life/inbox" className={`life-brand-inbox${is('/life/inbox') ? ' is-active' : ''}`} aria-label={pending > 0 ? `Inbox, ${pending} waiting` : 'Inbox'} title="Inbox">
+            <Inbox size={18} strokeWidth={2.2} aria-hidden />
             {pending > 0 && <span className="life-nav-count">{pending}</span>}
           </Link>
+        </div>
 
+        <div className="life-nav">
           {SECTIONS.map((section) => (
             <div className="life-nav-group" key={section.label}>
               <div className="life-nav-label">{section.label}</div>

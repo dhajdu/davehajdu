@@ -61,7 +61,7 @@ export async function getFocus(db: Db, today: string): Promise<Focus> {
 export type GoalRow = {
   id: string;
   title: string;
-  horizon: 'vision' | 'year' | 'month' | '30d' | '60d';
+  horizon: 'vision' | 'year' | 'month' | 'week' | '30d' | '60d';
   status: 'open' | 'hit' | 'missed' | 'dropped' | 'behind';
   due_on: string | null;
   target_value: number | string | null;
@@ -73,10 +73,14 @@ export type GoalRow = {
 
 const GOAL_SELECT = 'id, title, horizon, status, due_on, target_value, period, focus, area:areas(slug, name), metric:metrics(slug, name, unit)';
 
-// Vision and year goals, plus the month goals of `period` (the One Thing first).
-export async function getLongGoals(db: Db, period?: string): Promise<GoalRow[]> {
+// Vision and year goals, plus the month goals of `period` and the week goals
+// of `week` (its Monday), the One Thing first.
+export async function getLongGoals(db: Db, period?: string, week?: string): Promise<GoalRow[]> {
   let q = db.from('goals').select(GOAL_SELECT).neq('status', 'dropped').order('focus', { ascending: false }).order('created_at');
-  q = period ? q.or(`horizon.in.(vision,year),and(horizon.eq.month,period.eq.${period})`) : q.in('horizon', ['vision', 'year']);
+  const parts = ['horizon.in.(vision,year)'];
+  if (period) parts.push(`and(horizon.eq.month,period.eq.${period})`);
+  if (week) parts.push(`and(horizon.eq.week,period.eq.${week})`);
+  q = parts.length > 1 ? q.or(parts.join(',')) : q.in('horizon', ['vision', 'year']);
   const { data, error } = await q;
   if (error) throw new Error(error.message);
   return (data ?? []) as unknown as GoalRow[];
