@@ -144,8 +144,14 @@ function ItemRow({ item, muted }: { item: Item; muted?: boolean }) {
   );
 }
 
-export function Itinerary({ legs, muted }: { legs: Leg[]; muted?: boolean }) {
-  const items = buildItems(legs);
+// The local day keys an itinerary would show, in order.
+export function itineraryDays(legs: Leg[]): string[] {
+  return [...new Set(buildItems(legs).map((i) => i.day))];
+}
+
+// `days` narrows the view to the days it accepts (today only, the rest of the trip).
+export function Itinerary({ legs, muted, days: keep }: { legs: Leg[]; muted?: boolean; days?: (day: string) => boolean }) {
+  const items = buildItems(legs).filter((i) => !keep || keep(i.day));
   const days: { day: string; items: Item[] }[] = [];
   for (const item of items) {
     const last = days[days.length - 1];

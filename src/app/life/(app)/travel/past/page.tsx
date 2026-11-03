@@ -6,7 +6,7 @@ import { TripRow } from '@/components/life/travel/TripRow';
 import { AwayStrip, EarthLaps, Stamps, type AwayYear, type Stamp } from '@/components/life/travel/Passport';
 import { allTrips, fetchAll } from '@/components/life/travel/data';
 import { km } from '@/components/life/travel/geo';
-import { isHome, localDateKey, nightsOf, todayKey } from '@/components/life/travel/format';
+import { isCurrent, isHome, localDateKey, nightsOf, todayKey } from '@/components/life/travel/format';
 import type { Trip } from '@/components/life/travel/types';
 
 export const metadata: Metadata = { title: 'Travel', robots: { index: false, follow: false } };
@@ -110,7 +110,7 @@ export default async function TravelPastPage() {
   return (
     <div className="max-w-2xl">
       <PageHeader title="Travel" />
-      <TravelTabs active="past" />
+      <TravelTabs active="past" hasCurrent={trips.some((t) => isCurrent(t, today))} />
 
       <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {stats.map((s) => (

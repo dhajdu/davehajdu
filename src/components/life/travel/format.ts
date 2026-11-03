@@ -75,6 +75,11 @@ export function nightsOf(trip: Pick<Trip, 'start_on' | 'end_on'>, capAt?: string
   return Math.max(0, daysBetween(trip.start_on, end));
 }
 
+// Underway today: started, and not yet past its last day (a trip with no end lasts one day).
+export function isCurrent(trip: Pick<Trip, 'start_on' | 'end_on'>, today = todayKey()): boolean {
+  return trip.start_on <= today && (trip.end_on ?? trip.start_on) >= today;
+}
+
 export function nightsLabel(n: number): string {
   return `${n} ${n === 1 ? 'night' : 'nights'}`;
 }

@@ -9,6 +9,7 @@ import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { Foundation } from '@/components/life/health/Foundation';
 import { NextTripPass } from '@/components/life/travel/NextTripPass';
 import { Postcard } from '@/components/life/travel/Postcard';
+import { TodayOnTrip } from '@/components/life/travel/TodayOnTrip';
 import { LEG_SELECT, TRIP_SELECT } from '@/components/life/travel/data';
 import { passPropsFor } from '@/components/life/travel/pass';
 import { daysBetween } from '@/components/life/travel/format';
@@ -39,9 +40,9 @@ export default async function TodayPage() {
     supabase.from('trips').select(TRIP_SELECT).gt('start_on', today).order('start_on').limit(3),
   ]);
 
-  // The trip underway, if any, as the boarding pass in its on-the-road state.
+  // The trip underway, if any: the boarding pass in its on-the-road state, then today's bookings.
   const current = (currentRes.data?.[0] ?? null) as Trip | null;
-  const currentLegs = current ? ((currentLegsRes.data ?? []) as unknown as Leg[]).filter((l) => l.trip_id === current.id) : [];
+  const currentLegs = current ? ((currentLegsRes.data ?? []) as unknown as Leg[]).filter((l) => l.trip_id === current.id && l.status !== 'cancelled') : [];
 
   const weightTarget = goals.find((g) => g.metric?.slug === WEIGHT && g.target_value !== null && g.status === 'open')?.target_value;
   const monthGoals = goals.filter((g) => g.horizon === 'month' && g.period === now);
@@ -78,6 +79,10 @@ export default async function TodayPage() {
           <section aria-label="On the road">
             <h2 className="life-card-title">On the road</h2>
             <NextTripPass {...passPropsFor(current, currentLegs, today)} />
+            <div className="mt-4 space-y-3">
+              <TodayOnTrip trip={current} legs={currentLegs} today={today} />
+              <Link href="/life/travel" className="inline-block text-xs font-semibold text-blue">Rest of the trip →</Link>
+            </div>
           </section>
         )}
 
