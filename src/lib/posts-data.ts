@@ -10,10 +10,24 @@ export type Post = {
   tags: string[];
   featured?: boolean;
   image?: string;
+  ogImage?: string;
   dayNumber?: number;
 };
 
 export const POSTS: Post[] = [
+  {
+    slug: 'human-economics-3-0-the-ai-impact',
+    title: 'Human Economics 3.0: The AI Impact',
+    excerpt:
+      'My team sent me a token cost table for AIOlabz and called it the cost model. It is a great table. It is also one of five numbers that decide whether we have a scalable business. Why the numbers behind one learner decide what we can charge.',
+    date: 'Nov 3, 2026',
+    readTime: '8 min',
+    category: 'AI In Business',
+    tags: ['ai-in-business', 'high-performance-culture'],
+    featured: true,
+    image: '/images/unit-economics-hero.webp',
+    ogImage: '/images/unit-economics-og.jpg',
+  },
   {
     slug: 'i-rewrote-tripit-in-an-hour',
     title: 'Dear TripIt: I Rewrote You in an Hour on Holiday in Phnom Penh',
@@ -168,6 +182,59 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
+  'human-economics-3-0-the-ai-impact': [
+    { tag: 'p', text: 'Last week one of my engineers sent me a table in Lark.' },
+    { tag: 'p', text: 'Some context. We are a week away from a test cohort on <a href="https://aiolabz.com" target="_blank" rel="noopener noreferrer">AIOlabz.com</a>, our AI Officer certification platform. Each learner works through six missions with an AI coach, submits real artefacts, gets graded, and comes out the other end with the AIO credential. I had written in the thread: <em>doing this will tell us if we have a scalable product or not.</em> The reply came back with this.' },
+    { tag: 'table', text: '<table><thead><tr><th>AI Officer mission</th><th class="num">Learners finished</th><th class="num">Typical cost</th><th class="num">Chatty learner</th><th class="num">Messages</th></tr></thead><tbody><tr><td>A01</td><td class="num">39</td><td class="num">$2.55</td><td class="num">$3.30</td><td class="num">52</td></tr><tr><td>A02</td><td class="num">28</td><td class="num">$2.09</td><td class="num">$2.28</td><td class="num">43</td></tr><tr><td>A03</td><td class="num">18</td><td class="num">$1.89</td><td class="num">$2.04</td><td class="num">40</td></tr><tr><td>A04</td><td class="num">8</td><td class="num">$1.63</td><td class="num">$1.69</td><td class="num">34</td></tr><tr><td>A05</td><td class="num">6</td><td class="num">$2.15</td><td class="num">$2.20</td><td class="num">46</td></tr><tr><td>A06</td><td class="num">5</td><td class="num">$1.51</td><td class="num">$1.54</td><td class="num">31</td></tr><tr class="total"><td>All six</td><td></td><td class="num">$11.82</td><td class="num">$13.05</td><td></td></tr></tbody></table>' },
+    { tag: 'p', text: 'I liked this table a lot. The engineer did the work. Real token usage per mission, a typical learner split out from a chatty one, infrastructure cost folded in, and the bill already cut the week before with prompt caching. All six missions, start to credential, cost us <strong>$11.82 in AI</strong>. Even if the model upgrade doubles it, it is cheap.' },
+    { tag: 'p', text: 'And then the message said: <em>then I can have the cost model ready.</em>' },
+    { tag: 'p', text: 'That is the moment I realised we were using the same words for different things. This table is the cost of goods. It is one input to unit economics. It is not the unit economics. So this post is half for my team and half for every founder running an AI workload who has been handed a token bill and told it is a business model.' },
+    { tag: 'h2', text: 'What unit economics actually means' },
+    { tag: 'p', text: 'Pick a unit. For a SaaS business it is one paying customer. For AIOlabz it is one paying learner. Unit economics is the answer to one question: <strong>over the whole time that learner is with us, do we make more from them than it costs to get them and serve them?</strong>' },
+    { tag: 'p', text: 'That question has five numbers in it, and the token table gives us one of them.' },
+    { tag: 'li', text: '<strong>Price.</strong> What one learner pays us per month. Today that is anywhere from $25 to $99 a seat, depending on the size of the company and whether they also have a consulting contract with us. Hold that range in your head, because it is the reason this post exists.' },
+    { tag: 'li', text: '<strong>Cost to serve.</strong> What it costs us to deliver each month: tokens, infrastructure, payment fees, and any human time for grading, support and coaching. This is where the token table lives.' },
+    { tag: 'li', text: '<strong>Gross margin.</strong> Price minus cost to serve, usually shown as a percentage. Software businesses live at 70 to 85 percent. Services businesses live at 30 to 50.' },
+    { tag: 'li', text: '<strong>Customer acquisition cost, or CAC.</strong> Everything we spend on marketing and sales in a period, divided by the number of new paying learners it produced. Ads, events, my time on discovery calls, the salary of whoever runs the funnel.' },
+    { tag: 'li', text: '<strong>Lifetime.</strong> How many months the learner keeps paying before they leave, which is one divided by the monthly churn rate. Multiply lifetime by monthly gross profit and you have lifetime value, or LTV.' },
+    { tag: 'p', text: 'The person who taught a generation of founders to think this way is David Skok, a partner at Matrix and the author of the forEntrepreneurs blog. His <a href="https://www.forentrepreneurs.com/saas-metrics-2/" target="_blank" rel="noopener noreferrer">SaaS Metrics 2.0</a> post is still the best write-up I know. He gave us two rules of thumb every founder should be able to recite: <strong>LTV should be at least three times CAC</strong>, and <strong>you should recover CAC in under twelve months</strong>, with the best companies doing it in five to seven. He also gave us the image I use most. Growth without retention is filling a leaky bucket.' },
+    { tag: 'p', text: 'Skok called his post 2.0 because the first version was written for a world where cost to serve meant servers and support staff. I think of what we are doing at AIOlabz as the 3.0 version, and the unit is still a human. AI changed one of the five lines, cost to serve, and it changed it in a strange way: it made delivering a coached, graded, six-mission certification cost less than a lunch. Which means the human lines, whether people finish, whether they stay, what it costs to find them, now decide everything.' },
+    { tag: 'p', text: 'Notice that tokens appear in exactly one of the five. Notice also which of the five we do not have yet.' },
+    { tag: 'h2', text: 'Running our own numbers' },
+    { tag: 'p', text: 'Let me do the arithmetic with what we know and be honest about what we are guessing. Everything below is illustrative. The real model will replace the guesses after the test week.' },
+    { tag: 'p', text: 'Start with gross margin, because that is the part the token table nearly answers. Say a learner finishes all six missions in one month, which is the worst case for cost. Tokens and infrastructure: $11.82. Stripe takes 2.9 percent plus 30 cents. Human time for grading review and support: we have not measured it, so I will leave it at zero and come back to that. At the top of our range, a $99 seat, <strong>gross profit on the month is about $84, a gross margin around 85 percent.</strong> That is a software margin. Good news, and the engineer\'s instinct that the number is fine was right.' },
+    { tag: 'p', text: 'Now do the same sum at the bottom of our range, a $25 seat. Gross profit is about $12 and the margin is 49 percent. That is a services margin, not a software margin. Then stress it: suppose the model upgrade doubles the token bill to $24. The $99 seat drops to $72 of gross profit, annoying and survivable. <strong>The $25 seat drops to roughly zero.</strong> Same product, same tokens, and at one end of our price list we are fine while at the other end we are working for free. The engineer was right that the token bill is fine. He was right at $99.' },
+    { tag: 'p', text: 'Now the two numbers we have never measured. Suppose we spend $2,000 in a month on ads, an event and my time, and it brings in ten paying learners. CAC is $200. At $84 of monthly gross profit we recover that in 2.4 months. Skok would call that excellent.' },
+    { tag: 'p', text: 'Then churn. If one in ten learners cancels each month, the average learner stays ten months and a $99 seat is worth $840 to us. LTV to CAC is 4.2. We have a business. If one in four cancels each month, the average learner stays four months and is worth $336. LTV to CAC is 1.7. We do not have a business, and no amount of prompt caching will fix it.' },
+    { tag: 'p', text: 'Put the two stress tests side by side at $99. <strong>Doubling the token bill took 14 percent off lifetime value. Moving churn from one in ten to one in five took 50 percent off it.</strong> The number we have been optimising is the one that matters least, at the price where it matters least.' },
+    { tag: 'h2', text: 'The most important number was already in the table' },
+    { tag: 'p', text: 'Look at the second column again. 39 learners finished A01. 28 finished A02. 18 finished A03. By A06 it was 5.' },
+    { tag: 'p', text: 'Some of that is timing: learners who started recently have not reached the later missions yet. But some of it is the leaky bucket, and it was sitting in a column labelled "learners finished" in a table about token costs. If 39 people start and 5 earn the credential, the question is not whether a mission costs $2 or $3 in tokens. The question is where the other 34 went, and whether they are still paying while they are stuck.' },
+    { tag: 'p', text: 'That is what unit economics does for you. It tells you which column to stare at.' },
+    { tag: 'h2', text: 'What we are measuring in the test week' },
+    { tag: 'p', text: 'So here is what I asked the team for, and what I would ask any team shipping an AI product right now.' },
+    { tag: 'li', text: '<strong>Cost per learner, by mission.</strong> Keep the table. It is good. Add human minutes per learner for grading review and support, because the moment a person touches a learner, that becomes the biggest line.' },
+    { tag: 'li', text: '<strong>The completion funnel.</strong> How many learners who start A01 reach A06, and how long it takes them. This is our churn proxy until we have months of billing data.' },
+    { tag: 'li', text: '<strong>Week two return.</strong> Of the learners who log in during week one, how many come back in week two. The leak shows up here first.' },
+    { tag: 'li', text: '<strong>Where every learner came from.</strong> An ad, a referral, an event, a LinkedIn post of mine. If we cannot attribute them, we cannot compute CAC, and CAC is half the equation.' },
+    { tag: 'li', text: '<strong>Price actually paid, per seat.</strong> Not the list price. The real number after company size, consulting bundles and comps, so we can see margin by deal, not just on average.' },
+    { tag: 'p', text: 'With those five we can build the cost model the engineer promised, except now it will be a unit economics model: price, cost to serve, gross margin, CAC, LTV and payback, one row per learner. Then the question I asked in the thread, do we have a scalable product, gets a number instead of a feeling. It also lines up with <a href="/blog/tore-up-my-website">the four AI metrics I rebuilt my engagements around</a>: outcomes, not tools.' },
+    { tag: 'h2', text: 'Why this decides our pricing' },
+    { tag: 'p', text: 'Here is the part that matters most to me as the founder. We charge between $25 and $99 a seat. That spread did not come from a model. It came from deals: a big company negotiates, a consulting client gets seats bundled in, an individual pays list. Each of those was a reasonable call on the day. Together they are a pricing strategy we never actually designed.' },
+    { tag: 'p', text: 'Unit economics is how you design it. A $25 seat can work, but only under conditions the five numbers make explicit: the acquisition cost has to be close to zero, which is true when the seats ride on a consulting contract we already won, and the learners have to finish, because a stuck learner at $25 costs us the same tokens as a finished one at $99. A $99 seat can carry real marketing spend and some churn. A $25 seat cannot carry either.' },
+    { tag: 'p', text: 'So the pricing question is not whether $25 or $99 is the right number. It is which number each customer type earns, given what it costs to reach them and how long they stay. We cannot answer that with a token table. We can answer it with one row per learner that has all five numbers on it. That is what the test week is for.' },
+    { tag: 'h2', text: 'The point, for my team' },
+    { tag: 'p', text: 'The token bill is the first thing an engineer can see, so it is the first thing an engineer optimises. That is fine, and the caching work was real money saved. But cost to serve is the part of this business that was always going to be fine. AI tokens are cheap and getting cheaper. What decides whether AIOlabz works is whether people finish, whether they stay, what it costs to find them, and what each kind of customer pays. Those are product, marketing and pricing problems wearing a finance costume.' },
+    { tag: 'blockquote', text: 'If you can recite the five numbers and tell me which one you are moving this week, you understand unit economics. If you can only tell me the token cost, you understand the token cost.' },
+    { tag: 'p', text: 'Dave.' },
+    { tag: 'h2', text: 'Things people ask me about this' },
+    { tag: 'h3', text: 'What is the difference between cost per user and unit economics?' },
+    { tag: 'p', text: 'Cost per user is one input. Unit economics compares everything a customer pays over their lifetime with everything it costs to acquire and serve them: price, cost to serve, gross margin, customer acquisition cost and churn.' },
+    { tag: 'h3', text: 'What are good unit economics for a SaaS business?' },
+    { tag: 'p', text: 'David Skok\'s rules of thumb: lifetime value at least three times customer acquisition cost, and acquisition cost recovered within twelve months, ideally five to seven.' },
+    { tag: 'h3', text: 'How do you calculate unit economics for an AI product?' },
+    { tag: 'p', text: 'The same way as any subscription business, with one extra line. Tokens and model inference go into cost to serve alongside infrastructure, payment fees and human support time. Then measure churn and acquisition cost, which move the result far more than the token bill does.' },
+  ],
   'i-rewrote-tripit-in-an-hour': [
     { tag: 'p', text: 'Dear TripIt,' },
     { tag: 'p', text: 'We need to talk. I am writing this from a hotel balcony in Phnom Penh, on holiday, at an hour when nobody should be making decisions about their relationships. And yet here we are.' },
@@ -776,6 +843,11 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 // FAQ schema content keyed by slug. Used to render FAQPage JSON-LD on posts that have FAQ content.
 // Keep these aligned with the visible "Things people ask me about this" h3/p blocks above.
 export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
+  'human-economics-3-0-the-ai-impact': [
+    { q: 'What is the difference between cost per user and unit economics?', a: 'Cost per user is one input. Unit economics compares everything a customer pays over their lifetime with everything it costs to acquire and serve them: price, cost to serve, gross margin, customer acquisition cost and churn.' },
+    { q: 'What are good unit economics for a SaaS business?', a: 'David Skok\'s rules of thumb: lifetime value at least three times customer acquisition cost, and acquisition cost recovered within twelve months, ideally five to seven.' },
+    { q: 'How do you calculate unit economics for an AI product?', a: 'The same way as any subscription business, with one extra line. Tokens and model inference go into cost to serve alongside infrastructure, payment fees and human support time. Then measure churn and acquisition cost, which move the result far more than the token bill does.' },
+  ],
   'i-rewrote-tripit-in-an-hour': [
     { q: 'Can you really replace TripIt with your own app?', a: 'For personal use, yes. A travel tracker is a database of bookings plus something that reads your confirmation emails. With Claude doing the reading, the hard part is deciding what a trip is, not writing the code.' },
     { q: 'How does it get trips out of Gmail?', a: 'A small Google Apps Script runs inside the Gmail account every hour, finds booking confirmations, and sends them to the app. Claude extracts the flights and hotels, and anything uncertain goes to an inbox for approval instead of being guessed.' },

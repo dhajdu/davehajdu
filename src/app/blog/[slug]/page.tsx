@@ -31,7 +31,8 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = POSTS.find((p) => p.slug === slug);
   if (!post) return {};
-  const ogImage = post.image ? [post.image] : undefined;
+  const ogShare = post.ogImage ?? post.image;
+  const ogImage = ogShare ? [ogShare] : undefined;
   const seoTitleBase = SEO_TITLE_OVERRIDES[slug] || post.title;
   const description = META_DESCRIPTION_OVERRIDES[slug] || post.excerpt;
   return {
@@ -200,6 +201,14 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
                   </figcaption>
                 )}
               </figure>
+            );
+          case 'table':
+            return (
+              <div
+                key={i}
+                className="blog-table my-8 overflow-x-auto rounded-xl border border-[#EAEEF2]"
+                dangerouslySetInnerHTML={{ __html: block.text ?? '' }}
+              />
             );
           case 'p':
           default:
