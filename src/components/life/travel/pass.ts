@@ -4,19 +4,21 @@ import type { Leg, Place, Trip } from './types';
 
 const cityOf = (p: Place | null | undefined) => p?.city ?? p?.name ?? '';
 
-// Hours to be at the airport ahead of departure: a domestic hop needs less.
-export function airportLead(flight: Leg): number {
-  const a = flight.origin?.country?.trim().toLowerCase();
-  const b = flight.destination?.country?.trim().toLowerCase();
-  return a && b && a === b ? 2 : 3;
+// Dave is at the airport two hours before departure (priority lanes and
+// status mean no queues), and the ride there is allowed half an hour.
+const AT_AIRPORT_MS = 2 * 3_600_000;
+const TRANSIT_MS = 30 * 60_000;
+const QUARTER_MS = 15 * 60_000;
+
+// When to be at the airport, as an instant.
+export function arriveByFor(flight: Leg): number {
+  return Date.parse(flight.starts_at) - AT_AIRPORT_MS;
 }
 
-const HALF_HOUR = 30 * 60_000;
-
-// When to leave for the airport, as an instant: the lead time before
-// departure, settled on the nearest half hour (10:50 reads as 11:00).
+// When to leave for the airport: the ride before that, settled down to the
+// quarter hour so the time is never later than the rule (11:20 reads as 11:15).
 export function leaveByFor(flight: Leg): number {
-  return Math.round((Date.parse(flight.starts_at) - airportLead(flight) * 3_600_000) / HALF_HOUR) * HALF_HOUR;
+  return Math.floor((arriveByFor(flight) - TRANSIT_MS) / QUARTER_MS) * QUARTER_MS;
 }
 
 // The non-cancelled flight leaving on `today` (local to its origin), if any.
@@ -67,7 +69,7 @@ export function passPropsFor(trip: Trip, legs: Leg[], today: string): PassProps 
         : null,
     leaveBy:
       leaveMs != null && flight
-        ? { code: placeCode(flight.origin), time: localTime(new Date(leaveMs).toISOString(), flight.start_tz), hours: airportLead(flight) }
+        ? { code: placeCode(flight.origin), time: localTime(new Date(leaveMs).toISOString(), flight.start_tz), arrive: localTime(new Date(arriveByFor(flight)).toISOString(), flight.start_tz) }
         : null,
     destTz: flight?.end_tz ?? hotel?.start_tz ?? null,
     homeTz: HOME_TZ,

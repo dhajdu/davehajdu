@@ -21,7 +21,7 @@ export type PassProps = {
   nights: number | null;
   hotel: string | null;
   checkout: { time: string; hotel: string } | null;
-  leaveBy: { code: string; time: string; hours: number } | null;
+  leaveBy: { code: string; time: string; arrive: string } | null;
   destTz: string | null;
   homeTz: string;
   code: string | null;
@@ -174,7 +174,7 @@ export function NextTripPass(p: PassProps) {
               <dt>Leave for {p.leaveBy.code}</dt>
               <dd>
                 {p.leaveBy.time}
-                <small>{p.leaveBy.hours}h before the flight</small>
+                <small>at {p.leaveBy.code} by {p.leaveBy.arrive}</small>
               </dd>
             </div>
           ) : (
