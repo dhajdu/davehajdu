@@ -204,8 +204,11 @@ src/app/life/
                         and the pinned reference blocks. Notion-synced days show read-only
   eo/, eo/[id]/         EO updates: the forum updates with scores and presentations, apart
                         from the journal and the month-end review
-  goals/                Five-year vision, year goals and the month's One Thing and goals
-                        (goals table; month goals carry period + focus), track record (journal)
+  goals/                Goals, two tabs: the climb (hero), this week, the month, the year and the
+                        five-year vision, in health and business columns (goals table; month and
+                        week goals carry period + focus). goals/record: the track record, one
+                        card per past month (app goals, the journal's Historical block, the
+                        month-end grades; src/lib/life/record.ts)
   review/, review/[period]/  Month-end review in Dave's format (month_reviews): health graded
                         first, business, next month's moves. EO scores live under /life/eo
   health/               Fitness: Whoop recovery, sleep, strain, HRV, resting HR, weight
