@@ -63,6 +63,16 @@ export default async function TodayPage() {
 
       <div className="space-y-5">
         <FocusLadder focus={focus} goals={goals} today={today} week={week} />
+        {current && (
+          <section aria-label="On the road">
+            <h2 className="life-card-title">On the road</h2>
+            <NextTripPass {...passPropsFor(current, currentLegs, today)} />
+            <div className="mt-4 space-y-3">
+              <TodayOnTrip trip={current} legs={currentLegs} today={today} />
+              <Link href="/life/travel" className="inline-block text-xs font-semibold text-blue">Rest of the trip →</Link>
+            </div>
+          </section>
+        )}
         <VisionSection vision={focus.vision} until={Number(today.slice(0, 4)) + 5} />
 
         <Card title="The foundation">
@@ -74,17 +84,6 @@ export default async function TodayPage() {
             hba1cTarget={hba1cTarget === undefined || hba1cTarget === null ? null : Number(hba1cTarget)}
           />
         </Card>
-
-        {current && (
-          <section aria-label="On the road">
-            <h2 className="life-card-title">On the road</h2>
-            <NextTripPass {...passPropsFor(current, currentLegs, today)} />
-            <div className="mt-4 space-y-3">
-              <TodayOnTrip trip={current} legs={currentLegs} today={today} />
-              <Link href="/life/travel" className="inline-block text-xs font-semibold text-blue">Rest of the trip →</Link>
-            </div>
-          </section>
-        )}
 
         <div className="grid lg:grid-cols-5 gap-4">
           <Card title={`${monthName} goals`} className="lg:col-span-3">
