@@ -302,33 +302,33 @@
 
 .life-ladder { background: var(--life-navy); color: #fff; border-radius: 18px; box-shadow: var(--life-shadow-md); padding: 20px 24px 16px; }
 .life-ladder-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; margin-bottom: 10px; }
-.life-ladder-title { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--life-mint); }
-.life-ladder-q { font-size: 13px; color: var(--life-sidebar-ink); }
+.life-ladder-title { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--life-mint); }
+.life-ladder-q { font-size: 14px; color: var(--life-sidebar-ink); }
 .life-rungs { position: relative; }
 .life-rungs::before { content: ""; position: absolute; left: 10px; top: 18px; bottom: 18px; width: 2px; background: rgba(255, 255, 255, 0.14); }
-.life-rung { display: grid; grid-template-columns: 22px 96px minmax(0, 1fr); gap: 0 14px; align-items: start; padding: 11px 0; border-top: 1px dashed rgba(255, 255, 255, 0.12); }
+.life-rung { display: grid; grid-template-columns: 22px 110px minmax(0, 1fr); gap: 0 16px; align-items: start; padding: 14px 0; border-top: 1px dashed rgba(255, 255, 255, 0.12); }
 .life-rung:first-child { border-top: 0; }
 .life-rung-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.35); margin: 7px auto 0; position: relative; }
 .life-rung.is-now .life-rung-dot { background: var(--life-mint); box-shadow: 0 0 0 4px rgba(111, 242, 193, 0.22); }
-.life-rung-label { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.62); padding-top: 5px; }
-.life-rung-label small { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; color: rgba(255, 255, 255, 0.42); margin-top: 2px; }
+.life-rung-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.62); padding-top: 5px; }
+.life-rung-label small { display: block; font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; color: rgba(255, 255, 255, 0.42); margin-top: 2px; }
 .life-rung-body { min-width: 0; display: grid; gap: 6px; }
-.life-rung-text { font-size: 15px; font-weight: 600; line-height: 1.35; color: #fff; overflow-wrap: anywhere; }
+.life-rung-text { font-size: 17px; font-weight: 600; line-height: 1.35; color: #fff; overflow-wrap: anywhere; }
 .life-rung.is-now .life-rung-text { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; }
-.life-rung-item { display: flex; gap: 9px; align-items: flex-start; font-size: 14px; line-height: 1.4; color: var(--life-sidebar-ink); overflow-wrap: anywhere; }
-.life-rung-item .life-mark { margin-top: 1px; border-color: rgba(255, 255, 255, 0.3); }
+.life-rung-item { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; line-height: 1.4; color: var(--life-sidebar-ink); overflow-wrap: anywhere; }
+.life-rung-item .life-mark { margin-top: 2px; border-color: rgba(255, 255, 255, 0.3); }
 .life-rung-item.is-hit { color: #fff; }
-.life-rung-empty { font-size: 13px; color: rgba(255, 255, 255, 0.5); }
+.life-rung-empty { font-size: 14px; color: rgba(255, 255, 255, 0.5); }
 .life-rung-form { display: flex; gap: 8px; align-items: center; min-width: 0; }
-.life-main .life-rung-form input { flex: 1; min-width: 0; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; color: #fff; box-shadow: none; }
-.life-main .life-rung.is-now .life-rung-form input { font-size: 18px; font-weight: 700; padding: 10px 14px; }
+.life-main .life-rung-form input { flex: 1; min-width: 0; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 9px 12px; font: inherit; font-size: 15px; color: #fff; box-shadow: none; }
+.life-main .life-rung.is-now .life-rung-form input { font-size: 20px; font-weight: 700; padding: 10px 14px; }
 .life-main .life-rung-form input::placeholder { color: rgba(255, 255, 255, 0.42); font-weight: 500; }
 .life-main .life-rung-form input:focus { outline: none; border-color: var(--life-mint); box-shadow: 0 0 0 3px rgba(111, 242, 193, 0.22); }
-.life-rung-form button { flex: none; background: var(--life-mint); color: var(--life-navy); border: 0; border-radius: 8px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.life-rung-form button { flex: none; background: var(--life-mint); color: var(--life-navy); border: 0; border-radius: 8px; padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
 .life-rung-form button:disabled { opacity: 0.6; cursor: default; }
 .life-btn.is-saved, .life-rung-form button.is-saved { background: var(--life-ok-ink); border-color: var(--life-ok-ink); color: #fff; }
-.life-main .life-rung-input { width: 100%; min-width: 0; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--life-mint); border-radius: 8px; padding: 4px 10px; font: inherit; font-size: 14px; line-height: 1.4; color: #fff; box-shadow: 0 0 0 3px rgba(111, 242, 193, 0.22); }
-.life-main .life-rung-input.is-big { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; padding: 6px 12px; }
+.life-main .life-rung-input { width: 100%; min-width: 0; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--life-mint); border-radius: 8px; padding: 4px 10px; font: inherit; font-size: 16px; line-height: 1.4; color: #fff; box-shadow: 0 0 0 3px rgba(111, 242, 193, 0.22); }
+.life-main .life-rung-input.is-big { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; padding: 6px 12px; }
 .life-rung-thing { background: none; border: 0; padding: 0; text-align: left; cursor: text; font: inherit; }
 .life-rung-thing:hover { text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.3); text-underline-offset: 4px; }
 .life-rung-goal { position: relative; flex-wrap: wrap; }
@@ -336,42 +336,57 @@
 .life-rung-goal-text:hover { text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.3); text-underline-offset: 3px; }
 .life-rung-goal-actions { display: none; align-items: center; gap: 4px; flex: 0 0 100%; padding-left: 27px; margin-top: 2px; }
 .life-rung-goal:hover .life-rung-goal-actions, .life-rung-goal:focus-within .life-rung-goal-actions { display: inline-flex; }
-.life-rung-goal-actions button { font: inherit; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.22); background: none; color: rgba(255, 255, 255, 0.62); cursor: pointer; white-space: nowrap; }
+.life-rung-goal-actions button { font: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.22); background: none; color: rgba(255, 255, 255, 0.62); cursor: pointer; white-space: nowrap; }
 .life-rung-goal-actions button:hover { border-color: var(--life-mint); color: #fff; }
 .life-rung-goal-actions button.is-hit:hover { background: var(--life-mint); color: var(--life-navy); }
 .life-rung-goal-actions .life-rung-goal-x { width: 20px; height: 20px; padding: 0; border-radius: 50%; border: 0; font-size: 16px; line-height: 1; display: grid; place-items: center; }
 .life-rung-goal-actions .life-rung-goal-x:hover { background: var(--life-magenta); color: #fff; }
 .life-rung-goal.is-pending, .life-rung-thing.is-pending { opacity: 0.5; }
 @media (hover: none) { .life-rung-goal-actions { display: inline-flex; } }
-.life-vision-prose { display: grid; gap: 12px; }
-.life-vision-statement { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.2; color: #fff; margin: 0; }
-.life-values { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.life-values li { font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.82); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 999px; padding: 4px 11px; }
-.life-vision-picture { display: grid; gap: 8px; max-width: 72ch; }
-.life-ladder .life-md { color: var(--life-sidebar-ink); font-size: 14px; line-height: 1.55; gap: 10px; }
-.life-ladder .life-md b { color: #fff; }
-.life-ladder .life-md i { color: var(--life-mint); font-style: italic; }
-.life-ladder .life-md h4 { color: #fff; }
-.life-vision-edit, .life-vision-cancel { justify-self: start; background: none; border: 0; padding: 0; font: inherit; font-size: 12px; font-weight: 600; color: var(--life-mint); cursor: pointer; }
+.life-vision-block { background: var(--life-navy); color: #fff; border-radius: 18px; box-shadow: var(--life-shadow-md); padding: 22px 28px 24px; display: grid; gap: 18px; }
+.life-vision-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 20px 44px; align-items: start; }
+.life-vision-prose { display: grid; gap: 14px; max-width: 64ch; }
+.life-vision-statement { font-size: 32px; font-weight: 800; letter-spacing: -0.6px; line-height: 1.1; color: #fff; margin: 0; }
+.life-vision-block .life-md { color: var(--life-sidebar-ink); font-size: 17px; line-height: 1.65; gap: 12px; }
+.life-vision-block .life-md b { color: #fff; }
+.life-vision-block .life-md i { color: var(--life-mint); font-style: italic; }
+.life-vision-block .life-md h4 { color: #fff; font-size: 15px; }
+.life-vision-more > summary { cursor: pointer; list-style: none; display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--life-mint); }
+.life-vision-more > summary::-webkit-details-marker { display: none; }
+.life-vision-more > summary::after { content: " \25BE"; }
+.life-vision-more[open] > summary::after { content: " \25B4"; }
+.life-vision-more[open] > summary { margin-bottom: 12px; }
+.life-values-col { border-left: 2px solid rgba(111, 242, 193, 0.35); padding-left: 22px; display: grid; gap: 10px; align-content: start; }
+.life-values { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: value; }
+.life-values li { counter-increment: value; display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.12); font-size: 19px; font-weight: 800; letter-spacing: -0.2px; line-height: 1.2; color: #fff; }
+.life-values li:last-child { border-bottom: 0; }
+.life-values li::before { content: counter(value, decimal-leading-zero); font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--life-mint); }
+.life-values li:nth-child(even)::before { color: var(--life-magenta); }
+@media (max-width: 760px) {
+  .life-vision-block { padding: 18px 16px 20px; }
+  .life-vision-grid { grid-template-columns: minmax(0, 1fr); }
+  .life-vision-statement { font-size: 26px; }
+  .life-values-col { border-left: 0; padding-left: 0; }
+}
+.life-vision-edit, .life-vision-cancel { justify-self: start; background: none; border: 0; padding: 0; font: inherit; font-size: 13px; font-weight: 600; color: var(--life-mint); cursor: pointer; }
 .life-vision-edit:hover, .life-vision-cancel:hover { text-decoration: underline; }
 .life-vision-form { display: grid; gap: 10px; max-width: 72ch; }
 .life-vision-form label { display: grid; gap: 4px; }
-.life-vision-form label > span { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
+.life-vision-form label > span { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
 .life-main .life-vision-form input, .life-main .life-vision-form textarea { width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; line-height: 1.5; color: #fff; box-shadow: none; resize: vertical; }
 .life-main .life-vision-form input::placeholder, .life-main .life-vision-form textarea::placeholder { color: rgba(255, 255, 255, 0.42); }
 .life-main .life-vision-form input:focus, .life-main .life-vision-form textarea:focus { outline: none; border-color: var(--life-mint); box-shadow: 0 0 0 3px rgba(111, 242, 193, 0.22); }
 .life-vision-form-foot { display: flex; align-items: center; gap: 14px; }
-.life-vision-form-foot button[type="submit"] { background: var(--life-mint); color: var(--life-navy); border: 0; border-radius: 8px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.life-vision-form-foot button[type="submit"] { background: var(--life-mint); color: var(--life-navy); border: 0; border-radius: 8px; padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
 .life-vision-form-foot button[type="submit"].is-saved { background: var(--life-ok-ink); color: #fff; }
 .life-rung-tracks { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px 24px; }
 .life-track { min-width: 0; display: grid; gap: 6px; align-content: start; }
-.life-track-head { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
+.life-track-head { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
 .life-track.is-health .life-track-head { color: var(--life-mint); }
-.life-rung.is-now .life-rung-text { font-size: 22px; }
 .life-rung-body > .life-rung-empty { margin-top: 2px; }
 @media (max-width: 760px) {
   .life-rung-tracks { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-  .life-rung.is-now .life-rung-text { font-size: 20px; }
+  .life-rung.is-now .life-rung-text { font-size: 22px; }
 }
 .life-ladder a { color: var(--life-mint); font-weight: 600; text-decoration: none; }
 .life-main .life-ladder a { color: var(--life-mint); }
@@ -381,8 +396,7 @@
   .life-rung { grid-template-columns: 22px minmax(0, 1fr); gap: 2px 12px; }
   .life-rung-label { grid-column: 2; padding-top: 2px; }
   .life-rung-body { grid-column: 2; }
-  .life-rung.is-now .life-rung-text { font-size: 22px; }
-}
+  }
 
 .life-goals { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .life-goal { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.4; color: var(--life-ink); min-width: 0; }
