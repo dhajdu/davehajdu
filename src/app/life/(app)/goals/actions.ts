@@ -32,9 +32,10 @@ export async function addLongGoal(formData: FormData) {
   const areaId = str(formData, 'area_id');
   const horizon = str(formData, 'horizon');
   if (!title || !areaId) throw new Error('A goal needs a title and an area');
-  if (horizon !== 'vision' && horizon !== 'year' && horizon !== 'month') throw new Error('Horizon must be vision, year or month');
+  if (horizon !== 'vision' && horizon !== 'year' && horizon !== 'month' && horizon !== 'week') throw new Error('Horizon must be vision, year, month or week');
   const period = str(formData, 'period');
   if (horizon === 'month' && !/^\d{4}-\d{2}$/.test(period ?? '')) throw new Error('A month goal needs its month');
+  if (horizon === 'week' && !/^\d{4}-\d{2}-\d{2}$/.test(period ?? '')) throw new Error('A week goal needs its Monday');
   const focus = str(formData, 'focus') === '1';
   const track = trackOf(formData);
 
@@ -56,8 +57,8 @@ export async function addLongGoal(formData: FormData) {
     track,
     metric_id: metricId,
     target_value: target,
-    due_on: horizon === 'year' ? `${year}-12-31` : horizon === 'month' ? monthEnd(period!) : `${year + 5}-12-31`,
-    period: horizon === 'month' ? period : null,
+    due_on: horizon === 'year' ? `${year}-12-31` : horizon === 'month' ? monthEnd(period!) : horizon === 'week' ? addDays(period!, 6) : `${year + 5}-12-31`,
+    period: horizon === 'month' || horizon === 'week' ? period : null,
     focus: horizon === 'month' && focus,
     status: 'open',
   });

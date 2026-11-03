@@ -87,6 +87,20 @@ export type GoalRow = {
 
 const GOAL_SELECT = 'id, title, horizon, status, due_on, target_value, period, focus, track, area:areas(slug, name), metric:metrics(slug, name, unit)';
 
+// Every month and week goal before `period`, newest first, for the track record.
+export async function getPastGoals(db: Db, period: string): Promise<GoalRow[]> {
+  const { data, error } = await db
+    .from('goals')
+    .select(GOAL_SELECT)
+    .in('horizon', ['month', 'week'])
+    .lt('period', period)
+    .order('period', { ascending: false })
+    .order('focus', { ascending: false })
+    .order('created_at');
+  if (error) throw new Error(error.message);
+  return (data ?? []) as unknown as GoalRow[];
+}
+
 // Vision and year goals, plus the month goals of `period` and the week goals
 // of `week` (its Monday), the One Thing first.
 export async function getLongGoals(db: Db, period?: string, week?: string): Promise<GoalRow[]> {
