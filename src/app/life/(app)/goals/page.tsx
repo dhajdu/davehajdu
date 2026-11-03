@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
 import { FocusLadder } from '@/components/life/focus/FocusLadder';
+import { VisionSection } from '@/components/life/focus/VisionSection';
 import { MonthGoals } from '@/components/life/focus/MonthGoals';
 import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { VisionCard } from '@/components/life/focus/VisionCard';
@@ -105,6 +106,9 @@ export default async function GoalsPage() {
       <PageHeader title="Goals" subtitle="Am I living the life I intend to live? The ladder runs from today to five years out." />
 
       <FocusLadder focus={focus} goals={goals} today={today} week={week} />
+      <div className="mt-5">
+        <VisionSection vision={focus.vision} until={Number(year) + 5} />
+      </div>
 
       <section className="life-section">
         <div className="life-section-head">

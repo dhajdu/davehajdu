@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, PageHeader } from '@/components/life/ui';
 import { FocusLadder } from '@/components/life/focus/FocusLadder';
+import { VisionSection } from '@/components/life/focus/VisionSection';
 import { MonthGoals } from '@/components/life/focus/MonthGoals';
 import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { Foundation } from '@/components/life/health/Foundation';
@@ -61,6 +62,7 @@ export default async function TodayPage() {
 
       <div className="space-y-5">
         <FocusLadder focus={focus} goals={goals} today={today} week={week} />
+        <VisionSection vision={focus.vision} until={Number(today.slice(0, 4)) + 5} />
 
         <Card title="The foundation">
           <Foundation
