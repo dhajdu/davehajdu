@@ -3,17 +3,19 @@ import { clean, statusOf, type Status } from '@/lib/life/focus-parse';
 import { StatusMark } from './focus/StatusMark';
 
 // Just enough markdown for journal blocks: ### headings, - and 1. lists,
-// - [ ] checkboxes, **bold**, [links](url). No raw HTML.
+// - [ ] checkboxes, ***bold italic***, **bold**, *italic*, [links](url). No raw HTML.
 function inline(text: string): React.ReactNode[] {
   const out: React.ReactNode[] = [];
-  const re = /\*\*(.+?)\*\*|\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+  const re = /\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*([^*\s](?:[^*]*?[^*\s])?)\*|\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
   let last = 0;
   let m: RegExpExecArray | null;
   let k = 0;
   while ((m = re.exec(text))) {
     if (m.index > last) out.push(text.slice(last, m.index));
-    if (m[1] !== undefined) out.push(<b key={k++}>{m[1]}</b>);
-    else out.push(<a key={k++} href={m[3]} target="_blank" rel="noreferrer">{m[2]}</a>);
+    if (m[1] !== undefined) out.push(<b key={k++}><i>{m[1]}</i></b>);
+    else if (m[2] !== undefined) out.push(<b key={k++}>{m[2]}</b>);
+    else if (m[3] !== undefined) out.push(<i key={k++}>{m[3]}</i>);
+    else out.push(<a key={k++} href={m[5]} target="_blank" rel="noreferrer">{m[4]}</a>);
     last = m.index + m[0].length;
   }
   if (last < text.length) out.push(text.slice(last));

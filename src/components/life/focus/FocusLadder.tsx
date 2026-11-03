@@ -7,6 +7,7 @@ import { setFocusGoal } from '@/app/life/(app)/goals/actions';
 import { StatusMark } from './StatusMark';
 import { LadderGoal } from './LadderGoal';
 import { LadderThing } from './LadderThing';
+import { LadderVision } from './LadderVision';
 
 // The question the app answers, as one ladder with two tracks: health (the
 // foundation) and business. Today, this week, this month, this year, five
@@ -182,18 +183,10 @@ export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals
             <small>by {Number(year) + 5}</small>
           </span>
           <div className="life-rung-body">
-            <Tracks>
-              {(track) => {
-                const rows = of('vision', track);
-                return rows.length ? (
-                  <GoalLines rows={rows} />
-                ) : (
-                  <p className="life-rung-empty">
-                    Nothing {noun(track)} yet. <Link href="/life/goals">Write it</Link>
-                  </p>
-                );
-              }}
-            </Tracks>
+            <LadderVision vision={focus.vision} />
+            <p className="life-rung-empty">
+              The vision as goals, one card each: <Link href="/life/goals">the goals page</Link>
+            </p>
           </div>
         </div>
       </div>

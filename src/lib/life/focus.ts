@@ -1,5 +1,6 @@
 import 'server-only';
 import type { Db } from './metrics';
+import { VISION_TITLE, visionFields, type VisionFields } from './vision';
 import {
   parseDoing,
   parseHistory,
@@ -18,15 +19,17 @@ export type Focus = {
   month: (MonthBlock & { date: string }) | null;
   doing: { items: string[]; date: string } | null;
   history: HistorySection[];
+  vision: (VisionFields & { date: string }) | null; // the statement, the values and the picture, as written in the app
 };
 
 type Row = { entry_date: string; title: string | null; body_md: string };
 
 export async function getFocus(db: Db, today: string): Promise<Focus> {
-  const [recentRes, monthRes, histRes] = await Promise.all([
+  const [recentRes, monthRes, histRes, visionRes] = await Promise.all([
     db.from('entries').select('entry_date, title, body_md').eq('kind', 'journal').lte('entry_date', today).order('entry_date', { ascending: false }).limit(10),
     db.from('entries').select('entry_date, title, body_md').eq('kind', 'journal').lte('entry_date', today).like('body_md', '%❸%').order('entry_date', { ascending: false }).limit(1),
     db.from('entries').select('entry_date, title, body_md').eq('kind', 'reference').ilike('title', 'historical').order('entry_date', { ascending: false }).limit(1),
+    db.from('entries').select('entry_date, fields').eq('kind', 'reference').eq('title', VISION_TITLE).not('fields', 'is', null).order('entry_date', { ascending: false }).limit(1),
   ]);
   if (recentRes.error) throw new Error(recentRes.error.message);
 
@@ -54,7 +57,10 @@ export async function getFocus(db: Db, today: string): Promise<Focus> {
   const histRow = (histRes.data?.[0] ?? null) as Row | null;
   const history = histRow ? parseHistory(histRow.body_md).filter((s) => s.lines.length > 0) : [];
 
-  return { oneThing, latest, month, doing, history };
+  const visionRow = (visionRes.data?.[0] ?? null) as { entry_date: string; fields: Partial<VisionFields> } | null;
+  const vision = visionRow ? { ...visionFields(visionRow.fields), date: visionRow.entry_date } : null;
+
+  return { oneThing, latest, month, doing, history, vision };
 }
 
 // The two tracks of the ladder. Health first: it is the foundation.
