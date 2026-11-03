@@ -6,15 +6,19 @@ import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 
 // What stays in view while writing: the vision, the year, the month and the
 // week from Goals, plus the reference blocks the Notion template carried.
-export function JournalRail({ focus, goals, refs, today }: { focus: Focus; goals: GoalRow[]; refs: Reference[]; today: string }) {
+export function JournalRail({ focus, goals, refs, today, week: weekKey }: { focus: Focus; goals: GoalRow[]; refs: Reference[]; today: string; week: string }) {
   const vision = goals.filter((g) => g.horizon === 'vision');
   const year = goals.filter((g) => g.horizon === 'year');
-  const weekNo = Math.min(5, Math.ceil(Number(today.slice(8, 10)) / 7));
-  const weeks = focus.month?.weeks ?? [];
-  const week = weeks.find((w) => w.week === weekNo) ?? weeks[weeks.length - 1];
-  const monthGoals = focus.month?.goals.length ? focus.month.goals : (focus.month?.moves ?? []);
-  const appMonth = goals.filter((g) => g.horizon === 'month' && g.period === today.slice(0, 7));
   const monthName = new Date(`${today.slice(0, 7)}-01T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
+  // The journal's ❸ block only speaks for the month it names.
+  const journalMonth = focus.month && focus.month.month.trim().toLowerCase() === monthName.toLowerCase() ? focus.month : null;
+  const weekNo = Math.min(5, Math.ceil(Number(today.slice(8, 10)) / 7));
+  const weeks = journalMonth?.weeks ?? [];
+  const week = weeks.find((w) => w.week === weekNo) ?? weeks[weeks.length - 1];
+  const monthGoals = journalMonth ? (journalMonth.goals.length ? journalMonth.goals : journalMonth.moves) : [];
+  const appMonth = goals.filter((g) => g.horizon === 'month' && g.period === today.slice(0, 7));
+  const appWeek = goals.filter((g) => g.horizon === 'week' && g.period === weekKey);
+  const trackWord = (g: GoalRow) => (g.track === 'health' ? 'Health' : 'Business');
 
   return (
     <aside className="life-rail" aria-label="Keep in mind">
@@ -51,13 +55,25 @@ export function JournalRail({ focus, goals, refs, today }: { focus: Focus; goals
       </details>
 
       <details open>
-        <summary>{appMonth.length ? monthName : (focus.month?.month ?? 'This month')}</summary>
-        {appMonth.length || monthGoals.length || week ? (
+        <summary>{monthName}</summary>
+        {appMonth.length || appWeek.length || monthGoals.length || week ? (
           <ul className="life-goals">
             {appMonth.map((g) => (
               <li key={g.id} className={`life-goal is-${goalStatus(g.status)}${g.focus ? ' is-now' : ''}`}>
                 <StatusMark status={goalStatus(g.status)} />
-                <span className="life-goal-text">{g.title}</span>
+                <span className="life-goal-text">
+                  <span className="text-muted">{trackWord(g)} · </span>
+                  {g.title}
+                </span>
+              </li>
+            ))}
+            {appWeek.map((g) => (
+              <li key={g.id} className={`life-goal is-${goalStatus(g.status)} is-now`}>
+                <StatusMark status={goalStatus(g.status)} />
+                <span className="life-goal-text">
+                  <span className="text-muted">This week, {trackWord(g).toLowerCase()} · </span>
+                  {g.title}
+                </span>
               </li>
             ))}
             {!appMonth.length && monthGoals.map((g, i) => (
@@ -77,7 +93,7 @@ export function JournalRail({ focus, goals, refs, today }: { focus: Focus; goals
             )}
           </ul>
         ) : (
-          <p className="text-sm text-muted">No month goals in the journal yet.</p>
+          <p className="text-sm text-muted">Nothing set for {monthName} yet. <Link href="/life" className="text-blue font-semibold">Set it on Today</Link></p>
         )}
       </details>
 

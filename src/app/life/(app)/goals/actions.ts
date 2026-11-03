@@ -18,6 +18,12 @@ function refresh() {
   revalidatePath('/life');
 }
 
+function trackOf(fd: FormData): 'health' | 'business' {
+  const t = str(fd, 'track') ?? 'business';
+  if (t !== 'health' && t !== 'business') throw new Error('Track must be health or business');
+  return t;
+}
+
 // Five-year vision and this year's goals. Month and week goals stay in the journal.
 export async function addLongGoal(formData: FormData) {
   const { supabase } = await requireOwner();
@@ -29,6 +35,7 @@ export async function addLongGoal(formData: FormData) {
   const period = str(formData, 'period');
   if (horizon === 'month' && !/^\d{4}-\d{2}$/.test(period ?? '')) throw new Error('A month goal needs its month');
   const focus = str(formData, 'focus') === '1';
+  const track = trackOf(formData);
 
   const metricId = str(formData, 'metric_id');
   const targetRaw = metricId ? str(formData, 'target_value') : null;
@@ -37,14 +44,15 @@ export async function addLongGoal(formData: FormData) {
 
   const year = new Date().getUTCFullYear();
   if (horizon === 'month' && focus) {
-    // One One Thing per month: the previous one becomes an ordinary goal.
-    const { error: e } = await supabase.from('goals').update({ focus: false }).eq('horizon', 'month').eq('period', period!).eq('focus', true);
+    // One One Thing per month and track: the previous one becomes an ordinary goal.
+    const { error: e } = await supabase.from('goals').update({ focus: false }).eq('horizon', 'month').eq('period', period!).eq('track', track).eq('focus', true);
     if (e) throw new Error(e.message);
   }
   const { error } = await supabase.from('goals').insert({
     area_id: areaId,
     title,
     horizon,
+    track,
     metric_id: metricId,
     target_value: target,
     due_on: horizon === 'year' ? `${year}-12-31` : horizon === 'month' ? monthEnd(period!) : `${year + 5}-12-31`,
@@ -56,22 +64,25 @@ export async function addLongGoal(formData: FormData) {
   refresh();
 }
 
-// The One Thing for this week or this month, typed straight into the ladder.
-// Replaces the period's previous One Thing (it stays as an ordinary goal).
+// The One Thing for this week or this month on one track, typed straight into
+// the ladder. Replaces that track's previous One Thing for the period (it
+// stays as an ordinary goal).
 export async function setFocusGoal(formData: FormData) {
   const { supabase } = await requireOwner();
   const title = str(formData, 'title');
   const horizon = str(formData, 'horizon');
   const period = str(formData, 'period');
+  const track = trackOf(formData);
   if (!title) return;
   if (horizon !== 'week' && horizon !== 'month') throw new Error('Horizon must be week or month');
   if (!period || !(horizon === 'month' ? /^\d{4}-\d{2}$/ : /^\d{4}-\d{2}-\d{2}$/).test(period)) throw new Error('Bad period');
 
-  const { error: e } = await supabase.from('goals').update({ focus: false }).eq('horizon', horizon).eq('period', period).eq('focus', true);
+  const { error: e } = await supabase.from('goals').update({ focus: false }).eq('horizon', horizon).eq('period', period).eq('track', track).eq('focus', true);
   if (e) throw new Error(e.message);
   const { error } = await supabase.from('goals').insert({
     title: title.slice(0, 200),
     horizon,
+    track,
     period,
     focus: true,
     due_on: horizon === 'month' ? monthEnd(period) : addDays(period, 6),

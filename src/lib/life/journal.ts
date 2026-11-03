@@ -6,7 +6,8 @@ import { parseRoutineDay } from './focus-parse';
 // three gratitudes, No Holds Barred, and the to-do list. The first three are
 // stored as `entries.fields` and rendered to body_md in the same shape as
 // the Notion template, so the ladder, search and Ask read one format.
-export type DayFields = { one_thing: string; gratitude: string[]; nhb: string };
+// one_thing is the business One Thing (the Notion template's "Today" line); one_thing_health the health one.
+export type DayFields = { one_thing: string; one_thing_health: string; gratitude: string[]; nhb: string };
 
 export type JournalEntry = {
   id: string;
@@ -30,20 +31,28 @@ export type Todo = {
 
 export type TodoNode = Todo & { children: Todo[] };
 
-export const EMPTY_FIELDS: DayFields = { one_thing: '', gratitude: ['', '', ''], nhb: '' };
+export const EMPTY_FIELDS: DayFields = { one_thing: '', one_thing_health: '', gratitude: ['', '', ''], nhb: '' };
+
+// Rows written before the health line exist without it.
+export function dayFields(stored: Partial<DayFields> | null | undefined): DayFields {
+  return { ...EMPTY_FIELDS, ...(stored ?? {}) };
+}
 
 export function renderDay(f: DayFields): string {
   const lines: string[] = ['### **Morning Gratitude **🙏🏽', ''];
   for (const g of f.gratitude.map((s) => s.trim()).filter(Boolean)) lines.push(`- ${g}`);
   lines.push('');
   if (f.nhb.trim()) lines.push('**General Journal: No Holds Barred**', '', f.nhb.trim(), '');
-  lines.push('#  ❶ **The One Thing**', '', `**Today**: ${f.one_thing.trim()}`, '');
+  lines.push('#  ❶ **The One Thing**', '', `**Today**: ${f.one_thing.trim()}`);
+  if (f.one_thing_health.trim()) lines.push(`**Health**: ${f.one_thing_health.trim()}`);
+  lines.push('');
   return lines.join('\n');
 }
 
 export function dayTitle(dayNo: number | null, f: DayFields): string {
   const head = dayNo ? `Day ${dayNo}` : 'Journal';
-  return f.one_thing.trim() ? `${head} - ${f.one_thing.trim()}` : head;
+  const thing = f.one_thing.trim() || f.one_thing_health.trim();
+  return thing ? `${head} - ${thing}` : head;
 }
 
 export function isDateKey(s: unknown): s is string {

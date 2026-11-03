@@ -8,10 +8,10 @@ import { SaveButton } from '@/components/life/SaveButton';
 import { TodoList } from '@/components/life/journal/TodoList';
 import { JournalRail } from '@/components/life/journal/JournalRail';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
-import { EMPTY_FIELDS, getDay, getDayNumber, getPinnedReferences, getTodos, isDateKey, nextDay, prevDay } from '@/lib/life/journal';
+import { EMPTY_FIELDS, dayFields, getDay, getDayNumber, getPinnedReferences, getTodos, isDateKey, nextDay, prevDay } from '@/lib/life/journal';
 import { fieldsFromMarkdown } from '@/lib/life/focus-parse';
 import { WEIGHT } from '@/lib/life/health';
-import { formatDate, ictToday } from '@/lib/life/metrics';
+import { formatDate, ictToday, weekStart } from '@/lib/life/metrics';
 import { saveDay } from './actions';
 
 export const metadata: Metadata = { title: 'Journal', robots: { index: false, follow: false } };
@@ -29,12 +29,12 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
     getTodos(supabase, date),
     supabase.from('measurements').select('value, metrics!inner(slug)').eq('metrics.slug', WEIGHT).eq('measured_on', date).maybeSingle(),
     getFocus(supabase, today),
-    getLongGoals(supabase, today.slice(0, 7)),
+    getLongGoals(supabase, today.slice(0, 7), weekStart(today)),
     getPinnedReferences(supabase),
   ]);
   const weight = (weightRes.data as { value: number | string } | null)?.value;
   const fromNotion = !!entry && !entry.fields;
-  const f = entry?.fields ?? (entry ? fieldsFromMarkdown(entry.body_md) : EMPTY_FIELDS);
+  const f = dayFields(entry?.fields ?? (entry ? fieldsFromMarkdown(entry.body_md) : EMPTY_FIELDS));
   const g = [f.gratitude[0] ?? '', f.gratitude[1] ?? '', f.gratitude[2] ?? ''];
   const long = new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
@@ -58,8 +58,17 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
         <form action={saveDay} className="life-journal">
             <input type="hidden" name="date" value={date} />
             <section className="life-card">
-              <label className="life-stat-k" htmlFor="one_thing">❶ The one thing today</label>
-              <input id="one_thing" name="one_thing" defaultValue={f.one_thing} maxLength={300} placeholder="The one thing that makes everything else easier" className="life-journal-one" autoComplete="off" />
+              <p className="life-stat-k">❶ The one thing today</p>
+              <div className="life-journal-things">
+                <label className="life-journal-thing is-health">
+                  <span>Health</span>
+                  <input name="one_thing_health" defaultValue={f.one_thing_health} maxLength={300} placeholder="The one thing for my health today" className="life-journal-one" autoComplete="off" />
+                </label>
+                <label className="life-journal-thing is-business">
+                  <span>Business</span>
+                  <input name="one_thing" defaultValue={f.one_thing} maxLength={300} placeholder="The one thing that makes everything else easier" className="life-journal-one" autoComplete="off" />
+                </label>
+              </div>
             </section>
 
             <section className="life-card">
@@ -106,7 +115,7 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
           <TodoList date={date} open={todos.open} done={todos.done} />
         </Card>
       </div>
-      <JournalRail focus={focus} goals={goals} refs={refs} today={today} />
+      <JournalRail focus={focus} goals={goals} refs={refs} today={today} week={weekStart(today)} />
       </div>
     </div>
   );

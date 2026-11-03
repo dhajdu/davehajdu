@@ -52,13 +52,24 @@ function marked(line: string): Marked {
   return { text: clean(line), status: statusOf(line) };
 }
 
-// "**Today**: Workout and Rentwest" under the One Thing heading, wherever it sits.
-export function parseOneThing(md: string): string | null {
+// The two One Things under the heading, wherever it sits: "**Today**: …" is
+// the business one (the Notion template's only line), "**Health**: …" the
+// health one written in the app.
+export type OneThings = { business: string | null; health: string | null };
+
+export function parseOneThings(md: string): OneThings {
   const m = md.match(/^#+\s*[❶❷❸]?\s*\**\s*The One Thing\s*\**\s*$([\s\S]*?)(?=^#\s|\s*$(?![\s\S]))/im);
-  if (!m) return null;
-  const today = m[1].match(/\*\*Today\*\*\s*:\s*(.+)/i);
-  const text = today ? clean(today[1]) : null;
-  return text && text.length > 0 ? text : null;
+  if (!m) return { business: null, health: null };
+  const pick = (label: string) => {
+    const hit = m[1].match(new RegExp(`\\*\\*${label}\\*\\*\\s*:\\s*(.+)`, 'i'));
+    const text = hit ? clean(hit[1]) : null;
+    return text && text.length > 0 ? text : null;
+  };
+  return { business: pick('Today'), health: pick('Health') };
+}
+
+export function parseOneThing(md: string): string | null {
+  return parseOneThings(md).business;
 }
 
 // "Day 231 - Cambodia Holiday" → 231
@@ -257,7 +268,7 @@ export function todoKey(title: string): string {
 
 
 // The three written fields of a Notion-synced day, for prefilling the journal form.
-export function fieldsFromMarkdown(md: string): { one_thing: string; gratitude: string[]; nhb: string } {
+export function fieldsFromMarkdown(md: string): { one_thing: string; one_thing_health: string; gratitude: string[]; nhb: string } {
   const lines = md.split('\n');
   const gratitude: string[] = [];
   let nhb: string[] = [];
@@ -277,5 +288,6 @@ export function fieldsFromMarkdown(md: string): { one_thing: string; gratitude: 
   }
   nhb = nhb.filter(Boolean);
   while (gratitude.length < 3) gratitude.push('');
-  return { one_thing: parseOneThing(md) ?? '', gratitude, nhb: nhb.join('\n') };
+  const things = parseOneThings(md);
+  return { one_thing: things.business ?? '', one_thing_health: things.health ?? '', gratitude, nhb: nhb.join('\n') };
 }

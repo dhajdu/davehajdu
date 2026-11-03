@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition, type DragEvent } from 'react';
-import { GripVertical } from 'lucide-react';
+import { ArrowUp, GripVertical } from 'lucide-react';
 import type { TodoNode, Todo } from '@/lib/life/journal';
 import { formatDate } from '@/lib/life/format';
 import { addTodo, dropTodo, reorderTodos, setTodoDone } from '@/app/life/(app)/journal/[date]/actions';
@@ -9,7 +9,7 @@ import { addTodo, dropTodo, reorderTodos, setTodoDone } from '@/app/life/(app)/j
 // What is open on this day and what got done. Every control is a form, so it
 // works without JavaScript and on a phone with a flaky connection. The open
 // list is draggable: items above the line are for today, the rest can wait.
-function Row({ t, date, done, child = false, handle }: { t: Todo; date: string; done: boolean; child?: boolean; handle?: React.ReactNode }) {
+function Row({ t, date, done, child = false, handle, extra }: { t: Todo; date: string; done: boolean; child?: boolean; handle?: React.ReactNode; extra?: React.ReactNode }) {
   return (
     <li className={`life-todo${child ? ' is-child' : ''}${done ? ' is-done' : ''}`}>
       {handle}
@@ -25,6 +25,7 @@ function Row({ t, date, done, child = false, handle }: { t: Todo; date: string; 
         {t.title}
         {!child && !done && t.added_on !== date && <small>since {formatDate(t.added_on, { month: 'short', day: 'numeric' })}</small>}
       </span>
+      {extra}
       {!done && (
         <form action={dropTodo}>
           <input type="hidden" name="date" value={date} />
@@ -90,12 +91,20 @@ function OpenList({ date, open }: { date: string; open: TodoNode[] }) {
     const before = e.clientY < rect.top + rect.height / 2;
     setOrder((o) => moveKey(o, dragging, overKey, before));
   }
+  function persist(o: string[]) {
+    startTransition(() => reorderTodos(date, o.filter((k) => k !== LINE), o.indexOf(LINE)));
+  }
   // Every dragover re-rendered with the latest order before dragend fires, so `order` is current here.
   function onDragEnd() {
     if (!dragging) return;
     setDragging(null);
-    const ids = order.filter((k) => k !== LINE);
-    startTransition(() => reorderTodos(date, ids, order.indexOf(LINE)));
+    persist(order);
+  }
+  // The up arrow: the item joins the end of today's list, just above the line.
+  function moveToToday(id: string) {
+    const next = moveKey(order, id, LINE, true);
+    setOrder(next);
+    persist(next);
   }
 
   return (
@@ -130,11 +139,17 @@ function OpenList({ date, open }: { date: string; open: TodoNode[] }) {
             <GripVertical size={14} className="life-todo-grip" aria-hidden />
           </span>
         );
+        const later = order.indexOf(key) > lineAt;
+        const up = later ? (
+          <button type="button" className="life-todo-up" onClick={() => moveToToday(n.id)} aria-label="Move into today" title="Move into today">
+            <ArrowUp size={15} strokeWidth={2.4} aria-hidden />
+          </button>
+        ) : null;
         return (
           <li key={n.id} className={dragging === n.id ? 'is-dragging' : undefined} onDragOver={(e) => onDragOver(e, n.id)}>
             <ul className="life-todo-group">
               {openNow ? (
-                <Row t={n} date={date} done={false} handle={handle} />
+                <Row t={n} date={date} done={false} handle={handle} extra={up} />
               ) : (
                 <li className="life-todo is-dim">{handle}<span className="life-todo-title">{n.title}</span></li>
               )}
