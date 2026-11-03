@@ -244,7 +244,8 @@ The app answers one question, "Am I living the life I intend to live?", on one l
 | Week, month | Latest journal entry with a `# ❸ {Month}` block: numbered goals, `**Week N:**` lines, `**Deals that should close**`, `**{Month} Moves**`; ✅ ❌ 🟡 marks become statuses | `parseMonthBlock` |
 | Track record | The `Historical` reference entry (template block), one `###` section per month | `parseHistory` |
 | This week, this month | `goals` rows with `horizon` `week` / `month`, `focus` and `track`, set inline on the ladder (`setFocusGoal`, one per period per track); the journal's ❸ block only counts for the month it was written in |
-| Year, five years | `goals` rows with `horizon` `year` / `vision`, managed on `/life/goals` | `src/lib/life/focus.ts` `getLongGoals` |
+| Year | `goals` rows with `horizon` `year`, managed on `/life/goals` and editable on the ladder |
+| Five years | The vision as prose: one `entries` row (`kind=reference`, title `Five-year vision`) with `fields` `{statement, values[], picture}` (`src/lib/life/vision.ts`, `saveVision`), edited in place on the ladder; the vision goals stay as cards on `/life/goals` | `src/lib/life/focus.ts` `getLongGoals` |
 
 Month and week goals are never edited in the app yet: Dave writes them in Notion and the nightly sync carries them in.
 

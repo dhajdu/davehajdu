@@ -343,6 +343,26 @@
 .life-rung-goal-actions .life-rung-goal-x:hover { background: var(--life-magenta); color: #fff; }
 .life-rung-goal.is-pending, .life-rung-thing.is-pending { opacity: 0.5; }
 @media (hover: none) { .life-rung-goal-actions { display: inline-flex; } }
+.life-vision-prose { display: grid; gap: 12px; }
+.life-vision-statement { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.2; color: #fff; margin: 0; }
+.life-values { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.life-values li { font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.82); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 999px; padding: 4px 11px; }
+.life-vision-picture { display: grid; gap: 8px; max-width: 72ch; }
+.life-ladder .life-md { color: var(--life-sidebar-ink); font-size: 14px; line-height: 1.55; gap: 10px; }
+.life-ladder .life-md b { color: #fff; }
+.life-ladder .life-md i { color: var(--life-mint); font-style: italic; }
+.life-ladder .life-md h4 { color: #fff; }
+.life-vision-edit, .life-vision-cancel { justify-self: start; background: none; border: 0; padding: 0; font: inherit; font-size: 12px; font-weight: 600; color: var(--life-mint); cursor: pointer; }
+.life-vision-edit:hover, .life-vision-cancel:hover { text-decoration: underline; }
+.life-vision-form { display: grid; gap: 10px; max-width: 72ch; }
+.life-vision-form label { display: grid; gap: 4px; }
+.life-vision-form label > span { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
+.life-main .life-vision-form input, .life-main .life-vision-form textarea { width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; line-height: 1.5; color: #fff; box-shadow: none; resize: vertical; }
+.life-main .life-vision-form input::placeholder, .life-main .life-vision-form textarea::placeholder { color: rgba(255, 255, 255, 0.42); }
+.life-main .life-vision-form input:focus, .life-main .life-vision-form textarea:focus { outline: none; border-color: var(--life-mint); box-shadow: 0 0 0 3px rgba(111, 242, 193, 0.22); }
+.life-vision-form-foot { display: flex; align-items: center; gap: 14px; }
+.life-vision-form-foot button[type="submit"] { background: var(--life-mint); color: var(--life-navy); border: 0; border-radius: 8px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.life-vision-form-foot button[type="submit"].is-saved { background: var(--life-ok-ink); color: #fff; }
 .life-rung-tracks { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px 24px; }
 .life-track { min-width: 0; display: grid; gap: 6px; align-content: start; }
 .life-track-head { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
