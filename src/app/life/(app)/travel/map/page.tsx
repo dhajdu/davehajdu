@@ -4,7 +4,7 @@ import { Card, EmptyState, PageHeader } from '@/components/life/ui';
 import { TravelTabs } from '@/components/life/travel/TravelTabs';
 import { WorldMap, type MapArc, type MapPin } from '@/components/life/travel/WorldMap';
 import { fetchAll } from '@/components/life/travel/data';
-import { isHome } from '@/components/life/travel/format';
+import { isCurrent, isHome, todayKey } from '@/components/life/travel/format';
 import type { Place } from '@/components/life/travel/types';
 
 export const metadata: Metadata = { title: 'Travel', robots: { index: false, follow: false } };
@@ -25,8 +25,8 @@ export default async function TravelMapPage() {
         .neq('status', 'cancelled')
         .range(from, to)
     ),
-    fetchAll<{ id: string; primary_place_id: string | null; start_on: string; purpose: string }>((from, to) =>
-      supabase.from('trips').select('id, primary_place_id, start_on, purpose').range(from, to)
+    fetchAll<{ id: string; primary_place_id: string | null; start_on: string; end_on: string | null; purpose: string }>((from, to) =>
+      supabase.from('trips').select('id, primary_place_id, start_on, end_on, purpose').range(from, to)
     ),
   ]);
 
@@ -91,7 +91,7 @@ export default async function TravelMapPage() {
   return (
     <div className="max-w-3xl">
       <PageHeader title="Travel" />
-      <TravelTabs active="map" />
+      <TravelTabs active="map" hasCurrent={trips.some((t) => isCurrent(t, todayKey()))} />
 
       {visited.length === 0 ? (
         <EmptyState>Places come from the airports and hotels on your bookings, which arrive from Gmail and TripIt. None yet.</EmptyState>

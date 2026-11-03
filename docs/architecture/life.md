@@ -214,7 +214,7 @@ src/app/life/
   area/[slug]/          Area page (metrics, records, goals, sources); body → health,
                         direction → goals, places → travel
   timeline/
-  travel/               Upcoming (default), past, map
+  travel/               Current while a trip is underway, else upcoming; past, map
   travel/[id]/
   inbox/                review_queue
   sources/

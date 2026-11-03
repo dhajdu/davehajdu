@@ -1,4 +1,5 @@
 import 'server-only';
+import { isCurrent } from './format';
 import type { Leg, Trip } from './types';
 
 type Client = Awaited<ReturnType<typeof import('@/lib/life/supabase-server').createLifeClient>>;
@@ -38,4 +39,28 @@ export async function allTrips(supabase: Client): Promise<Trip[]> {
   return fetchAll<Trip>((from, to) =>
     supabase.from('trips').select(TRIP_SELECT).order('start_on', { ascending: false }).range(from, to)
   );
+}
+
+// Every trip still in play (underway or ahead) and their live legs, in one round trip.
+// `current` is the trip underway today (the latest to start, should two overlap).
+export async function loadLiveTravel(supabase: Client, today: string): Promise<{ current: Trip | null; upcoming: Trip[]; legs: Leg[] }> {
+  const live = `end_on.gte.${today},and(end_on.is.null,start_on.gte.${today})`;
+  const [tripsRes, legsRes] = await Promise.all([
+    supabase.from('trips').select(TRIP_SELECT).or(live).order('start_on'),
+    supabase
+      .from('trip_legs')
+      .select(`${LEG_SELECT}, trips!inner(start_on, end_on)`)
+      .or(live, { referencedTable: 'trips' })
+      .neq('status', 'cancelled')
+      .order('starts_at'),
+  ]);
+  if (tripsRes.error) throw new Error(tripsRes.error.message);
+  if (legsRes.error) throw new Error(legsRes.error.message);
+  const trips = (tripsRes.data ?? []) as unknown as Trip[];
+  const underway = trips.filter((t) => isCurrent(t, today));
+  return {
+    current: underway[underway.length - 1] ?? null,
+    upcoming: trips.filter((t) => t.start_on > today),
+    legs: (legsRes.data ?? []) as unknown as Leg[],
+  };
 }
