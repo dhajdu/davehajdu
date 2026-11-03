@@ -65,13 +65,13 @@ export async function saveDay(formData: FormData) {
   refresh(date);
 }
 
-// One One Thing (health or business) from the ladder on Today; the rest of the day is kept.
+// One One Thing (health or business) from the ladder on Today; the rest of the
+// day is kept. An empty text clears it.
 export async function setOneThing(formData: FormData) {
   const { supabase } = await requireOwner();
   const date = dateOf(formData);
   const text = str(formData, 'one_thing').slice(0, 300);
   const track = str(formData, 'track');
-  if (!text) return;
   if (track !== 'health' && track !== 'business') throw new Error('Track must be health or business');
   const entry = await getDay(supabase, date);
   const current = dayFields(entry?.fields ?? (entry ? fieldsFromMarkdown(entry.body_md) : EMPTY_FIELDS));
