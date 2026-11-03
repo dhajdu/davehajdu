@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireOwner } from '@/lib/life/auth';
-import { EMPTY_FIELDS, dayTitle, getDay, getDayNumber, isDateKey, renderDay, type DayFields } from '@/lib/life/journal';
+import { EMPTY_FIELDS, dayFields, dayTitle, getDay, getDayNumber, isDateKey, renderDay, type DayFields } from '@/lib/life/journal';
 import { fieldsFromMarkdown } from '@/lib/life/focus-parse';
 import { WEIGHT } from '@/lib/life/health';
 import type { Db } from '@/lib/life/metrics';
@@ -46,6 +46,7 @@ export async function saveDay(formData: FormData) {
   const date = dateOf(formData);
   const fields: DayFields = {
     one_thing: str(formData, 'one_thing').slice(0, 300),
+    one_thing_health: str(formData, 'one_thing_health').slice(0, 300),
     gratitude: [str(formData, 'g1'), str(formData, 'g2'), str(formData, 'g3')].map((s) => s.slice(0, 500)),
     nhb: str(formData, 'nhb').slice(0, 20000),
   };
@@ -64,15 +65,17 @@ export async function saveDay(formData: FormData) {
   refresh(date);
 }
 
-// The One Thing alone, from the ladder on Today; the rest of the day is kept.
+// One One Thing (health or business) from the ladder on Today; the rest of the day is kept.
 export async function setOneThing(formData: FormData) {
   const { supabase } = await requireOwner();
   const date = dateOf(formData);
   const text = str(formData, 'one_thing').slice(0, 300);
+  const track = str(formData, 'track');
   if (!text) return;
+  if (track !== 'health' && track !== 'business') throw new Error('Track must be health or business');
   const entry = await getDay(supabase, date);
-  const current = entry?.fields ?? (entry ? fieldsFromMarkdown(entry.body_md) : EMPTY_FIELDS);
-  await writeDay(supabase, date, { ...current, one_thing: text });
+  const current = dayFields(entry?.fields ?? (entry ? fieldsFromMarkdown(entry.body_md) : EMPTY_FIELDS));
+  await writeDay(supabase, date, { ...current, [track === 'health' ? 'one_thing_health' : 'one_thing']: text });
   refresh(date);
 }
 

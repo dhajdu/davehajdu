@@ -85,7 +85,7 @@ Phase 1 metric seed: `weight_kg`, `body_fat_pct`, `steps`, `workouts`, `active_k
 
 | Table | Columns |
 |---|---|
-| `goals` | `area_id`, `title`, `horizon` (`30d` \| `60d` \| `week` \| `month` \| `year` \| `vision`), `period` (`YYYY-MM` for month goals, the Monday for week goals), `focus` (the period's One Thing), `metric_id`, `target_value`, `due_on`, `status` (`open` \| `hit` \| `missed` \| `dropped`), `review_id` (set in) |
+| `goals` | `area_id`, `title`, `horizon` (`30d` \| `60d` \| `week` \| `month` \| `year` \| `vision`), `period` (`YYYY-MM` for month goals, the Monday for week goals), `focus` (the period's One Thing), `track` (`health` \| `business`: every rung of the ladder carries one of each; backfilled from the area, body and mind being health), `metric_id`, `target_value`, `due_on`, `status` (`open` \| `hit` \| `missed` \| `dropped`), `review_id` (set in) |
 | `reviews` | `period` (`YYYY-MM`, unique), `one_word`, `headline`, `status` (`draft` \| `done`), `auto_summary jsonb`, `entry_id` (source EO update, if imported) |
 | `review_scores` | `review_id`, `area_id`, `score numeric(3,1)`, `feelings`, `headline`, `impact`; unique (`review_id`, `area_id`) |
 
@@ -240,17 +240,17 @@ The app answers one question, "Am I living the life I intend to live?", on one l
 
 | Rung | Source | Parser |
 |---|---|---|
-| Today | Today's own journal entry, `# ❶ The One Thing` → `**Today**: …`; an empty rung takes it inline (`setOneThing`) | `src/lib/life/focus-parse.ts` `parseOneThing` |
+| Today | Today's own journal entry, `# ❶ The One Thing` → `**Today**: …` (business) and `**Health**: …` (health, `fields.one_thing_health`); an empty rung takes it inline (`setOneThing` with a track) | `src/lib/life/focus-parse.ts` `parseOneThing` |
 | Week, month | Latest journal entry with a `# ❸ {Month}` block: numbered goals, `**Week N:**` lines, `**Deals that should close**`, `**{Month} Moves**`; ✅ ❌ 🟡 marks become statuses | `parseMonthBlock` |
 | Track record | The `Historical` reference entry (template block), one `###` section per month | `parseHistory` |
-| This week, this month | `goals` rows with `horizon` `week` / `month` and `focus`, set inline on the ladder (`setFocusGoal`); the journal's ❸ block only counts for the month it was written in |
+| This week, this month | `goals` rows with `horizon` `week` / `month`, `focus` and `track`, set inline on the ladder (`setFocusGoal`, one per period per track); the journal's ❸ block only counts for the month it was written in |
 | Year, five years | `goals` rows with `horizon` `year` / `vision`, managed on `/life/goals` | `src/lib/life/focus.ts` `getLongGoals` |
 
 Month and week goals are never edited in the app yet: Dave writes them in Notion and the nightly sync carries them in.
 
 ### The journal in the app
 
-A day written on `/life/journal/[date]` is an `entries` row (`kind=journal`) with `fields` `{one_thing, gratitude, nhb}` and `body_md` rendered from them in the Notion template's shape (migration `20261103000000_journal_todos.sql`), so the ladder's parser, search and Ask read app-written and Notion-written days alike. The day's weight goes to `measurements`. To-dos are `todos` rows: open from `added_on` until `done_on` or `dropped_on`, one level of nesting, so any day shows what was open then and what got done that day. The open list is draggable (`TodoList.tsx`, `reorderTodos`): `sort_order` is the order, and items above the line carry `planned_on` = that day (an item planned for an earlier day stays above the line until done or moved). The Notion sync keeps running; where a day exists in both, the app-written row wins on the page, and a Notion day prefills the form so it can be edited. The sync also carries the journal's to-do lists into `todos` (`src/lib/life/todos-sync.ts`, nightly in the Notion cron, `scripts/life/sync-todos.ts` by hand): the dated DONE groups of every synced entry become done items (history), and the newest Notion page, fetched whole because synced entries keep only each day's new lines, says what is open now. Items added in the app (`source = app`) are never touched.
+A day written on `/life/journal/[date]` is an `entries` row (`kind=journal`) with `fields` `{one_thing, gratitude, nhb}` and `body_md` rendered from them in the Notion template's shape (migration `20261103000000_journal_todos.sql`), so the ladder's parser, search and Ask read app-written and Notion-written days alike. The day's weight goes to `measurements`. To-dos are `todos` rows: open from `added_on` until `done_on` or `dropped_on`, one level of nesting, so any day shows what was open then and what got done that day. The open list is draggable (`TodoList.tsx`, `reorderTodos`): `sort_order` is the order, and items above the line carry `planned_on` = that day (an item planned for an earlier day stays above the line until done or moved; the up arrow on a later item moves it just above the line). The Notion sync keeps running; where a day exists in both, the app-written row wins on the page, and a Notion day prefills the form so it can be edited. The sync also carries the journal's to-do lists into `todos` (`src/lib/life/todos-sync.ts`, nightly in the Notion cron, `scripts/life/sync-todos.ts` by hand): the dated DONE groups of every synced entry become done items (history), and the newest Notion page, fetched whole because synced entries keep only each day's new lines, says what is open now. Items added in the app (`source = app`) are never touched.
 
 Trip purpose is business (default), eo or personal (holiday). The first pass set eo where a journal entry written during the trip mentions EO, a forum, Ignite, GLC, RLA or Nerve. The first vision and year rows were seeded from journal passages (the One Thing, the "Dealing with Age" forum presentation, the October 2026 EO update) and are meant to be rewritten in the app.
 

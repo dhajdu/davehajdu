@@ -4,7 +4,7 @@ import {
   parseDoing,
   parseHistory,
   parseMonthBlock,
-  parseOneThing,
+  parseOneThings,
   parseRoutineDay,
   type HistorySection,
   type MonthBlock,
@@ -13,7 +13,7 @@ import {
 // What Dave wrote in the journal about what matters: today's One Thing, the
 // month's goals (the ❸ block) and the Historical log of past months.
 export type Focus = {
-  oneThing: { text: string; date: string; day: number | null } | null;
+  oneThing: { business: string | null; health: string | null; date: string; day: number | null } | null;
   latest: { date: string; day: number | null } | null;
   month: (MonthBlock & { date: string }) | null;
   doing: { items: string[]; date: string } | null;
@@ -37,8 +37,8 @@ export async function getFocus(db: Db, today: string): Promise<Focus> {
   let doing: Focus['doing'] = null;
   for (const e of recent) {
     if (!oneThing) {
-      const text = parseOneThing(e.body_md);
-      if (text) oneThing = { text, date: e.entry_date, day: parseRoutineDay(e.title) };
+      const things = parseOneThings(e.body_md);
+      if (things.business || things.health) oneThing = { ...things, date: e.entry_date, day: parseRoutineDay(e.title) };
     }
     if (!doing) {
       const items = parseDoing(e.body_md);
@@ -57,6 +57,13 @@ export async function getFocus(db: Db, today: string): Promise<Focus> {
   return { oneThing, latest, month, doing, history };
 }
 
+// The two tracks of the ladder. Health first: it is the foundation.
+export type Track = 'health' | 'business';
+export const TRACKS: { key: Track; label: string }[] = [
+  { key: 'health', label: 'Health' },
+  { key: 'business', label: 'Business' },
+];
+
 // Goals rows for the ladder: vision (five years) and year.
 export type GoalRow = {
   id: string;
@@ -67,11 +74,12 @@ export type GoalRow = {
   target_value: number | string | null;
   period: string | null;
   focus: boolean;
+  track: Track;
   area: { slug: string; name: string } | null;
   metric: { slug: string; name: string; unit: string | null } | null;
 };
 
-const GOAL_SELECT = 'id, title, horizon, status, due_on, target_value, period, focus, area:areas(slug, name), metric:metrics(slug, name, unit)';
+const GOAL_SELECT = 'id, title, horizon, status, due_on, target_value, period, focus, track, area:areas(slug, name), metric:metrics(slug, name, unit)';
 
 // Vision and year goals, plus the month goals of `period` and the week goals
 // of `week` (its Monday), the One Thing first.

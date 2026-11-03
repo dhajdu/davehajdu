@@ -47,6 +47,11 @@ function AddForm({ horizon, areas, metrics, period, focus, label }: { horizon: '
         {focus && <input type="hidden" name="focus" value="1" />}
         <input name="title" required maxLength={200} placeholder={focus ? 'The one thing that makes everything else easier this month' : horizon === 'vision' ? 'Where I want to be in five years' : horizon === 'month' ? 'What this month has to deliver' : 'What this year has to deliver'} className={input} />
         <div className="life-add-row">
+          <select name="track" required defaultValue={horizon === 'month' ? '' : 'business'} className={input} aria-label="Track">
+            <option value="" disabled>Health or business</option>
+            <option value="health">Health</option>
+            <option value="business">Business</option>
+          </select>
           <select name="area_id" required defaultValue="" className={input} aria-label="Area">
             <option value="" disabled>Area</option>
             {areas.map((a) => (

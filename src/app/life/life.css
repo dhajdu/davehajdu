@@ -319,7 +319,7 @@
 .life-rung-item .life-mark { margin-top: 1px; border-color: rgba(255, 255, 255, 0.3); }
 .life-rung-item.is-hit { color: #fff; }
 .life-rung-empty { font-size: 13px; color: rgba(255, 255, 255, 0.5); }
-.life-rung-form { display: flex; gap: 8px; align-items: center; }
+.life-rung-form { display: flex; gap: 8px; align-items: center; min-width: 0; }
 .life-main .life-rung-form input { flex: 1; min-width: 0; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; color: #fff; box-shadow: none; }
 .life-main .life-rung.is-now .life-rung-form input { font-size: 18px; font-weight: 700; padding: 10px 14px; }
 .life-main .life-rung-form input::placeholder { color: rgba(255, 255, 255, 0.42); font-weight: 500; }
@@ -327,6 +327,16 @@
 .life-rung-form button { flex: none; background: var(--life-mint); color: var(--life-navy); border: 0; border-radius: 8px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .life-rung-form button:disabled { opacity: 0.6; cursor: default; }
 .life-btn.is-saved, .life-rung-form button.is-saved { background: var(--life-ok-ink); border-color: var(--life-ok-ink); color: #fff; }
+.life-rung-tracks { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px 24px; }
+.life-track { min-width: 0; display: grid; gap: 6px; align-content: start; }
+.life-track-head { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
+.life-track.is-health .life-track-head { color: var(--life-mint); }
+.life-rung.is-now .life-rung-text { font-size: 22px; }
+.life-rung-body > .life-rung-empty { margin-top: 2px; }
+@media (max-width: 760px) {
+  .life-rung-tracks { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .life-rung.is-now .life-rung-text { font-size: 20px; }
+}
 .life-ladder a { color: var(--life-mint); font-weight: 600; text-decoration: none; }
 .life-main .life-ladder a { color: var(--life-mint); }
 .life-ladder a:hover { text-decoration: underline; }
@@ -557,6 +567,8 @@ button.life-vision-text:focus-visible { outline: none; box-shadow: var(--life-fo
 .life-todo-sub details > summary { font-size: 11px; color: var(--life-muted); cursor: pointer; list-style: none; }
 .life-todo-sub details[open] > summary { margin-bottom: 6px; }
 .life-todo-done-head { margin-top: 6px; }
+.life-todo-up { flex: none; background: none; border: 0; color: var(--life-faint); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+.life-todo-up:hover { background: var(--life-ok-bg); color: var(--life-ok-ink); }
 .life-todo-handle { flex: none; display: grid; place-items: center; width: 16px; height: 28px; margin-left: -4px; color: var(--life-faint); cursor: grab; touch-action: none; }
 .life-todo-handle:hover { color: var(--life-muted); }
 .life-todo-handle:active { cursor: grabbing; }
@@ -589,6 +601,11 @@ button.life-vision-text:focus-visible { outline: none; box-shadow: var(--life-fo
 .life-journal .life-card:nth-child(3) { border-left-color: var(--life-magenta); }
 .life-main .life-journal-one { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; padding: 12px 14px; border-color: var(--life-line); }
 .life-main .life-journal-one::placeholder { font-weight: 600; color: var(--life-faint); }
+.life-journal-things { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin-top: 8px; }
+.life-journal-thing { display: grid; gap: 6px; min-width: 0; }
+.life-journal-thing > span { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--life-muted); }
+.life-journal-thing.is-health > span { color: var(--life-ok-ink); }
+@media (max-width: 760px) { .life-journal-things { grid-template-columns: minmax(0, 1fr); } }
 .life-journal-grat-row { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: center; gap: 8px; }
 .life-journal-grat-row span { width: 24px; height: 24px; border-radius: 50%; background: var(--life-ok-bg); color: var(--life-ok-ink); font-size: 12px; font-weight: 800; display: grid; place-items: center; }
 .life-main .life-journal-grat-row input { border-color: var(--life-line); }
