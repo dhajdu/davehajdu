@@ -5,10 +5,23 @@ import type { Leg, Place, Trip } from './types';
 const cityOf = (p: Place | null | undefined) => p?.city ?? p?.name ?? '';
 
 // Hours to be at the airport ahead of departure: a domestic hop needs less.
-function airportLead(flight: Leg): number {
+export function airportLead(flight: Leg): number {
   const a = flight.origin?.country?.trim().toLowerCase();
   const b = flight.destination?.country?.trim().toLowerCase();
   return a && b && a === b ? 2 : 3;
+}
+
+const HALF_HOUR = 30 * 60_000;
+
+// When to leave for the airport, as an instant: the lead time before
+// departure, settled on the nearest half hour (10:50 reads as 11:00).
+export function leaveByFor(flight: Leg): number {
+  return Math.round((Date.parse(flight.starts_at) - airportLead(flight) * 3_600_000) / HALF_HOUR) * HALF_HOUR;
+}
+
+// The non-cancelled flight leaving on `today` (local to its origin), if any.
+export function flightOn(legs: Leg[], today: string): Leg | undefined {
+  return legs.find((l) => l.kind === 'flight' && l.status !== 'cancelled' && localDateKey(l.starts_at, l.start_tz) === today);
 }
 
 // Everything the boarding pass needs for a trip, from its non-cancelled legs.
@@ -28,6 +41,9 @@ export function passPropsFor(trip: Trip, legs: Leg[], today: string): PassProps 
   const flightIsToday = !!flight && started && dayOf(flight) === today;
   const flightToday = flightIsToday && Date.parse(flight.starts_at) > Date.now();
   const leaving = started ? hotels.find((l) => l.ends_at && localDateKey(l.ends_at, l.end_tz ?? l.start_tz) === today) : undefined;
+  const leaveMs = flightToday && flight ? leaveByFor(flight) : null;
+  // Check out by the hotel's deadline, or earlier if that is when you must leave for the airport.
+  const checkoutMs = leaving ? (leaveMs != null && leaveMs < Date.parse(leaving.ends_at!) ? leaveMs : Date.parse(leaving.ends_at!)) : null;
   const dest = trip.primary?.city ?? trip.primary?.name ?? trip.title;
 
   return {
@@ -45,16 +61,13 @@ export function passPropsFor(trip: Trip, legs: Leg[], today: string): PassProps 
     duration: flight?.ends_at ? fmtDuration(flight.starts_at, flight.ends_at) : null,
     nights: trip.end_on ? nightsOf(trip) : null,
     hotel: hotel ? (hotel.destination?.name ?? hotel.provider) : null,
-    checkout: leaving
-      ? { time: localTime(leaving.ends_at!, leaving.end_tz ?? leaving.start_tz), hotel: leaving.destination?.name ?? leaving.provider ?? 'Hotel' }
-      : null,
+    checkout:
+      leaving && checkoutMs != null
+        ? { time: localTime(new Date(checkoutMs).toISOString(), leaving.end_tz ?? leaving.start_tz), hotel: leaving.destination?.name ?? leaving.provider ?? 'Hotel' }
+        : null,
     leaveBy:
-      flightToday && flight
-        ? {
-            code: placeCode(flight.origin),
-            time: localTime(new Date(Date.parse(flight.starts_at) - airportLead(flight) * 3_600_000).toISOString(), flight.start_tz),
-            hours: airportLead(flight),
-          }
+      leaveMs != null && flight
+        ? { code: placeCode(flight.origin), time: localTime(new Date(leaveMs).toISOString(), flight.start_tz), hours: airportLead(flight) }
         : null,
     destTz: flight?.end_tz ?? hotel?.start_tz ?? null,
     homeTz: HOME_TZ,

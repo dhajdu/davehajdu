@@ -1,12 +1,15 @@
 import { EmptyState } from '@/components/life/ui';
 import { Itinerary, itineraryDays } from './Itinerary';
-import { daysBetween, fmtDay, localDateKey } from './format';
+import { flightOn, leaveByFor } from './pass';
+import { daysBetween, fmtDay, localDateKey, placeCode } from './format';
 import type { Leg, Trip } from './types';
 
 // The day you are in on the trip underway: tonight's hotel, then today's
 // bookings. Shared by the Current tab and the On the road card on Today.
 export function TodayOnTrip({ trip, legs, today }: { trip: Trip; legs: Leg[]; today: string }) {
   const hasToday = itineraryDays(legs).includes(today);
+  const flight = flightOn(legs, today);
+  const leaveBy = flight ? { day: today, ms: leaveByFor(flight), code: placeCode(flight.origin) } : undefined;
   const home = trip.end_on && trip.end_on > today ? trip.end_on : null;
 
   // Tonight's hotel: checked in by today, checking out after it.
@@ -29,7 +32,7 @@ export function TodayOnTrip({ trip, legs, today }: { trip: Trip; legs: Leg[]; to
         </p>
       )}
       {hasToday ? (
-        <Itinerary legs={legs} days={(d) => d === today} />
+        <Itinerary legs={legs} days={(d) => d === today} leaveBy={leaveBy} />
       ) : (
         <EmptyState>Nothing booked today.{home && ` Home ${fmtDay(home)}.`}</EmptyState>
       )}

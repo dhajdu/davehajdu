@@ -174,7 +174,7 @@ export function NextTripPass(p: PassProps) {
               <dt>Leave for {p.leaveBy.code}</dt>
               <dd>
                 {p.leaveBy.time}
-                <small>{p.leaveBy.hours}h before wheels up</small>
+                <small>{p.leaveBy.hours}h before the flight</small>
               </dd>
             </div>
           ) : (
