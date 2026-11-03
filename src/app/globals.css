@@ -64,3 +64,35 @@ body {
 .prose-custom em {
   font-style: italic;
 }
+.prose-custom .blog-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #2A3044;
+}
+.prose-custom .blog-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #04102D;
+  background: #EAEEF2;
+  padding: 10px 14px;
+}
+.prose-custom .blog-table td {
+  padding: 10px 14px;
+  border-top: 1px solid #EAEEF2;
+  vertical-align: top;
+}
+.prose-custom .blog-table th.num,
+.prose-custom .blog-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.prose-custom .blog-table tr.total td {
+  font-weight: 700;
+  color: #04102D;
+  background: #F8F9FC;
+}
