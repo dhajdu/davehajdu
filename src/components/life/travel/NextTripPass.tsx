@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 
 // Boarding-pass card for the next (or current) trip. The server works out
 // which state applies; this island only ticks the countdown and the clock there.
+// On the road it reads as today: the stub counts down to a flight leaving today,
+// and the fields swap to check-out and leave-for-the-airport times.
 export type PassProps = {
   href: string;
   title: string;
   purpose: string;
+  place: string;
   from: { code: string; city: string };
   to: { code: string; city: string };
   targetMs: number;
@@ -17,10 +20,13 @@ export type PassProps = {
   duration: string | null;
   nights: number | null;
   hotel: string | null;
+  checkout: { time: string; hotel: string } | null;
+  leaveBy: { code: string; time: string; arrive: string } | null;
   destTz: string | null;
   homeTz: string;
   code: string | null;
   onRoad: { day: number; of: number } | null;
+  flightToday: boolean;
 };
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -69,7 +75,18 @@ export function NextTripPass(p: PassProps) {
 
   const left = now == null ? null : Math.max(0, Math.floor((p.targetMs - now) / 1000));
   const days = left == null ? null : Math.floor(left / 86400);
-  const clock = left == null ? '--:--:--' : `${pad(Math.floor((left % 86400) / 3600))}:${pad(Math.floor((left % 3600) / 60))}:${pad(left % 60)}`;
+  // Within a day the big number turns into hours and the clock keeps the minutes and seconds.
+  const sameDay = left != null && days === 0;
+  const big = left == null ? null : sameDay ? Math.floor(left / 3600) : days;
+  const unit = sameDay ? (big === 1 ? 'hour' : 'hours') : big === 1 ? 'day' : 'days';
+  const clock =
+    left == null
+      ? '--:--:--'
+      : sameDay
+        ? `${pad(Math.floor((left % 3600) / 60))}:${pad(left % 60)}`
+        : `${pad(Math.floor((left % 86400) / 3600))}:${pad(Math.floor((left % 3600) / 60))}:${pad(left % 60)}`;
+  // On the road the ring shows the day of the trip, except while a flight is still ahead today.
+  const showRing = !!p.onRoad && !(p.flightToday && (left == null || left > 0));
   const there =
     now != null && p.destTz
       ? new Intl.DateTimeFormat('en-GB', { timeZone: p.destTz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now)
@@ -133,31 +150,51 @@ export function NextTripPass(p: PassProps) {
               </dd>
             </div>
           )}
-          {p.nights != null && (
+          {p.checkout ? (
             <div>
-              <dt>Nights</dt>
+              <dt>Check out</dt>
               <dd>
-                {p.nights}
-                {p.hotel && <small className="truncate">{p.hotel}</small>}
+                {p.checkout.time}
+                <small className="truncate">{p.checkout.hotel}</small>
               </dd>
             </div>
+          ) : (
+            p.nights != null && (
+              <div>
+                <dt>Nights</dt>
+                <dd>
+                  {p.nights}
+                  {p.hotel && <small className="truncate">{p.hotel}</small>}
+                </dd>
+              </div>
+            )
           )}
-          {p.destTz && (
+          {p.leaveBy ? (
             <div>
-              <dt>{p.to.city} now</dt>
+              <dt>Leave for {p.leaveBy.code}</dt>
               <dd>
-                {there}
-                {now != null && <small>{shift(p.destTz, p.homeTz, new Date(now))}</small>}
+                {p.leaveBy.time}
+                <small>at {p.leaveBy.code} by {p.leaveBy.arrive}</small>
               </dd>
             </div>
+          ) : (
+            p.destTz && (
+              <div>
+                <dt>{p.to.city} now</dt>
+                <dd>
+                  {there}
+                  {now != null && <small>{shift(p.destTz, p.homeTz, new Date(now))}</small>}
+                </dd>
+              </div>
+            )
           )}
         </dl>
       </div>
 
       <div className="life-pass-stub">
-        {p.onRoad ? (
+        {showRing && p.onRoad ? (
           <div>
-            <div className="life-pass-stub-label">Today in {p.to.city}</div>
+            <div className="life-pass-stub-label">Today in {p.place}</div>
             <svg className="life-pass-ring" viewBox="0 0 100 100" role="img" aria-label={`Day ${p.onRoad.day} of ${p.onRoad.of}`}>
               <circle cx="50" cy="50" r="42" className="life-pass-ring-track" />
               <circle
@@ -177,8 +214,8 @@ export function NextTripPass(p: PassProps) {
           <div>
             <div className="life-pass-stub-label">{p.flight ? 'Wheels up in' : 'Leaving in'}</div>
             <div className="life-pass-days">
-              {days ?? '–'}
-              <span>{days === 1 ? 'day' : 'days'}</span>
+              {big ?? '–'}
+              <span>{unit}</span>
             </div>
             <div className="life-pass-clock">{clock}</div>
           </div>

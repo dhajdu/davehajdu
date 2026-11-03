@@ -52,7 +52,10 @@ function gmailUrl(leg: Leg): string | null {
   return `https://mail.google.com/mail/u/0/#all/${encodeURIComponent(s.external_id)}`;
 }
 
-function ItemRow({ item, muted }: { item: Item; muted?: boolean }) {
+// Leave for the airport on `day` at `ms`: a check-out that day moves up to it.
+export type LeaveBy = { day: string; ms: number; code: string };
+
+function ItemRow({ item, muted, leaveBy }: { item: Item; muted?: boolean; leaveBy?: LeaveBy }) {
   const { leg, variant } = item;
   const startTime = localTime(leg.starts_at, leg.start_tz);
   const endTz = leg.end_tz ?? leg.start_tz;
@@ -75,7 +78,8 @@ function ItemRow({ item, muted }: { item: Item; muted?: boolean }) {
     detail = [`from ${startTime}`];
   } else if (variant === 'checkout') {
     headline = `Check out · ${hotelName}`;
-    detail = [`by ${localTime(leg.ends_at!, endTz)}`];
+    const early = leaveBy && leaveBy.day === item.day && leaveBy.ms < item.at;
+    detail = early ? [`by ${localTime(new Date(leaveBy.ms).toISOString(), endTz)}`, `then leave for ${leaveBy.code}`] : [`by ${localTime(leg.ends_at!, endTz)}`];
   } else {
     headline = leg.provider ?? leg.destination?.name ?? 'Event';
     detail = [startTime, leg.destination?.name !== headline ? leg.destination?.name : null].filter(
@@ -150,7 +154,7 @@ export function itineraryDays(legs: Leg[]): string[] {
 }
 
 // `days` narrows the view to the days it accepts (today only, the rest of the trip).
-export function Itinerary({ legs, muted, days: keep }: { legs: Leg[]; muted?: boolean; days?: (day: string) => boolean }) {
+export function Itinerary({ legs, muted, days: keep, leaveBy }: { legs: Leg[]; muted?: boolean; days?: (day: string) => boolean; leaveBy?: LeaveBy }) {
   const items = buildItems(legs).filter((i) => !keep || keep(i.day));
   const days: { day: string; items: Item[] }[] = [];
   for (const item of items) {
@@ -176,7 +180,7 @@ export function Itinerary({ legs, muted, days: keep }: { legs: Leg[]; muted?: bo
             </div>
             <ul className="life-itin-stops">
               {d.items.map((item) => (
-                <ItemRow key={item.key} item={item} muted={muted} />
+                <ItemRow key={item.key} item={item} muted={muted} leaveBy={leaveBy} />
               ))}
             </ul>
           </li>
