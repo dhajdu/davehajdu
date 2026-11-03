@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       { source: '/keynotes', destination: '/book-keynote', permanent: true },
       { source: '/workshops', destination: '/book-keynote', permanent: false },
       { source: '/consultation', destination: '/schedule-consultation', permanent: true },
+      { source: '/blog/human-economics-3-0-the-ai-impact', destination: '/blog/unit-economics-3-0-the-ai-impact', permanent: true },
     ];
   },
 };

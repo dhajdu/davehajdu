@@ -16,8 +16,8 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
-    slug: 'human-economics-3-0-the-ai-impact',
-    title: 'Human Economics 3.0: The AI Impact',
+    slug: 'unit-economics-3-0-the-ai-impact',
+    title: 'Unit Economics 3.0: The AI Impact',
     excerpt:
       'My team sent me a token cost table for AIOlabz and called it the cost model. It is a great table. It is also one of five numbers that decide whether we have a scalable business. Why the numbers behind one learner decide what we can charge.',
     date: 'Nov 3, 2026',
@@ -182,7 +182,7 @@ export const POSTS: Post[] = [
 
 // Structured body content keyed by slug
 export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
-  'human-economics-3-0-the-ai-impact': [
+  'unit-economics-3-0-the-ai-impact': [
     { tag: 'p', text: 'Last week one of my engineers sent me a table in Lark.' },
     { tag: 'p', text: 'Some context. We are a week away from a test cohort on <a href="https://aiolabz.com" target="_blank" rel="noopener noreferrer">AIOlabz.com</a>, our AI Officer certification platform. Each learner works through six missions with an AI coach, submits real artefacts, gets graded, and comes out the other end with the AIO credential. I had written in the thread: <em>doing this will tell us if we have a scalable product or not.</em> The reply came back with this.' },
     { tag: 'table', text: '<table><thead><tr><th>AI Officer mission</th><th class="num">Learners finished</th><th class="num">Typical cost</th><th class="num">Chatty learner</th><th class="num">Messages</th></tr></thead><tbody><tr><td>A01</td><td class="num">39</td><td class="num">$2.55</td><td class="num">$3.30</td><td class="num">52</td></tr><tr><td>A02</td><td class="num">28</td><td class="num">$2.09</td><td class="num">$2.28</td><td class="num">43</td></tr><tr><td>A03</td><td class="num">18</td><td class="num">$1.89</td><td class="num">$2.04</td><td class="num">40</td></tr><tr><td>A04</td><td class="num">8</td><td class="num">$1.63</td><td class="num">$1.69</td><td class="num">34</td></tr><tr><td>A05</td><td class="num">6</td><td class="num">$2.15</td><td class="num">$2.20</td><td class="num">46</td></tr><tr><td>A06</td><td class="num">5</td><td class="num">$1.51</td><td class="num">$1.54</td><td class="num">31</td></tr><tr class="total"><td>All six</td><td></td><td class="num">$11.82</td><td class="num">$13.05</td><td></td></tr></tbody></table>' },
@@ -843,7 +843,7 @@ export const BLOCKS_BY_SLUG: Record<string, Block[]> = {
 // FAQ schema content keyed by slug. Used to render FAQPage JSON-LD on posts that have FAQ content.
 // Keep these aligned with the visible "Things people ask me about this" h3/p blocks above.
 export const FAQS_BY_SLUG: Record<string, Array<{ q: string; a: string }>> = {
-  'human-economics-3-0-the-ai-impact': [
+  'unit-economics-3-0-the-ai-impact': [
     { q: 'What is the difference between cost per user and unit economics?', a: 'Cost per user is one input. Unit economics compares everything a customer pays over their lifetime with everything it costs to acquire and serve them: price, cost to serve, gross margin, customer acquisition cost and churn.' },
     { q: 'What are good unit economics for a SaaS business?', a: 'David Skok\'s rules of thumb: lifetime value at least three times customer acquisition cost, and acquisition cost recovered within twelve months, ideally five to seven.' },
     { q: 'How do you calculate unit economics for an AI product?', a: 'The same way as any subscription business, with one extra line. Tokens and model inference go into cost to serve alongside infrastructure, payment fees and human support time. Then measure churn and acquisition cost, which move the result far more than the token bill does.' },
