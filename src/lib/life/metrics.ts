@@ -7,8 +7,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Db = SupabaseClient<any, any, any>;
 
-import { formatNumber, formatValue, trendTone, type Direction } from './format';
-export { formatNumber, formatValue, trendTone, type Direction };
+import { formatDate, formatNumber, formatValue, trendTone, type Direction } from './format';
+export { formatDate, formatNumber, formatValue, trendTone, type Direction };
 
 export type Aggregation = 'avg' | 'sum' | 'last';
 
@@ -75,6 +75,12 @@ export function addDays(date: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+// The Monday of the week holding `date`.
+export function weekStart(date: string): string {
+  const dow = new Date(`${date}T00:00:00Z`).getUTCDay(); // 0 is Sunday
+  return addDays(date, -((dow + 6) % 7));
+}
+
 export function daysBetween(from: string, to: string): number {
   return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
 }
@@ -82,10 +88,6 @@ export function daysBetween(from: string, to: string): number {
 export function periodLabel(period: string, style: 'long' | 'short' = 'long'): string {
   const d = new Date(`${period}-01T00:00:00Z`);
   return d.toLocaleDateString('en-US', { month: style, year: 'numeric', timeZone: 'UTC' });
-}
-
-export function formatDate(date: string, opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }): string {
-  return new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', { ...opts, timeZone: 'UTC' });
 }
 
 // ===== Fetching =====

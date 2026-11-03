@@ -2,6 +2,9 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireOwner } from '@/lib/life/auth';
+import { addDays } from '@/lib/life/metrics';
+
+const monthEnd = (p: string) => new Date(Date.UTC(Number(p.slice(0, 4)), Number(p.slice(5, 7)), 0)).toISOString().slice(0, 10);
 
 function str(fd: FormData, key: string): string | null {
   const v = fd.get(key);
@@ -33,7 +36,6 @@ export async function addLongGoal(formData: FormData) {
   if (target !== null && !Number.isFinite(target)) throw new Error('Target must be a number');
 
   const year = new Date().getUTCFullYear();
-  const monthEnd = (p: string) => new Date(Date.UTC(Number(p.slice(0, 4)), Number(p.slice(5, 7)), 0)).toISOString().slice(0, 10);
   if (horizon === 'month' && focus) {
     // One One Thing per month: the previous one becomes an ordinary goal.
     const { error: e } = await supabase.from('goals').update({ focus: false }).eq('horizon', 'month').eq('period', period!).eq('focus', true);
@@ -48,6 +50,31 @@ export async function addLongGoal(formData: FormData) {
     due_on: horizon === 'year' ? `${year}-12-31` : horizon === 'month' ? monthEnd(period!) : `${year + 5}-12-31`,
     period: horizon === 'month' ? period : null,
     focus: horizon === 'month' && focus,
+    status: 'open',
+  });
+  if (error) throw new Error(error.message);
+  refresh();
+}
+
+// The One Thing for this week or this month, typed straight into the ladder.
+// Replaces the period's previous One Thing (it stays as an ordinary goal).
+export async function setFocusGoal(formData: FormData) {
+  const { supabase } = await requireOwner();
+  const title = str(formData, 'title');
+  const horizon = str(formData, 'horizon');
+  const period = str(formData, 'period');
+  if (!title) return;
+  if (horizon !== 'week' && horizon !== 'month') throw new Error('Horizon must be week or month');
+  if (!period || !(horizon === 'month' ? /^\d{4}-\d{2}$/ : /^\d{4}-\d{2}-\d{2}$/).test(period)) throw new Error('Bad period');
+
+  const { error: e } = await supabase.from('goals').update({ focus: false }).eq('horizon', horizon).eq('period', period).eq('focus', true);
+  if (e) throw new Error(e.message);
+  const { error } = await supabase.from('goals').insert({
+    title: title.slice(0, 200),
+    horizon,
+    period,
+    focus: true,
+    due_on: horizon === 'month' ? monthEnd(period) : addDays(period, 6),
     status: 'open',
   });
   if (error) throw new Error(error.message);

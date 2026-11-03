@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { requireOwner } from '@/lib/life/auth';
 import { Card, PageHeader, buttonClass, primaryButtonClass } from '@/components/life/ui';
 import { Markdown } from '@/components/life/Markdown';
+import { SaveButton } from '@/components/life/SaveButton';
 import { TodoList } from '@/components/life/journal/TodoList';
 import { JournalRail } from '@/components/life/journal/JournalRail';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
@@ -83,7 +84,7 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
                 <span className="life-stat-k">Weight</span>
                 <input name="weight" type="number" step="0.1" inputMode="decimal" min={30} max={250} defaultValue={weight === undefined ? '' : Number(weight)} placeholder="kg" />
               </label>
-              <button type="submit" className={primaryButtonClass}>Save the day</button>
+              <SaveButton className={primaryButtonClass}>Save the day</SaveButton>
             </div>
             {fromNotion && (
               <p className="text-xs text-muted">

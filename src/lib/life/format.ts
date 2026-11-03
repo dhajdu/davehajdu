@@ -3,6 +3,10 @@
 
 export type Direction = 'higher_better' | 'lower_better' | 'target';
 
+export function formatDate(date: string, opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }): string {
+  return new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', { ...opts, timeZone: 'UTC' });
+}
+
 export function formatNumber(v: number, unit?: string | null): string {
   const digits = Math.abs(v) >= 1000 || unit === 'steps' || unit === 'kcal' || unit === 'count' ? 0 : 1;
   return v.toLocaleString('en-US', { maximumFractionDigits: digits, minimumFractionDigits: 0 });

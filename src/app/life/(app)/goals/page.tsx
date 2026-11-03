@@ -7,7 +7,7 @@ import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { VisionCard } from '@/components/life/focus/VisionCard';
 import { Markdown } from '@/components/life/Markdown';
 import { getFocus, getLongGoals, type GoalRow } from '@/lib/life/focus';
-import { METRIC_COLUMNS, currentPeriod, formatValue, getAreas, ictToday, periodLabel, type MetricDef } from '@/lib/life/metrics';
+import { METRIC_COLUMNS, currentPeriod, formatValue, getAreas, ictToday, periodLabel, weekStart, type MetricDef } from '@/lib/life/metrics';
 import { addLongGoal, renameLongGoal, setLongGoalStatus } from './actions';
 
 export const metadata: Metadata = { title: 'Goals', robots: { index: false, follow: false } };
@@ -74,10 +74,11 @@ export default async function GoalsPage() {
   const today = ictToday();
   const year = today.slice(0, 4);
   const period = currentPeriod();
+  const week = weekStart(today);
 
   const [focus, goals, areas, metricsRes] = await Promise.all([
     getFocus(supabase, today),
-    getLongGoals(supabase, period),
+    getLongGoals(supabase, period, week),
     getAreas(supabase),
     supabase.from('metrics').select(METRIC_COLUMNS).order('name'),
   ]);
@@ -98,7 +99,7 @@ export default async function GoalsPage() {
     <div className="max-w-5xl">
       <PageHeader title="Goals" subtitle="Am I living the life I intend to live? The ladder runs from today to five years out." />
 
-      <FocusLadder focus={focus} goals={goals} today={today} />
+      <FocusLadder focus={focus} goals={goals} today={today} week={week} />
 
       <section className="life-section">
         <div className="life-section-head">

@@ -24,6 +24,7 @@ export type Todo = {
   added_on: string;
   done_on: string | null;
   dropped_on: string | null;
+  planned_on: string | null; // the day it is meant to get done (above the line); null means another day
   sort_order: number;
 };
 
@@ -82,7 +83,7 @@ export async function getDay(db: Db, date: string): Promise<JournalEntry | null>
 export async function getTodos(db: Db, date: string): Promise<{ open: TodoNode[]; done: TodoNode[] }> {
   const { data, error } = await db
     .from('todos')
-    .select('id, parent_id, title, added_on, done_on, dropped_on, sort_order')
+    .select('id, parent_id, title, added_on, done_on, dropped_on, planned_on, sort_order')
     .lte('added_on', date)
     .or(`done_on.is.null,done_on.gte.${date}`)
     .or(`dropped_on.is.null,dropped_on.gt.${date}`)
