@@ -4,7 +4,9 @@ import { addDays, formatDate } from '@/lib/life/metrics';
 import { SaveButton } from '@/components/life/SaveButton';
 import { setOneThing } from '@/app/life/(app)/journal/[date]/actions';
 import { setFocusGoal } from '@/app/life/(app)/goals/actions';
-import { StatusMark, goalStatus } from './StatusMark';
+import { StatusMark } from './StatusMark';
+import { LadderGoal } from './LadderGoal';
+import { LadderThing } from './LadderThing';
 
 // The question the app answers, as one ladder with two tracks: health (the
 // foundation) and business. Today, this week, this month, this year, five
@@ -31,12 +33,7 @@ function Tracks({ children }: { children: (track: Track) => React.ReactNode }) {
 }
 
 function GoalLines({ rows }: { rows: GoalRow[] }) {
-  return rows.map((g) => (
-    <p key={g.id} className={`life-rung-item is-${goalStatus(g.status)}${g.focus ? ' is-focus' : ''}`}>
-      <StatusMark status={goalStatus(g.status)} />
-      <span>{g.title}</span>
-    </p>
-  ));
+  return rows.map((g) => <LadderGoal key={g.id} goal={g} />);
 }
 
 function FocusForm({ horizon, period, track, placeholder }: { horizon: 'week' | 'month'; period: string; track: Track; placeholder: string }) {
@@ -88,7 +85,7 @@ export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals
               {(track) => {
                 const text = track === 'health' ? oneThing?.health : oneThing?.business;
                 return text ? (
-                  <p className="life-rung-text">{text}</p>
+                  <LadderThing date={today} track={track} text={text} />
                 ) : (
                   <form action={setOneThing} className="life-rung-form">
                     <input type="hidden" name="date" value={today} />

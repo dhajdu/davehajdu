@@ -327,6 +327,22 @@
 .life-rung-form button { flex: none; background: var(--life-mint); color: var(--life-navy); border: 0; border-radius: 8px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .life-rung-form button:disabled { opacity: 0.6; cursor: default; }
 .life-btn.is-saved, .life-rung-form button.is-saved { background: var(--life-ok-ink); border-color: var(--life-ok-ink); color: #fff; }
+.life-main .life-rung-input { width: 100%; min-width: 0; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--life-mint); border-radius: 8px; padding: 4px 10px; font: inherit; font-size: 14px; line-height: 1.4; color: #fff; box-shadow: 0 0 0 3px rgba(111, 242, 193, 0.22); }
+.life-main .life-rung-input.is-big { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; padding: 6px 12px; }
+.life-rung-thing { background: none; border: 0; padding: 0; text-align: left; cursor: text; font: inherit; }
+.life-rung-thing:hover { text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.3); text-underline-offset: 4px; }
+.life-rung-goal { position: relative; flex-wrap: wrap; }
+.life-rung-goal-text { flex: 1; min-width: 0; background: none; border: 0; padding: 0; text-align: left; font: inherit; color: inherit; cursor: text; overflow-wrap: anywhere; }
+.life-rung-goal-text:hover { text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.3); text-underline-offset: 3px; }
+.life-rung-goal-actions { display: none; align-items: center; gap: 4px; flex: 0 0 100%; padding-left: 27px; margin-top: 2px; }
+.life-rung-goal:hover .life-rung-goal-actions, .life-rung-goal:focus-within .life-rung-goal-actions { display: inline-flex; }
+.life-rung-goal-actions button { font: inherit; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.22); background: none; color: rgba(255, 255, 255, 0.62); cursor: pointer; white-space: nowrap; }
+.life-rung-goal-actions button:hover { border-color: var(--life-mint); color: #fff; }
+.life-rung-goal-actions button.is-hit:hover { background: var(--life-mint); color: var(--life-navy); }
+.life-rung-goal-actions .life-rung-goal-x { width: 20px; height: 20px; padding: 0; border-radius: 50%; border: 0; font-size: 16px; line-height: 1; display: grid; place-items: center; }
+.life-rung-goal-actions .life-rung-goal-x:hover { background: var(--life-magenta); color: #fff; }
+.life-rung-goal.is-pending, .life-rung-thing.is-pending { opacity: 0.5; }
+@media (hover: none) { .life-rung-goal-actions { display: inline-flex; } }
 .life-rung-tracks { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px 24px; }
 .life-track { min-width: 0; display: grid; gap: 6px; align-content: start; }
 .life-track-head { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.42); }
