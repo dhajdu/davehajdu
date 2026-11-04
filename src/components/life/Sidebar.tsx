@@ -12,7 +12,7 @@ const SECTIONS: { label: string; items: Item[] }[] = [
   { label: 'Productivity', items: [{ href: '/life', label: 'Today' }, { href: '/life/travel', label: 'Travel' }, { href: '/life/journal', label: 'Journal' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/review', label: 'Review' }] },
   { label: 'Health', items: [{ href: '/life/health', label: 'Fitness' }, { href: '/life/health/medical', label: 'Medical' }] },
   { label: 'EO', items: [{ href: '/life/eo', label: 'Forum' }, { href: '/life/eo/presentations', label: 'Presentations' }] },
-  { label: 'Settings', items: [{ href: '/life/sources', label: 'Sources' }, { href: '/life/timeline', label: 'Timeline' }, { href: '/life/ask', label: 'Ask' }] },
+  { label: 'Settings', items: [{ href: '/life/settings', label: 'Account' }, { href: '/life/sources', label: 'Sources' }, { href: '/life/timeline', label: 'Timeline' }, { href: '/life/ask', label: 'Ask' }] },
 ];
 
 // The mark: the ladder, with the one thing at the top of it.
