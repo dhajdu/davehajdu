@@ -5,7 +5,7 @@ import { createLifeBrowserClient } from '@/lib/life/supabase-browser';
 import { primaryButtonClass } from '@/components/life/ui';
 import PasswordInput from '@/components/life/PasswordInput';
 
-const MIN_LENGTH = 10;
+const MIN_LENGTH = 6;
 
 export default function ChangePasswordForm({ email }: { email: string }) {
   const [supabase] = useState(() => createLifeBrowserClient());
