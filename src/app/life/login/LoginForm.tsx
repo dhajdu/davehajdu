@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { createLifeBrowserClient } from '@/lib/life/supabase-browser';
 import { primaryButtonClass } from '@/components/life/ui';
 
-type Step = 'loading' | 'email' | 'code';
+type Step = 'loading' | 'password' | 'email' | 'code';
 
 const inputClass = 'w-full border border-border rounded-lg px-3 py-2 text-sm text-navy focus:outline-none focus:border-blue';
 
@@ -12,14 +12,21 @@ export default function LoginForm() {
   const [supabase] = useState(() => createLifeBrowserClient());
   const [step, setStep] = useState<Step>('loading');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) window.location.assign('/life');
-      else setStep('email');
+      if (data.user) {
+        window.location.assign('/life');
+        return;
+      }
+      if (new URLSearchParams(window.location.search).get('error') === 'link') {
+        setError('That sign-in link expired or was already used. Sign in with your password instead.');
+      }
+      setStep('password');
     });
   }, [supabase]);
 
@@ -34,6 +41,13 @@ export default function LoginForm() {
       setBusy(false);
     }
   }
+
+  const signInWithPassword = () =>
+    run(async () => {
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) throw new Error('Wrong email or password.');
+      window.location.assign('/life');
+    });
 
   const sendCode = () =>
     run(async () => {
@@ -53,7 +67,12 @@ export default function LoginForm() {
       window.location.assign('/life');
     });
 
-  const submit = step === 'email' ? sendCode : verifyEmail;
+  const submit = step === 'password' ? signInWithPassword : step === 'email' ? sendCode : verifyEmail;
+
+  function switchTo(next: Step) {
+    setError('');
+    setStep(next);
+  }
 
   return (
     <form
@@ -65,20 +84,28 @@ export default function LoginForm() {
     >
       {step === 'loading' && <p className="text-sm text-muted">Checking session…</p>}
 
-      {step === 'email' && (
+      {(step === 'password' || step === 'email') && (
         <>
           <label className="block text-sm font-semibold text-navy" htmlFor="email">Email</label>
           <input id="email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
-          <p className="text-xs text-muted">We will email you a sign-in link.</p>
         </>
       )}
+
+      {step === 'password' && (
+        <>
+          <label className="block text-sm font-semibold text-navy" htmlFor="password">Password</label>
+          <input id="password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} />
+        </>
+      )}
+
+      {step === 'email' && <p className="text-xs text-muted">We will email you a sign-in link.</p>}
 
       {step === 'code' && (
         <>
           <p className="text-sm text-body-text">Check {email} and click the sign-in link. If the email shows a 6-digit code instead, enter it here.</p>
           <label className="block text-sm font-semibold text-navy" htmlFor="code">Code</label>
           <input id="code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={(e) => setCode(e.target.value)} className={`${inputClass} tracking-widest`} />
-          <button type="button" className="text-xs text-blue" onClick={() => setStep('email')}>Use a different email</button>
+          <button type="button" className="text-xs text-blue" onClick={() => switchTo('email')}>Use a different email</button>
         </>
       )}
 
@@ -86,7 +113,18 @@ export default function LoginForm() {
 
       {step !== 'loading' && (
         <button type="submit" disabled={busy} className={`${primaryButtonClass} w-full py-2 text-sm`}>
-          {busy ? 'Working…' : step === 'email' ? 'Send link' : 'Verify'}
+          {busy ? 'Working…' : step === 'password' ? 'Sign in' : step === 'email' ? 'Send link' : 'Verify'}
+        </button>
+      )}
+
+      {step === 'password' && (
+        <button type="button" className="block w-full text-center text-xs text-blue" onClick={() => switchTo('email')}>
+          Email me a sign-in link instead
+        </button>
+      )}
+      {step === 'email' && (
+        <button type="button" className="block w-full text-center text-xs text-blue" onClick={() => switchTo('password')}>
+          Sign in with a password instead
         </button>
       )}
     </form>
