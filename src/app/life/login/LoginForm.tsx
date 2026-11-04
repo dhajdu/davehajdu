@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 import { createLifeBrowserClient } from '@/lib/life/supabase-browser';
 import { primaryButtonClass } from '@/components/life/ui';
+import PasswordInput, { lifeInputClass as inputClass } from '@/components/life/PasswordInput';
 
 type Step = 'loading' | 'password' | 'email' | 'code';
-
-const inputClass = 'w-full border border-border rounded-lg px-3 py-2 text-sm text-navy focus:outline-none focus:border-blue';
 
 export default function LoginForm() {
   const [supabase] = useState(() => createLifeBrowserClient());
@@ -94,7 +93,7 @@ export default function LoginForm() {
       {step === 'password' && (
         <>
           <label className="block text-sm font-semibold text-navy" htmlFor="password">Password</label>
-          <input id="password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} />
+          <PasswordInput id="password" value={password} onChange={setPassword} autoComplete="current-password" />
         </>
       )}
 
