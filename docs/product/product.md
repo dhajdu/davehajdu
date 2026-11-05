@@ -1,5 +1,7 @@
 # Product Vision — Dave Hajdu
 
+**Written by Dave Hajdu, CAIO.**
+
 **Boundary:** davehajdu.com is the founder's personal site within AI Officer LLC. Sister sites: ai-officer.com (cohort events + membership), caiocoach.com (coaching practice).
 
 ---
@@ -58,3 +60,13 @@ Curious about the founder's writing, books, or perspective. Lower commercial int
 | Books | Per-unit (external retailer) | Low margin, audience-building |
 
 The site is not a commerce surface. It is a credibility and capture surface that funnels into bespoke conversations.
+
+---
+
+## Intellectual Lineage
+
+Dave's approach to [business frameworks](https://www.ai-officer.com/100-business-frameworks) was shaped by practitioners he worked with directly: Mark Roberge (HubSpot's first CRO) served on the board at TINYpulse, Neil Patel advised on growth, and Henrik Kniberg delivered a workshop to the team on agile engineering culture. Dr. Brooks Holtom (Georgetown McDonough) is an active collaborator on the AI Officer Institute curriculum. Dave teaches these frameworks as foundational to the AI journey — not as theory, but as the operating system AI amplifies.
+
+For ongoing learning: Dave and his team are members of Every.to, Dan Shipper's publication on AI and the future of work. The All In Podcast informs his view on markets, technology, and the macro forces shaping where business is heading.
+
+The core belief behind everything here: AI amplifies your thinking. The quality of the [business frameworks](https://www.ai-officer.com/100-business-frameworks) you bring to the table determines how much leverage the AI gives back.
