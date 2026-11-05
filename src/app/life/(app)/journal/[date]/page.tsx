@@ -98,7 +98,7 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
                 </label>
                 <label className="life-journal-weight">
                   <span className="life-stat-k">Blood sugar</span>
-                  <input name="blood_sugar" type="number" step="0.1" inputMode="decimal" min={1} max={35} defaultValue={sugar === undefined ? '' : Number(sugar)} placeholder="mmol/L" />
+                  <input name="blood_sugar" type="number" step="1" inputMode="numeric" min={20} max={600} defaultValue={sugar === undefined ? '' : Number(sugar)} placeholder="mg/dL" />
                 </label>
               </div>
               <SaveButton className={primaryButtonClass}>Save the day</SaveButton>

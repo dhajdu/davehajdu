@@ -19,7 +19,7 @@ names resolve to public. Only public is readable.
 - metrics: area_id -> areas, slug, name, unit, aggregation (avg|sum|last: how
   daily values roll up to a month), direction (higher_better|lower_better|target),
   source_id -> sources. Slugs: weight_kg, body_fat_pct, steps, workouts,
-  active_kcal, sleep_hours, resting_hr, hrv_ms, blood_sugar_mmol (body); journal_entries (mind);
+  active_kcal, sleep_hours, resting_hr, hrv_ms, blood_sugar_mgdl (body); journal_entries (mind);
   nights_away, trips (places).
 - sources: slug (gmail|notion|apple_health|tripit|manual), name, method, cadence,
   enabled, last_run_at, last_status. Connector registry.
