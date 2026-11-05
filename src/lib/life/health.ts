@@ -13,6 +13,7 @@ export const WHOOP = {
   strain: 'whoop_strain',
 } as const;
 export const WEIGHT = 'weight_kg';
+export const BLOOD_SUGAR = 'blood_sugar_mmol';
 
 export type Zone = 'green' | 'yellow' | 'red';
 export function zone(recovery: number): Zone {

@@ -580,6 +580,7 @@
 .life-journal-grat { display: grid; gap: 8px; }
 .life-main .life-journal-nhb { min-height: 150px; line-height: 1.5; resize: vertical; }
 .life-journal-foot { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+.life-journal-stats { display: flex; gap: 16px; flex-wrap: wrap; }
 .life-journal-weight { display: grid; gap: 4px; }
 .life-main .life-journal-weight input { width: 110px; }
 .life-todos { display: grid; gap: 12px; }

@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { requireOwner } from '@/lib/life/auth';
 import { EMPTY_FIELDS, dayFields, dayTitle, getDay, getDayNumber, isDateKey, renderDay, type DayFields } from '@/lib/life/journal';
 import { fieldsFromMarkdown } from '@/lib/life/focus-parse';
-import { WEIGHT } from '@/lib/life/health';
+import { BLOOD_SUGAR, WEIGHT } from '@/lib/life/health';
 import type { Db } from '@/lib/life/metrics';
 
 function str(fd: FormData, key: string): string {
@@ -56,13 +56,22 @@ export async function saveDay(formData: FormData) {
   if (weight) {
     const kg = Number(weight);
     if (!Number.isFinite(kg) || kg < 30 || kg > 250) throw new Error('Weight must be in kg');
-    const { data: metric } = await supabase.from('metrics').select('id').eq('slug', WEIGHT).single();
-    if (metric) {
-      const { error } = await supabase.from('measurements').upsert({ metric_id: metric.id, measured_on: date, value: kg }, { onConflict: 'owner_id,metric_id,measured_on' });
-      if (error) throw new Error(error.message);
-    }
+    await saveMeasurement(supabase, WEIGHT, date, kg);
+  }
+  const sugar = str(formData, 'blood_sugar');
+  if (sugar) {
+    const mmol = Number(sugar);
+    if (!Number.isFinite(mmol) || mmol < 1 || mmol > 35) throw new Error('Blood sugar must be in mmol/L');
+    await saveMeasurement(supabase, BLOOD_SUGAR, date, mmol);
   }
   refresh(date);
+}
+
+async function saveMeasurement(supabase: Db, slug: string, date: string, value: number) {
+  const { data: metric } = await supabase.from('metrics').select('id').eq('slug', slug).single();
+  if (!metric) return;
+  const { error } = await supabase.from('measurements').upsert({ metric_id: metric.id, measured_on: date, value }, { onConflict: 'owner_id,metric_id,measured_on' });
+  if (error) throw new Error(error.message);
 }
 
 // One One Thing (health or business) from the ladder on Today; the rest of the
