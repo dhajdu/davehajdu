@@ -60,9 +60,9 @@ export async function saveDay(formData: FormData) {
   }
   const sugar = str(formData, 'blood_sugar');
   if (sugar) {
-    const mmol = Number(sugar);
-    if (!Number.isFinite(mmol) || mmol < 1 || mmol > 35) throw new Error('Blood sugar must be in mmol/L');
-    await saveMeasurement(supabase, BLOOD_SUGAR, date, mmol);
+    const mgdl = Number(sugar);
+    if (!Number.isFinite(mgdl) || mgdl < 20 || mgdl > 600) throw new Error('Blood sugar must be in mg/dL');
+    await saveMeasurement(supabase, BLOOD_SUGAR, date, mgdl);
   }
   refresh(date);
 }
