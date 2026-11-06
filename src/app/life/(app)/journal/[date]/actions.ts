@@ -94,7 +94,13 @@ export async function addTodo(formData: FormData) {
   const title = str(formData, 'title').slice(0, 300);
   if (!title) return;
   const parent = str(formData, 'parent_id') || null;
-  const { error } = await supabase.from('todos').insert({ title, parent_id: parent, added_on: date });
+  // A new item goes into today, at the end of today's list (just above the line).
+  let planned: { planned_on: string; sort_order: number } | null = null;
+  if (!parent) {
+    const { data: last } = await supabase.from('todos').select('sort_order').order('sort_order', { ascending: false }).limit(1);
+    planned = { planned_on: date, sort_order: (last?.[0]?.sort_order ?? 0) + 1 };
+  }
+  const { error } = await supabase.from('todos').insert({ title, parent_id: parent, added_on: date, ...planned });
   if (error) throw new Error(error.message);
   refresh(date);
 }
