@@ -597,6 +597,7 @@
 .life-todo-check button.life-mark:hover { border-color: var(--life-blue); }
 .life-todo-title { flex: 1; min-width: 0; overflow-wrap: anywhere; color: var(--life-ink); padding-top: 3px; }
 .life-todo-title small { display: block; font-size: 11px; color: var(--life-muted); }
+.life-todo-title .life-badge { margin-left: 6px; padding: 0 6px; font-size: 11px; vertical-align: 1px; }
 .life-todo-x { background: none; border: 0; color: var(--life-faint); font-size: 18px; line-height: 1; cursor: pointer; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
 .life-todo-x:hover { background: var(--life-pink-bg); color: var(--life-magenta); }
 .life-todo-sub { padding-left: 30px; }
