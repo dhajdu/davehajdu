@@ -4,12 +4,13 @@ import { useState, useTransition, type DragEvent } from 'react';
 import { ArrowUp, GripVertical } from 'lucide-react';
 import type { TodoNode, Todo } from '@/lib/life/journal';
 import { formatDate } from '@/lib/life/format';
+import { Chip } from '@/components/life/ui';
 import { addTodo, dropTodo, reorderTodos, setTodoDone } from '@/app/life/(app)/journal/[date]/actions';
 
 // What is open on this day and what got done. Every control is a form, so it
 // works without JavaScript and on a phone with a flaky connection. The open
 // list is draggable: items above the line are for today, the rest can wait.
-function Row({ t, date, done, child = false, handle, extra }: { t: Todo; date: string; done: boolean; child?: boolean; handle?: React.ReactNode; extra?: React.ReactNode }) {
+function Row({ t, date, done, child = false, today = false, handle, extra }: { t: Todo; date: string; done: boolean; child?: boolean; today?: boolean; handle?: React.ReactNode; extra?: React.ReactNode }) {
   return (
     <li className={`life-todo${child ? ' is-child' : ''}${done ? ' is-done' : ''}`}>
       {handle}
@@ -23,7 +24,8 @@ function Row({ t, date, done, child = false, handle, extra }: { t: Todo; date: s
       </form>
       <span className="life-todo-title">
         {t.title}
-        {!child && !done && t.added_on !== date && <small>since {formatDate(t.added_on, { month: 'short', day: 'numeric' })}</small>}
+        {today && <Chip tone="mint">Today</Chip>}
+        {!child && !done && <small>Started {t.added_on === date ? 'today' : formatDate(t.added_on, { month: 'short', day: 'numeric' })}</small>}
       </span>
       {extra}
       {!done && (
@@ -149,7 +151,7 @@ function OpenList({ date, open }: { date: string; open: TodoNode[] }) {
           <li key={n.id} className={dragging === n.id ? 'is-dragging' : undefined} onDragOver={(e) => onDragOver(e, n.id)}>
             <ul className="life-todo-group">
               {openNow ? (
-                <Row t={n} date={date} done={false} handle={handle} extra={up} />
+                <Row t={n} date={date} done={false} today={!later} handle={handle} extra={up} />
               ) : (
                 <li className="life-todo is-dim">{handle}<span className="life-todo-title">{n.title}</span></li>
               )}

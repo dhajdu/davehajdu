@@ -10,7 +10,7 @@ import { JournalRail } from '@/components/life/journal/JournalRail';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
 import { EMPTY_FIELDS, dayFields, getDay, getDayNumber, getPinnedReferences, getTodos, isDateKey, nextDay, prevDay } from '@/lib/life/journal';
 import { fieldsFromMarkdown } from '@/lib/life/focus-parse';
-import { WEIGHT } from '@/lib/life/health';
+import { BLOOD_SUGAR, WEIGHT } from '@/lib/life/health';
 import { formatDate, ictToday, weekStart } from '@/lib/life/metrics';
 import { saveDay } from './actions';
 
@@ -23,16 +23,18 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
   const today = ictToday();
   if (date > today) notFound();
 
-  const [entry, dayNo, todos, weightRes, focus, goals, refs] = await Promise.all([
+  const [entry, dayNo, todos, weightRes, sugarRes, focus, goals, refs] = await Promise.all([
     getDay(supabase, date),
     getDayNumber(supabase, date),
     getTodos(supabase, date),
     supabase.from('measurements').select('value, metrics!inner(slug)').eq('metrics.slug', WEIGHT).eq('measured_on', date).maybeSingle(),
+    supabase.from('measurements').select('value, metrics!inner(slug)').eq('metrics.slug', BLOOD_SUGAR).eq('measured_on', date).maybeSingle(),
     getFocus(supabase, today),
     getLongGoals(supabase, today.slice(0, 7), weekStart(today)),
     getPinnedReferences(supabase),
   ]);
   const weight = (weightRes.data as { value: number | string } | null)?.value;
+  const sugar = (sugarRes.data as { value: number | string } | null)?.value;
   const fromNotion = !!entry && !entry.fields;
   const f = dayFields(entry?.fields ?? (entry ? fieldsFromMarkdown(entry.body_md) : EMPTY_FIELDS));
   const g = [f.gratitude[0] ?? '', f.gratitude[1] ?? '', f.gratitude[2] ?? ''];
@@ -89,10 +91,16 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
             </section>
 
             <div className="life-journal-foot">
-              <label className="life-journal-weight">
-                <span className="life-stat-k">Weight</span>
-                <input name="weight" type="number" step="0.1" inputMode="decimal" min={30} max={250} defaultValue={weight === undefined ? '' : Number(weight)} placeholder="kg" />
-              </label>
+              <div className="life-journal-stats">
+                <label className="life-journal-weight">
+                  <span className="life-stat-k">Weight</span>
+                  <input name="weight" type="number" step="0.1" inputMode="decimal" min={30} max={250} defaultValue={weight === undefined ? '' : Number(weight)} placeholder="kg" />
+                </label>
+                <label className="life-journal-weight">
+                  <span className="life-stat-k">Blood sugar</span>
+                  <input name="blood_sugar" type="number" step="1" inputMode="numeric" min={20} max={600} defaultValue={sugar === undefined ? '' : Number(sugar)} placeholder="mg/dL" />
+                </label>
+              </div>
               <SaveButton className={primaryButtonClass}>Save the day</SaveButton>
             </div>
             {fromNotion && (

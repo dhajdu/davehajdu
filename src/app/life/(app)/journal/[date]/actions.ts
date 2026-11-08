@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { requireOwner } from '@/lib/life/auth';
 import { EMPTY_FIELDS, dayFields, dayTitle, getDay, getDayNumber, isDateKey, renderDay, type DayFields } from '@/lib/life/journal';
 import { fieldsFromMarkdown } from '@/lib/life/focus-parse';
-import { WEIGHT } from '@/lib/life/health';
+import { BLOOD_SUGAR, WEIGHT } from '@/lib/life/health';
 import type { Db } from '@/lib/life/metrics';
 
 function str(fd: FormData, key: string): string {
@@ -56,13 +56,22 @@ export async function saveDay(formData: FormData) {
   if (weight) {
     const kg = Number(weight);
     if (!Number.isFinite(kg) || kg < 30 || kg > 250) throw new Error('Weight must be in kg');
-    const { data: metric } = await supabase.from('metrics').select('id').eq('slug', WEIGHT).single();
-    if (metric) {
-      const { error } = await supabase.from('measurements').upsert({ metric_id: metric.id, measured_on: date, value: kg }, { onConflict: 'owner_id,metric_id,measured_on' });
-      if (error) throw new Error(error.message);
-    }
+    await saveMeasurement(supabase, WEIGHT, date, kg);
+  }
+  const sugar = str(formData, 'blood_sugar');
+  if (sugar) {
+    const mgdl = Number(sugar);
+    if (!Number.isFinite(mgdl) || mgdl < 20 || mgdl > 600) throw new Error('Blood sugar must be in mg/dL');
+    await saveMeasurement(supabase, BLOOD_SUGAR, date, mgdl);
   }
   refresh(date);
+}
+
+async function saveMeasurement(supabase: Db, slug: string, date: string, value: number) {
+  const { data: metric } = await supabase.from('metrics').select('id').eq('slug', slug).single();
+  if (!metric) return;
+  const { error } = await supabase.from('measurements').upsert({ metric_id: metric.id, measured_on: date, value }, { onConflict: 'owner_id,metric_id,measured_on' });
+  if (error) throw new Error(error.message);
 }
 
 // One One Thing (health or business) from the ladder on Today; the rest of the
@@ -85,7 +94,13 @@ export async function addTodo(formData: FormData) {
   const title = str(formData, 'title').slice(0, 300);
   if (!title) return;
   const parent = str(formData, 'parent_id') || null;
-  const { error } = await supabase.from('todos').insert({ title, parent_id: parent, added_on: date });
+  // A new item goes into today, at the end of today's list (just above the line).
+  let planned: { planned_on: string; sort_order: number } | null = null;
+  if (!parent) {
+    const { data: last } = await supabase.from('todos').select('sort_order').order('sort_order', { ascending: false }).limit(1);
+    planned = { planned_on: date, sort_order: (last?.[0]?.sort_order ?? 0) + 1 };
+  }
+  const { error } = await supabase.from('todos').insert({ title, parent_id: parent, added_on: date, ...planned });
   if (error) throw new Error(error.message);
   refresh(date);
 }
