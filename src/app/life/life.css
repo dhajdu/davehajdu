@@ -603,7 +603,6 @@
 .life-todo-sub { padding-left: 30px; }
 .life-todo-sub details > summary { font-size: 11px; color: var(--life-muted); cursor: pointer; list-style: none; }
 .life-todo-sub details[open] > summary { margin-bottom: 6px; }
-.life-todo-done-head { margin-top: 6px; }
 .life-todo-up { flex: none; background: none; border: 0; color: var(--life-faint); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
 .life-todo-up:hover { background: var(--life-ok-bg); color: var(--life-ok-ink); }
 .life-todo-handle { flex: none; display: grid; place-items: center; width: 16px; height: 28px; margin-left: -4px; color: var(--life-faint); cursor: grab; touch-action: none; }
@@ -621,6 +620,7 @@
 .life-rail > details[open] > summary { margin-bottom: 8px; }
 .life-rail .life-goal { font-size: 13px; }
 .life-rail .life-md { font-size: 13px; }
+.life-rail .life-todo { font-size: 13px; }
 .life-rail-foot { font-size: 12px; text-align: right; }
 .life-main .life-rail-foot a { color: var(--life-blue); font-weight: 600; }
 @media (max-width: 960px) { .life-rail { position: static; } }
