@@ -15,7 +15,8 @@ import {
   todayKey,
 } from '@/components/life/travel/format';
 import type { Purpose, Trip } from '@/components/life/travel/types';
-import { updateTripNotes, updateTripPurpose, updateTripTitle } from './actions';
+import { deleteTrip, updateTripNotes, updateTripPurpose, updateTripTitle } from './actions';
+import { DeleteTripButton } from './DeleteTripButton';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -167,6 +168,11 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
           <button type="submit" className={primaryButtonClass}>Save notes</button>
         </form>
       </Card>
+
+      <form action={deleteTrip}>
+        <input type="hidden" name="id" value={trip.id} />
+        <DeleteTripButton title={trip.title} />
+      </form>
     </div>
   );
 }
