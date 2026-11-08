@@ -1,6 +1,6 @@
 # Data Flows — Dave Hajdu
 
-davehajdu.com is a credibility-and-capture site. It owns no database schema. Inquiries flow into the shared CRM via Supabase RPC, the founder is notified via Lark, and Resend handles transactional email.
+The public site is a credibility-and-capture site. Inquiries are inserted into the `leads` table and the founder is notified via Lark. There is no transactional email yet. /life and marketing use a separate Supabase project, dave-life: see [life.md](./life.md) and [marketing.md](./marketing.md).
 
 ---
 
@@ -14,7 +14,7 @@ Three form variants share one handler at `/api/inquiries`:
 | Consultation | `consultation` | `/ai-in-business` |
 | General | `general` | `/contact` (or any embedded inquiry CTA) |
 
-All variants POST to `/api/inquiries`. The handler validates the payload, calls the `submit_inquiry` RPC on the shared Supabase instance, then fires a Lark webhook with a card formatted per inquiry type.
+All variants POST to `/api/inquiries`. The handler validates the payload against a field whitelist, inserts a row into `leads`, then fires a Lark webhook with a card formatted per inquiry type.
 
 Every payload sets `source_site = 'davehajdu.com'`.
 
@@ -26,7 +26,7 @@ Canonical schema and RPC contract: [aio-website/docs/architecture/database-schem
 
 ## Email and onboarding
 
-Resend is wired in `src/lib/email.ts` (or equivalent). Transactional confirmation emails are sent after a successful inquiry. Sequence templates and cadence are TBD — see Epic 7 in [`epics.md`](../product/epics.md).
+Not built. The form's success state shows a WhatsApp link. Resend confirmations, sequences and broadcasts are marketing phase 4 — see Epics 7 and 8 in [`epics.md`](../product/epics.md).
 
 ---
 
@@ -35,7 +35,7 @@ Resend is wired in `src/lib/email.ts` (or equivalent). Transactional confirmatio
 - The `people`, `inquiries`, `activity_log` tables (owned by ai-officer.com migrations).
 - Inquiry-pipeline state transitions (handled in the AIO admin console).
 - Book commerce (lives at external retailers).
-- Newsletter broadcast (TBD; not yet wired).
+- Newsletter broadcast (marketing phase 4; not yet wired).
 
 ---
 
