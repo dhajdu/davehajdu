@@ -120,10 +120,10 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
         )}
 
         <Card title="To do">
-          <TodoList date={date} open={todos.open} done={todos.done} />
+          <TodoList date={date} open={todos.open} />
         </Card>
       </div>
-      <JournalRail focus={focus} goals={goals} refs={refs} today={today} week={weekStart(today)} />
+      <JournalRail focus={focus} goals={goals} refs={refs} today={today} week={weekStart(today)} date={date} done={todos.done} />
       </div>
     </div>
   );

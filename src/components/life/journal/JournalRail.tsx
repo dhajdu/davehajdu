@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import type { Focus, GoalRow } from '@/lib/life/focus';
-import { parseRoutine, type Reference } from '@/lib/life/journal';
+import { doneCount, parseRoutine, type Reference, type TodoNode } from '@/lib/life/journal';
+import { formatDate } from '@/lib/life/format';
 import { Markdown } from '@/components/life/Markdown';
 import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
+import { DoneList } from '@/components/life/journal/TodoList';
 
 // What stays in view while writing: the vision, the year, the month and the
-// week from Goals, plus the reference blocks the Notion template carried.
-export function JournalRail({ focus, goals, refs, today, week: weekKey }: { focus: Focus; goals: GoalRow[]; refs: Reference[]; today: string; week: string }) {
+// week from Goals, what got done on the day, plus the reference blocks the
+// Notion template carried.
+export function JournalRail({ focus, goals, refs, today, week: weekKey, date, done }: { focus: Focus; goals: GoalRow[]; refs: Reference[]; today: string; week: string; date: string; done: TodoNode[] }) {
   const vision = goals.filter((g) => g.horizon === 'vision');
   const year = goals.filter((g) => g.horizon === 'year');
   const monthName = new Date(`${today.slice(0, 7)}-01T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
@@ -71,7 +74,7 @@ export function JournalRail({ focus, goals, refs, today, week: weekKey }: { focu
               <li key={g.id} className={`life-goal is-${goalStatus(g.status)} is-now`}>
                 <StatusMark status={goalStatus(g.status)} />
                 <span className="life-goal-text">
-                  <span className="text-muted">This week, {trackWord(g).toLowerCase()} · </span>
+                  <span className="text-muted">Week {weekNo}, {trackWord(g).toLowerCase()} · </span>
                   {g.title}
                 </span>
               </li>
@@ -95,6 +98,11 @@ export function JournalRail({ focus, goals, refs, today, week: weekKey }: { focu
         ) : (
           <p className="text-sm text-muted">Nothing set for {monthName} yet. <Link href="/life" className="text-blue font-semibold">Set it on Today</Link></p>
         )}
+      </details>
+
+      <details open>
+        <summary>Done {date === today ? 'today' : `on ${formatDate(date, { month: 'short', day: 'numeric' })}`} · {doneCount(done, date)}</summary>
+        <DoneList date={date} done={done} />
       </details>
 
       {refs.map((r) => {

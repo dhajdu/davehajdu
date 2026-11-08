@@ -31,6 +31,9 @@ export type Todo = {
 
 export type TodoNode = Todo & { children: Todo[] };
 
+// Items and sub-items ticked off on `date`.
+export const doneCount = (done: TodoNode[], date: string) => done.reduce((n, d) => n + (d.done_on === date ? 1 : 0) + d.children.length, 0);
+
 export const EMPTY_FIELDS: DayFields = { one_thing: '', one_thing_health: '', gratitude: ['', '', ''], nhb: '' };
 
 // Rows written before the health line exist without it.

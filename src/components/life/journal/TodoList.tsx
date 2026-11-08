@@ -172,29 +172,31 @@ function OpenList({ date, open }: { date: string; open: TodoNode[] }) {
   );
 }
 
-export function TodoList({ date, open, done }: { date: string; open: TodoNode[]; done: TodoNode[] }) {
+export function TodoList({ date, open }: { date: string; open: TodoNode[] }) {
   return (
     <div className="life-todos">
       <AddForm date={date} placeholder="Something to do" />
       {open.length === 0 ? <p className="text-sm text-muted">Nothing open.</p> : <OpenList date={date} open={open} />}
-
-      <p className="life-stat-k life-todo-done-head">Done {date ? `on ${formatDate(date, { month: 'short', day: 'numeric' })}` : ''} · {done.reduce((n, d) => n + (d.done_on === date ? 1 : 0) + d.children.length, 0)}</p>
-      {done.length === 0 ? (
-        <p className="text-sm text-muted">Nothing yet.</p>
-      ) : (
-        <ul className="life-todo-list">
-          {done.map((n) => (
-            <li key={n.id}>
-              <ul className="life-todo-group">
-                {n.done_on === date ? <Row t={n} date={date} done /> : <li className="life-todo is-dim"><span className="life-todo-title">{n.title}</span></li>}
-                {n.children.map((c) => (
-                  <Row key={c.id} t={c} date={date} done child />
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
+  );
+}
+
+// What got ticked off on this day, shown in the rail beside the to-do list.
+export function DoneList({ date, done }: { date: string; done: TodoNode[] }) {
+  return done.length === 0 ? (
+    <p className="text-sm text-muted">Nothing yet.</p>
+  ) : (
+    <ul className="life-todo-list">
+      {done.map((n) => (
+        <li key={n.id}>
+          <ul className="life-todo-group">
+            {n.done_on === date ? <Row t={n} date={date} done /> : <li className="life-todo is-dim"><span className="life-todo-title">{n.title}</span></li>}
+            {n.children.map((c) => (
+              <Row key={c.id} t={c} date={date} done child />
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ul>
   );
 }
