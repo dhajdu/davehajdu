@@ -9,6 +9,15 @@ import { rebuildTrips } from '@/lib/life/trips';
 // path as Gmail extractions, with source 'tripit' and external_id = event UID.
 export const maxDuration = 300;
 
+// Postgres jsonb hands keys back in its own order, so compare with keys sorted.
+// Otherwise every leg looks changed, is re-applied every night, and its
+// conflicts come back to the Inbox after they were resolved.
+function stable(v: unknown): string {
+  return JSON.stringify(v, (_k, x) =>
+    x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => a.localeCompare(b))) : x
+  );
+}
+
 export async function GET(request: Request) {
   if (!hasSecret(request, 'CRON_SECRET')) {
     return Response.json({ error: 'unauthorized' }, { status: 401 });
@@ -44,7 +53,7 @@ export async function GET(request: Request) {
     for (const { external_id, leg } of legs) {
       const payload = { leg };
       const before = prior.get(external_id);
-      if (before?.processed_at && JSON.stringify(before.payload) === JSON.stringify(payload)) {
+      if (before?.processed_at && stable(before.payload) === stable(payload)) {
         unchanged++;
         continue;
       }
