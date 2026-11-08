@@ -1,31 +1,66 @@
 'use client';
 
-import { useState, useTransition, type DragEvent } from 'react';
+import { useOptimistic, useState, useTransition, type DragEvent } from 'react';
 import { ArrowUp, GripVertical } from 'lucide-react';
 import type { TodoNode, Todo } from '@/lib/life/journal';
 import { formatDate } from '@/lib/life/format';
 import { Chip } from '@/components/life/ui';
-import { addTodo, dropTodo, reorderTodos, setTodoDone } from '@/app/life/(app)/journal/[date]/actions';
+import { addTodo, dropTodo, renameTodo, reorderTodos, setTodoDone } from '@/app/life/(app)/journal/[date]/actions';
 
 // What is open on this day and what got done. Every control is a form, so it
 // works without JavaScript and on a phone with a flaky connection. The open
 // list is draggable: items above the line are for today, the rest can wait.
-function Row({ t, date, done, child = false, today = false, handle, extra }: { t: Todo; date: string; done: boolean; child?: boolean; today?: boolean; handle?: React.ReactNode; extra?: React.ReactNode }) {
+// Ticking a box pops it at once, before the server answers; the item then
+// arrives in the Done list with a short glow (`fresh`).
+function Row({ t, date, done, child = false, today = false, fresh = false, handle, extra }: { t: Todo; date: string; done: boolean; child?: boolean; today?: boolean; fresh?: boolean; handle?: React.ReactNode; extra?: React.ReactNode }) {
+  const [ticking, setTicking] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useOptimistic(t.title);
+  const hit = done || ticking;
+  async function rename(fd: FormData) {
+    const next = String(fd.get('title') ?? '').trim();
+    if (!next || next === t.title) return;
+    setTitle(next);
+    await renameTodo(fd);
+  }
   return (
-    <li className={`life-todo${child ? ' is-child' : ''}${done ? ' is-done' : ''}`}>
+    <li className={`life-todo${child ? ' is-child' : ''}${hit ? ' is-done' : ''}${fresh ? ' is-new' : ''}`}>
       {handle}
       <form action={setTodoDone} className="life-todo-check">
         <input type="hidden" name="date" value={date} />
         <input type="hidden" name="id" value={t.id} />
         <input type="hidden" name="done" value={done ? '0' : '1'} />
-        <button type="submit" className={`life-mark${done ? ' is-hit' : ''}`} aria-label={done ? 'Mark not done' : 'Mark done'} title={done ? 'Not done' : 'Done'}>
-          {done ? '✓' : ''}
+        <button type="submit" onClick={() => !done && setTicking(true)} className={`life-mark${hit ? ' is-hit' : ''}${ticking ? ' is-pop' : ''}`} aria-label={done ? 'Mark not done' : 'Mark done'} title={done ? 'Not done' : 'Done'}>
+          {hit ? '✓' : ''}
         </button>
       </form>
       <span className="life-todo-title">
-        {t.title}
+        {editing ? (
+          <form action={rename} onSubmit={() => setEditing(false)} className="life-todo-edit">
+            <input type="hidden" name="date" value={date} />
+            <input type="hidden" name="id" value={t.id} />
+            <input
+              name="title"
+              defaultValue={title}
+              required
+              maxLength={300}
+              autoFocus
+              autoComplete="off"
+              aria-label="Edit item"
+              onFocus={(e) => e.currentTarget.select()}
+              onBlur={(e) => e.currentTarget.form?.requestSubmit()}
+              onKeyDown={(e) => {
+                if (e.key !== 'Escape') return;
+                e.currentTarget.value = title; // a blur on the way out then saves nothing
+                setEditing(false);
+              }}
+            />
+          </form>
+        ) : (
+          <button type="button" className="life-todo-text" onClick={() => setEditing(true)} title="Click to edit">{title}</button>
+        )}
         {today && <Chip tone="mint">Today</Chip>}
-        {!child && !done && <small>Started {t.added_on === date ? 'today' : formatDate(t.added_on, { month: 'short', day: 'numeric' })}</small>}
+        {!child && !hit && <small>Started {t.added_on === date ? 'today' : formatDate(t.added_on, { month: 'short', day: 'numeric' })}</small>}
       </span>
       {extra}
       {!done && (
@@ -183,6 +218,16 @@ export function TodoList({ date, open }: { date: string; open: TodoNode[] }) {
 
 // What got ticked off on this day, shown in the rail beside the to-do list.
 export function DoneList({ date, done }: { date: string; done: TodoNode[] }) {
+  const ids = done.flatMap((n) => [n.id, ...n.children.map((c) => c.id)]);
+  const signature = ids.join('|');
+  const [seen, setSeen] = useState(signature);
+  const [fresh, setFresh] = useState<Set<string>>(() => new Set());
+  if (seen !== signature) {
+    // Whatever was not in the last list was just ticked off.
+    const before = new Set(seen.split('|'));
+    setSeen(signature);
+    setFresh(new Set(ids.filter((id) => !before.has(id))));
+  }
   return done.length === 0 ? (
     <p className="text-sm text-muted">Nothing yet.</p>
   ) : (
@@ -190,9 +235,9 @@ export function DoneList({ date, done }: { date: string; done: TodoNode[] }) {
       {done.map((n) => (
         <li key={n.id}>
           <ul className="life-todo-group">
-            {n.done_on === date ? <Row t={n} date={date} done /> : <li className="life-todo is-dim"><span className="life-todo-title">{n.title}</span></li>}
+            {n.done_on === date ? <Row t={n} date={date} done fresh={fresh.has(n.id)} /> : <li className="life-todo is-dim"><span className="life-todo-title">{n.title}</span></li>}
             {n.children.map((c) => (
-              <Row key={c.id} t={c} date={date} done child />
+              <Row key={c.id} t={c} date={date} done child fresh={fresh.has(c.id)} />
             ))}
           </ul>
         </li>
