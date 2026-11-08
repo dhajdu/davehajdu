@@ -1,45 +1,38 @@
 # Epic Status — Dave Hajdu
 
-At-a-glance dashboard of the eight epics in [`epics.md`](./epics.md). Status is grounded in a code-level audit (2026-04-29).
+At-a-glance status of the epics in [`epics.md`](./epics.md), from a code audit on 2026-11-08.
 
-| # | Epic | Status | % | Evidence |
-|---|---|---|---|---|
-| 1 | Landing & hero | ✅ | 100 | `src/app/page.tsx` renders Hero, About, Speaking, Books, BlogPreview, ContactCTA — full wiring, copy final. |
-| 2 | Speaking & booking | ✅ | 100 | `/speaker-topics` complete. InquiryForm with `type='keynote'` → `/api/inquiries` → Supabase insert + Lark webhook with colour-coded card. |
-| 3 | Consulting sales | ✅ | 100 | `/ai-in-business` complete. `/schedule-consultation` InquiryForm with `type='consultation'` → same RPC pipeline → Lark fires. |
-| 4 | Content hub (blog) | ✅ | 100 | `/blog` route with 7 posts in `posts-data.ts`, full content blocks, category filter, post detail pages at `/blog/[slug]`. |
-| 5 | Books & presales | 📋 | 30 | `/books` page shows two book covers with `available: 'Summer 2026'` hardcoded. **No retailer links wired.** "Get notified" CTA is just the contact form — no book-specific waitlist. |
-| 6 | Lead capture & CRM sync | ✅ | 100 | `/api/inquiries` validates payload, inserts to Supabase `leads` table, fires Lark webhook for keynote/consultation/general. Field whitelist enforced. |
-| 7 | Email & onboarding | 🆕 | 0 | No Resend integration found. Form success state shows a WhatsApp link only. **No transactional confirmation, no sequence.** |
-| 8 | Newsletter | 🆕 | 0 | No subscribe form anywhere in the codebase. No newsletter component. No collection logic. Open question: should this live on caiocoach.com instead? |
-
----
+| # | Epic | Status | Evidence |
+|---|---|---|---|
+| 1 | Landing & hero | ✅ | `src/app/page.tsx` renders Hero, About, Speaking, Books, BlogPreview, ContactCTA. |
+| 2 | Speaking & booking | ✅ | `/speaker-topics`, `/book-keynote`; keynote form → `/api/inquiries` → `leads` + Lark card. |
+| 3 | Consulting sales | ✅ | `/ai-in-business`, `/schedule-consultation`; same pipeline. |
+| 4 | Blog (public reading) | 🔄 | 15 posts in `posts-data.ts`, `/blog`, `/blog/[slug]`, `llms.txt`. Still needs a code change per post; moves to the database in Epic 15. |
+| 5 | Books & presales | 📋 | `/books` shows two covers marked "Summer 2026". No retailer links; the CTA is the contact form. |
+| 6 | Lead capture | ✅ | `/api/inquiries` whitelists fields, inserts into `leads`, sends a Lark card. |
+| 7 | Email & onboarding | 🆕 | No Resend code. Later: marketing phase 4. |
+| 8 | Newsletter & broadcasts | 🆕 | No subscribe form. Later: marketing phases 4 and 5. |
+| 9 | The loop | ✅ | Today, Journal, Goals, Review and EO pages; monthly review cron. |
+| 10 | Travel | ✅ | Upcoming, past, map, trip detail with Delete trip; TripIt cron compares content with sorted keys (PR 70). |
+| 11 | Health | ✅ | Fitness and Medical pages; Apple Health ingest; weight and blood sugar metrics. |
+| 12 | Memories, timeline & Ask | ✅ | Photos picker and import, timeline, Ask over `life_reader`, sources page. |
+| 13 | Accounts & addresses | ✅ | `logins` and `addresses` tables and pages (PR 69). |
+| 14 | Personal assistant MCP | ✅ | `/api/life/mcp`, 12 tools, `life_assistant` role, tested on production (PR 71). |
+| 15 | Content core | 📋 | Planned, marketing phase 1. |
+| 16 | Marketing cockpit | 📋 | Planned, marketing phase 2. |
+| 17 | Marketing assistant MCP | 📋 | Planned, marketing phase 3. |
 
 ## Glyph legend
 
 | Glyph | Meaning |
 |---|---|
-| ✅ | Shipped — fully wired, in production |
-| 🔄 | In progress — partial wiring, gaps to close |
-| 📋 | Planned — skeleton exists but not wired |
-| 🆕 | Needs planning — not defined in code |
+| ✅ | Shipped and in production |
+| 🔄 | In progress or partly wired |
+| 📋 | Planned |
+| 🆕 | Not yet planned in detail |
 
----
+## Gaps
 
-## Critical gaps flagged in audit
-
-1. **Email is a stub (Epic 7).** Inquirers see a WhatsApp link, not a transactional confirmation. The Resend integration promised in the epic doc has no code behind it.
-2. **Books are visual-only (Epic 5).** Two book covers with placeholder dates and no retailer links. No native presale capture.
-3. **Newsletter is undefined (Epic 8).** Should this be planned for davehajdu.com or moved to caiocoach.com? Decision before further docs.
-
----
-
-## Recommendation
-
-Consider collapsing Epics 7 and 8 into a single "Post-inquiry communication" epic that decides: (a) Do you want Resend transactional confirmations? (b) Do you want a newsletter signup here, or only on caiocoach.com? The current split creates work-in-progress sprawl without clear dependencies.
-
----
-
-## Audit basis
-
-Code-level audit on 2026-04-29 across `src/app/`, `src/components/`, `src/lib/`, and `src/app/api/`. Percentages reflect production wiring, not test coverage.
+1. **The blog needs a deploy per post** (Epic 4). Fixed by Epics 15 and 16.
+2. **No email** (Epics 7 and 8). Planned for marketing phase 4; who receives broadcasts and which sender is used are decided then.
+3. **Books are visual only** (Epic 5). No plan yet.
