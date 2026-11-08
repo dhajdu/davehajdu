@@ -130,6 +130,17 @@ export async function reorderTodos(date: string, ids: string[], todayCount: numb
   refresh(date);
 }
 
+export async function renameTodo(formData: FormData) {
+  const { supabase } = await requireOwner();
+  const date = dateOf(formData);
+  const id = str(formData, 'id');
+  const title = str(formData, 'title').slice(0, 300);
+  if (!title) return;
+  const { error } = await supabase.from('todos').update({ title }).eq('id', id);
+  if (error) throw new Error(error.message);
+  refresh(date);
+}
+
 export async function dropTodo(formData: FormData) {
   const { supabase } = await requireOwner();
   const date = dateOf(formData);
