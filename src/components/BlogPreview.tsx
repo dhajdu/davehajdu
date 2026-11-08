@@ -1,15 +1,15 @@
 import Link from 'next/link';
-import { POSTS } from '@/lib/posts-data';
+import { listPosts } from '@/lib/blog/posts';
 
-const posts = POSTS.slice(0, 3).map((p) => ({
-  date: p.date,
-  tag: p.category,
-  title: p.title,
-  excerpt: p.excerpt,
-  slug: p.slug,
-}));
+export default async function BlogPreview() {
+  const posts = (await listPosts()).slice(0, 3).map((p) => ({
+    date: p.date,
+    tag: p.category,
+    title: p.title,
+    excerpt: p.excerpt,
+    slug: p.slug,
+  }));
 
-export default function BlogPreview() {
   return (
     <section className="bg-white py-24 md:py-32">
       <div className="max-w-[1080px] mx-auto px-8 sm:px-10">

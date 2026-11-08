@@ -1,13 +1,13 @@
-import { POSTS } from '@/lib/posts-data';
+import { listPosts } from '@/lib/blog/posts';
 
 // Serves /llms.txt — a curated, LLM-friendly map of the site for AI search
 // engines (ChatGPT, Perplexity, Claude, Google AI). Follows the llmstxt.org
-// spec. Generated from POSTS so the writing list stays in sync, mirroring
+// spec. Generated from the published posts so the writing list stays in sync, mirroring
 // sitemap.ts and robots.ts.
 
 const BASE = 'https://www.davehajdu.com';
 
-export const dynamic = 'force-static';
+export const revalidate = 3600;
 
 const CORE_PAGES: { path: string; title: string; desc: string }[] = [
   {
@@ -49,7 +49,8 @@ function link(path: string, title: string, desc: string): string {
   return `- [${title}](${BASE}${path}): ${desc}`;
 }
 
-export function GET() {
+export async function GET() {
+  const posts = await listPosts();
   const sections: string[] = [
     '# Dave Hajdu',
     '',
@@ -67,7 +68,7 @@ export function GET() {
     '',
     '## Writing',
     '',
-    ...POSTS.map((post) => link(`/blog/${post.slug}`, post.title, post.excerpt)),
+    ...posts.map((post) => link(`/blog/${post.slug}`, post.title, post.excerpt)),
     '',
   ];
 

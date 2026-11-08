@@ -178,7 +178,7 @@ Rebuilt in-house on the 8 Edges model: [`../adr/0001-marketing-on-8-edges.md`](.
 
 **Thesis:** Posts live in the database with their brand, so publishing needs no code.
 
-**Bundle:** `brands`, `brand_profiles`, `posts`, campaigns, pillars, images, a storage bucket; the 15 existing posts imported; Epic 4's pages reading from it.
+**Bundle:** `brands`, `brand_profiles`, `posts`, campaigns, pillars, images, a storage bucket; the 14 existing posts imported; Epic 4's pages reading from it.
 
 **Success criterion:** `posts-data.ts` is gone and every old `/blog/<slug>` URL still resolves.
 
