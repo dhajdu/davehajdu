@@ -48,7 +48,7 @@ davehajdu.com is three things in one Next.js app: the **public site** (credibili
 
 **Bundle:** `/blog`, `/blog/[slug]`, OG images, sitemap, `llms.txt`.
 
-**Mechanism:** Today, posts are hard-coded in `src/lib/posts-data.ts`. From marketing phase 1 the pages read published rows from the `posts` table in dave-life and keep their URLs.
+**Mechanism:** The pages read published rows from the `posts` table in dave-life and keep their URLs.
 
 **Success criterion:** A new post goes live without a code change or deploy. Page views per post trend up.
 
@@ -184,7 +184,7 @@ Rebuilt in-house on the 8 Edges model: [`../adr/0001-marketing-on-8-edges.md`](.
 
 ---
 
-## Epic 16 — Marketing cockpit (phase 2, now)
+## Epic 16 — Marketing cockpit (phase 2, shipped)
 
 **Thesis:** A post goes from idea to live, or scheduled, entirely inside /life.
 
@@ -194,7 +194,7 @@ Rebuilt in-house on the 8 Edges model: [`../adr/0001-marketing-on-8-edges.md`](.
 
 ---
 
-## Epic 17 — Marketing assistant MCP (phase 3, now)
+## Epic 17 — Marketing assistant MCP (phase 3, shipped)
 
 **Thesis:** An assistant keeps the blog current by drafting in Dave's voice, and can never publish.
 

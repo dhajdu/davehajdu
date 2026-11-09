@@ -11,6 +11,10 @@
     {
       "path": "/api/life/cron/review",
       "schedule": "0 23 * * *"
+    },
+    {
+      "path": "/api/cron/blog-publish",
+      "schedule": "0 1 * * *"
     }
   ]
 }
