@@ -81,6 +81,12 @@ export function weekStart(date: string): string {
   return addDays(date, -((dow + 6) % 7));
 }
 
+// Which week of its month a Monday-start week is, 1 to 5. A week belongs to
+// the month its Thursday falls in, so Nov 30 to Dec 6 is December's week 1.
+export function weekOfMonth(monday: string): number {
+  return Math.ceil(Number(addDays(monday, 3).slice(8, 10)) / 7);
+}
+
 export function daysBetween(from: string, to: string): number {
   return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
 }

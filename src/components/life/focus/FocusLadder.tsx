@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { TRACKS, type Focus, type GoalRow, type Track } from '@/lib/life/focus';
-import { addDays, formatDate } from '@/lib/life/metrics';
+import { addDays, formatDate, weekOfMonth } from '@/lib/life/metrics';
 import { SaveButton } from '@/components/life/SaveButton';
 import { setOneThing } from '@/app/life/(app)/journal/[date]/actions';
 import { setFocusGoal } from '@/app/life/(app)/goals/actions';
@@ -102,7 +102,7 @@ export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals
         <div className="life-rung">
           <span className="life-rung-dot" />
           <span className="life-rung-label">
-            This week
+            Week {weekOfMonth(week)}
             <small>{short(week)} to {short(addDays(week, 6))}</small>
           </span>
           <div className="life-rung-body">
