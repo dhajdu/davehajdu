@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Hero images are uploaded through a server action in /life/marketing.
+  experimental: { serverActions: { bodySizeLimit: '8mb' } },
+  // Post images live in dave-life's public blog bucket.
+  images: { remotePatterns: [{ protocol: 'https', hostname: 'akqpginnzgegavihlwmw.supabase.co', pathname: '/storage/v1/object/public/blog/**' }] },
   async rewrites() {
     return [{ source: '/personal-os', destination: '/personal-os/index.html' }];
   },

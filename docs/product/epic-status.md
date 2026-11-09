@@ -19,8 +19,8 @@ At-a-glance status of the epics in [`epics.md`](./epics.md), from a code audit o
 | 13 | Accounts & addresses | ✅ | `logins` and `addresses` tables and pages (PR 69). |
 | 14 | Personal assistant MCP | ✅ | `/api/life/mcp`, 12 tools, `life_assistant` role, tested on production (PR 71). |
 | 15 | Content core | ✅ | Brands, profiles, pillars, campaigns, posts, images, `blog` bucket; 14 posts imported and verified against production. |
-| 16 | Marketing cockpit | 📋 | Planned, marketing phase 2. |
-| 17 | Marketing assistant MCP | 📋 | Planned, marketing phase 3. |
+| 16 | Marketing cockpit | ✅ | `/life/marketing`: overview, calendar, campaigns, post editor, brand; publish gate, version-bound approval, schedule, live-edit lock, daily cron. |
+| 17 | Marketing assistant MCP | ✅ | `/api/marketing/mcp`, 9 tools, `marketing_assistant` role, denial tests in `supabase/life/tests`. |
 
 ## Glyph legend
 
@@ -33,6 +33,5 @@ At-a-glance status of the epics in [`epics.md`](./epics.md), from a code audit o
 
 ## Gaps
 
-1. **No editor yet** (Epic 4). Posts are edited in the database until the cockpit (Epic 16).
-2. **No email** (Epics 7 and 8). Planned for marketing phase 4; who receives broadcasts and which sender is used are decided then.
-3. **Books are visual only** (Epic 5). No plan yet.
+1. **No email** (Epics 7 and 8). Planned for marketing phase 4; who receives broadcasts and which sender is used are decided then.
+2. **Books are visual only** (Epic 5). No plan yet.
