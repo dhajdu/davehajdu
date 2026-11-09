@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Focus, GoalRow } from '@/lib/life/focus';
 import { doneCount, parseRoutine, type Reference, type TodoNode } from '@/lib/life/journal';
 import { formatDate } from '@/lib/life/format';
+import { weekOfMonth } from '@/lib/life/metrics';
 import { Markdown } from '@/components/life/Markdown';
 import { StatusMark, goalStatus } from '@/components/life/focus/StatusMark';
 import { DoneList } from '@/components/life/journal/TodoList';
@@ -74,7 +75,7 @@ export function JournalRail({ focus, goals, refs, today, week: weekKey, date, do
               <li key={g.id} className={`life-goal is-${goalStatus(g.status)} is-now`}>
                 <StatusMark status={goalStatus(g.status)} />
                 <span className="life-goal-text">
-                  <span className="text-muted">Week {weekNo}, {trackWord(g).toLowerCase()} · </span>
+                  <span className="text-muted">Week {weekOfMonth(weekKey)}, {trackWord(g).toLowerCase()} · </span>
                   {g.title}
                 </span>
               </li>
