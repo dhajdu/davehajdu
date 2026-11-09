@@ -1,9 +1,11 @@
 import type { MetadataRoute } from 'next';
-import { POSTS } from '@/lib/posts-data';
+import { listPosts } from '@/lib/blog/posts';
 
 const BASE = 'https://www.davehajdu.com';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticRoutes = [
@@ -21,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: path === '' ? 1.0 : 0.8,
   }));
 
-  const postRoutes = POSTS.map((post) => ({
+  const postRoutes = (await listPosts()).map((post) => ({
     url: `${BASE}/blog/${post.slug}`,
     lastModified: now,
     changeFrequency: 'monthly' as const,

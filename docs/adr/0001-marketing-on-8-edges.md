@@ -20,4 +20,4 @@ Every blog post on davehajdu.com is a hand edit to `src/lib/posts-data.ts` and n
 - Publishing stops needing deploys; `posts-data.ts` is deleted once the import is verified.
 - The public blog now depends on dave-life. The reader is cached and revalidated on publish, so an outage affects new posts, not pages already rendered.
 - Edge8 fixes don't flow here automatically; the two codebases diverge after the port.
-- dave-life gets a public read path for the first time, limited to published posts through a server-side reader.
+- dave-life gets a public read path for the first time: anonymous readers see published posts, brands and pillars only, enforced by row security.

@@ -17,7 +17,7 @@ A marketing assistant then keeps the blog current over its own MCP, with databas
 
 - **Who feels it:** Dave, the only person who can publish on davehajdu.com.
 - **What it costs:**
-  - Every post is a hand edit to `src/lib/posts-data.ts`: 938 lines of TypeScript covering 15 posts.
+  - Every post is a hand edit to `src/lib/posts-data.ts`: 938 lines of TypeScript covering 14 posts.
   - Every post needs a code deploy to go live.
   - No assistant can safely draft or refresh posts, so the blog falls behind.
   - Edge8 has already solved this (calendar, SEO checks, approval, scheduling, AI images, a publish editor), but davehajdu.com can't use it.
@@ -68,16 +68,16 @@ A marketing assistant then keeps the blog current over its own MCP, with databas
 | **Brands, brand profiles, auto-publish** | `marketing/brands`, `brand-profiles.ts`, `brand-sites.ts` | Port. Every asset, campaign and pillar belongs to a brand, and the profile drives the writing (voice, rules, banned words). One brand now; a second brand adds a profile and, if it has its own site, a `brand_sites` entry. |
 | **Personal sections** (per-recipient learner progress), **revenue board sync** | `personal-sections.ts`, `learner-progress.ts`, `crons/revenue-content-sync.ts` | Skip: tied to the AIO platform and Edge8 revenue |
 
-**Database (decided 2026-11-08):** dave-life. It already holds the journal, so drafts can grow out of journal days, and it has the owner login and the role-per-assistant pattern. The public blog reads published posts from it with the server-side key, only through a reader limited to published rows.
+**Database (decided 2026-11-08):** dave-life. It already holds the journal, so drafts can grow out of journal days, and it has the owner login and the role-per-assistant pattern. The public blog reads published posts from it with the publishable key; row security limits anonymous readers to published rows (changed during phase 1 from the server-side key, so no secret serves a public page).
 
 **What exists here:**
-- 15 posts with block content in `posts-data.ts`, plus images in `public/images/`.
+- 14 posts with block content in `posts-data.ts`, plus images in `public/images/`.
 - `/blog` and `/blog/[slug]` pages, `sitemap.ts`, `llms.txt`.
 
 **What's new:**
 - Migrations for `brands`, `brand_profiles`, `posts`, `post_pillars`, `post_images` and the `blog` bucket, plus a seeded "Dave Hajdu" brand and profile written from his existing posts.
 - A `marketing_assistant` role.
-- A one-time import of the 15 posts (blocks → markdown).
+- A one-time import of the 14 posts (blocks → markdown).
 - Env vars `MARKETING_ASSISTANT_TOKEN`, plus `GEMINI_API_KEY` for images.
 
 ## 3. Design the workflow
@@ -121,7 +121,7 @@ A marketing assistant then keeps the blog current over its own MCP, with databas
 | When | Phase | What |
 |---|---|---|
 | **Now** | 0 | Docs refresh and this plan agreed |
-| **Now** | 1 | **Content core:** migrations (brands and profiles, content assets, campaigns, pillars, images, bucket); import the 15 posts; public blog reads from the database (reader, `/blog`, `/blog/[slug]`, OG images, sitemap, `llms.txt`, revalidation); delete `posts-data.ts` |
+| **Now** | 1 | **Content core:** migrations (brands and profiles, content assets, campaigns, pillars, images, bucket); import the 14 posts; public blog reads from the database (reader, `/blog`, `/blog/[slug]`, OG images, sitemap, `llms.txt`, revalidation); delete `posts-data.ts` |
 | **Now** | 2 | **Marketing cockpit in /life:** overview, calendar (kanban and month), campaigns, post editor, publish gate, approve, schedule, live-edit lock, cron |
 | **Now** | 3 | **Marketing assistant MCP** and the `marketing_assistant` role, with denial tests |
 | Later | 4 | **Email:** contacts and audiences, broadcasts, approval, send cap and send window, Resend sending and webhook, tracking, unsubscribe, UTM. Fills Epics 7 and 8. |

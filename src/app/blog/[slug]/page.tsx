@@ -1,40 +1,26 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { POSTS, BLOCKS_BY_SLUG, FAQS_BY_SLUG, type Block } from '@/lib/posts-data';
+import { listPosts, getPost } from '@/lib/blog/posts';
+import { parseBody, type Block } from '@/lib/blog/body';
 
 type Props = { params: Promise<{ slug: string }> };
 
+// Static, refreshed hourly until publishing revalidates on demand (marketing phase 2).
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
-  return POSTS.map((post) => ({ slug: post.slug }));
+  return (await listPosts()).map((post) => ({ slug: post.slug }));
 }
-
-// SEO-optimized shorter titles for posts whose full display title exceeds 60 chars
-const SEO_TITLE_OVERRIDES: Record<string, string> = {
-  'ai-officer-mindset': 'AI Officer Mindset: Learning to Results in 12 Hours',
-  'entrepreneurial-learnings': '18 Entrepreneurial Learnings from Tough Markets',
-  'fire-horse-2026': 'Year of the Fire Horse 2026: Week One Lessons',
-  'supabase-for-non-technical-founders': 'Supabase for Non-Technical Founders',
-  'leverage-yourself-first': 'How Founders Should Use AI: The Infinite Leverage Math',
-  'tore-up-my-website': "Four AI Metrics That Prove You're Leading AI, Not Just Using It",
-};
-
-// Per-post meta description overrides (when seo.md specifies a different one than the excerpt)
-const META_DESCRIPTION_OVERRIDES: Record<string, string> = {
-  'leverage-yourself-first':
-    "How founders should use AI: the math most people get wrong. AI multiplies the version of you running it. Here's the 90-day proof.",
-  'tore-up-my-website':
-    'Most founders track AI tools, not AI outcomes. Here are the four AI metrics I rebuilt my consulting business around after one Verne Harnish talk in Manila.',
-};
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const post = POSTS.find((p) => p.slug === slug);
+  const post = await getPost(slug);
   if (!post) return {};
   const ogShare = post.ogImage ?? post.image;
   const ogImage = ogShare ? [ogShare] : undefined;
-  const seoTitleBase = SEO_TITLE_OVERRIDES[slug] || post.title;
-  const description = META_DESCRIPTION_OVERRIDES[slug] || post.excerpt;
+  const seoTitleBase = post.titleTag || post.title;
+  const description = post.metaDescription || post.excerpt;
   return {
     title: `${seoTitleBase} | Dave Hajdu`,
     description,
@@ -225,18 +211,19 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = POSTS.find((p) => p.slug === slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
-  const blocks = BLOCKS_BY_SLUG[slug] ?? [];
-  const faqs = FAQS_BY_SLUG[slug];
+  const blocks = parseBody(post.bodyMd);
+  const faqs = post.faqs;
   const gradient = DAY_GRADIENTS[(post.dayNumber ?? 0) % DAY_GRADIENTS.length];
   const categoryColor = CATEGORY_COLORS[post.category] ?? 'bg-gray-100 text-gray-600';
 
   // Adjacent posts
-  const idx = POSTS.indexOf(post);
-  const prevPost = idx < POSTS.length - 1 ? POSTS[idx + 1] : null;
-  const nextPost = idx > 0 ? POSTS[idx - 1] : null;
+  const posts = await listPosts();
+  const idx = posts.findIndex((p) => p.slug === slug);
+  const prevPost = idx < posts.length - 1 ? posts[idx + 1] : null;
+  const nextPost = idx > 0 ? posts[idx - 1] : null;
 
   return (
     <>
