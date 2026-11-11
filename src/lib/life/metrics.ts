@@ -87,6 +87,15 @@ export function weekOfMonth(monday: string): number {
   return Math.ceil(Number(addDays(monday, 3).slice(8, 10)) / 7);
 }
 
+// The Mondays of the weeks that belong to a month (by the Thursday rule above), four or five of them.
+export function monthWeeks(period: string): string[] {
+  let monday = weekStart(`${period}-01`);
+  if (addDays(monday, 3).slice(0, 7) !== period) monday = addDays(monday, 7);
+  const out: string[] = [];
+  for (; addDays(monday, 3).slice(0, 7) === period; monday = addDays(monday, 7)) out.push(monday);
+  return out;
+}
+
 export function daysBetween(from: string, to: string): number {
   return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
 }

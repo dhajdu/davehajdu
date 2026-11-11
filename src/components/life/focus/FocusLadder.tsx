@@ -48,7 +48,8 @@ function FocusForm({ horizon, period, track, placeholder }: { horizon: 'week' | 
   );
 }
 
-export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals: GoalRow[]; today: string; week: string }) {
+// `weeks` lists the Mondays shown in the Weekly rung; without it, only the current week.
+export function FocusLadder({ focus, goals, today, week, weeks = [week] }: { focus: Focus; goals: GoalRow[]; today: string; week: string; weeks?: string[] }) {
   const year = today.slice(0, 4);
   const period = today.slice(0, 7);
   const short = (d: string) => formatDate(d, { month: 'short', day: 'numeric' });
@@ -59,9 +60,6 @@ export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals
 
   // The journal's ❸ block only speaks for the month it names.
   const journalMonth = focus.month && focus.month.month.trim().toLowerCase() === monthName.toLowerCase() ? focus.month : null;
-  const dayOfMonth = Number(today.slice(8, 10));
-  const weekNo = Math.min(5, Math.ceil(dayOfMonth / 7));
-  const journalWeek = journalMonth?.weeks.find((w) => w.week === weekNo) ?? null;
   const journalGoals = journalMonth ? (journalMonth.goals.length ? journalMonth.goals : journalMonth.moves) : [];
 
   const of = (horizon: GoalRow['horizon'], track: Track, p?: string) => goals.filter((g) => g.horizon === horizon && g.track === track && (p === undefined || g.period === p));
@@ -102,33 +100,46 @@ export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals
         <div className="life-rung">
           <span className="life-rung-dot" />
           <span className="life-rung-label">
-            Week {weekOfMonth(week)}
-            <small>{short(week)} to {short(addDays(week, 6))}</small>
+            Weekly
+            <small>{monthName}</small>
           </span>
-          <div className="life-rung-body">
-            <Tracks>
-              {(track) => {
-                const rows = of('week', track, week);
-                if (rows.length) return <GoalLines rows={rows} />;
-                if (journalWeek && guessTrack(journalWeek.text) === track) {
-                  return (
-                    <p className={`life-rung-item is-${journalWeek.status}`}>
-                      <StatusMark status={journalWeek.status} />
-                      <span>{journalWeek.text}</span>
-                    </p>
-                  );
-                }
-                return <FocusForm horizon="week" period={week} track={track} placeholder={`The one thing ${noun(track)} this week`} />;
-              }}
-            </Tracks>
+          <div className="life-rung-body life-rung-weeks">
+            {weeks.map((w) => {
+              const no = weekOfMonth(w);
+              const journalWeek = journalMonth?.weeks.find((x) => x.week === no) ?? null;
+              const when = w === week ? 'this week' : `in week ${no}`;
+              return (
+                <div key={w} className={`life-rung-week${w === week ? ' is-this' : w < week ? ' is-past' : ''}`}>
+                  <span className="life-rung-week-label">
+                    Week {no}
+                    <small>{short(w)} to {short(addDays(w, 6))}{w === week ? ' · this week' : ''}</small>
+                  </span>
+                  <Tracks>
+                    {(track) => {
+                      const rows = of('week', track, w);
+                      if (rows.length) return <GoalLines rows={rows} />;
+                      if (journalWeek && guessTrack(journalWeek.text) === track) {
+                        return (
+                          <p className={`life-rung-item is-${journalWeek.status}`}>
+                            <StatusMark status={journalWeek.status} />
+                            <span>{journalWeek.text}</span>
+                          </p>
+                        );
+                      }
+                      return <FocusForm horizon="week" period={w} track={track} placeholder={`The one thing ${noun(track)} ${when}`} />;
+                    }}
+                  </Tracks>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         <div className="life-rung">
           <span className="life-rung-dot" />
           <span className="life-rung-label">
-            {monthName}
-            <small>this month</small>
+            Monthly
+            <small>{monthName}</small>
           </span>
           <div className="life-rung-body">
             <Tracks>
@@ -156,8 +167,8 @@ export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals
         <div className="life-rung">
           <span className="life-rung-dot" />
           <span className="life-rung-label">
-            {year}
-            <small>this year</small>
+            Yearly
+            <small>{year}</small>
           </span>
           <div className="life-rung-body">
             <Tracks>
@@ -178,7 +189,7 @@ export function FocusLadder({ focus, goals, today, week }: { focus: Focus; goals
         <div className="life-rung">
           <span className="life-rung-dot" />
           <span className="life-rung-label">
-            Five years
+            5 Year Vision
             <small>by {Number(year) + 5}</small>
           </span>
           <div className="life-rung-body">

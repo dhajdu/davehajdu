@@ -321,6 +321,14 @@
 .life-rung { display: grid; grid-template-columns: 22px 110px minmax(0, 1fr); gap: 0 16px; align-items: start; padding: 14px 0; border-top: 1px dashed rgba(255, 255, 255, 0.12); }
 .life-rung:first-child { border-top: 0; }
 .life-rung-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.35); margin: 7px auto 0; position: relative; }
+.life-rung-weeks { gap: 0; }
+.life-rung-week { display: grid; gap: 6px; padding: 12px 0; border-top: 1px dashed rgba(255, 255, 255, 0.12); }
+.life-rung-week:first-child { padding-top: 0; border-top: 0; }
+.life-rung-week:last-child { padding-bottom: 0; }
+.life-rung-week-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.62); }
+.life-rung-week-label small { font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; color: rgba(255, 255, 255, 0.42); margin-left: 8px; }
+.life-rung-week.is-this .life-rung-week-label { color: var(--life-mint); }
+.life-rung-week.is-past .life-rung-tracks { opacity: 0.6; }
 .life-rung.is-now .life-rung-dot { background: var(--life-mint); box-shadow: 0 0 0 4px rgba(111, 242, 193, 0.22); }
 .life-rung-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.62); padding-top: 5px; }
 .life-rung-label small { display: block; font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; color: rgba(255, 255, 255, 0.42); margin-top: 2px; }
