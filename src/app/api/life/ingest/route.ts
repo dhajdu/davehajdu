@@ -54,7 +54,8 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R
 }
 
 export async function POST(request: Request) {
-  if (!hasSecret(request, 'LIFE_INGEST_SECRET')) {
+  // The Gmail Apps Script has its own secret, so setting it up never means re-keying Health Auto Export.
+  if (!hasSecret(request, 'LIFE_INGEST_SECRET') && !hasSecret(request, 'LIFE_GMAIL_INGEST_SECRET')) {
     return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
 
