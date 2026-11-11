@@ -581,8 +581,6 @@
 .life-lab-trend { min-width: 0; }
 
 /* ── Journal ───────────────────────────────────────────────────────────── */
-.life-journal-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr); gap: 20px; align-items: start; }
-@media (max-width: 960px) { .life-journal-grid { grid-template-columns: 1fr; } }
 .life-journal { display: grid; gap: 14px; }
 .life-journal .life-card { display: grid; gap: 8px; }
 .life-main .life-journal-one { font-size: 20px; font-weight: 700; padding: 10px 12px; }
@@ -641,16 +639,6 @@
 .life-todo-line-rule { flex: 1; height: 2px; border-radius: 2px; background: var(--life-mint); }
 .life-todo-line-text { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; white-space: nowrap; }
 .life-todo-line.is-dragging { opacity: 0.35; }
-.life-rail { display: grid; gap: 8px; position: sticky; top: 20px; }
-.life-rail > details { background: var(--life-surface); border: 1px solid var(--life-line); border-radius: 12px; box-shadow: var(--life-shadow); padding: 10px 14px; }
-.life-rail > details > summary { cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--life-muted); }
-.life-rail > details[open] > summary { margin-bottom: 8px; }
-.life-rail .life-goal { font-size: 13px; }
-.life-rail .life-md { font-size: 13px; }
-.life-rail .life-todo { font-size: 13px; }
-.life-rail-foot { font-size: 12px; text-align: right; }
-.life-main .life-rail-foot a { color: var(--life-blue); font-weight: 600; }
-@media (max-width: 960px) { .life-rail { position: static; } }
 .life-md-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 4px 0; }
 .life-main .life-md-table td { padding: 3px 6px; border-bottom: 1px solid var(--life-line-soft); vertical-align: top; }
 .life-md-table tr:first-child td { font-weight: 700; color: var(--life-ink); }
@@ -907,3 +895,44 @@
 @media (prefers-reduced-motion: reduce) {
   .life-climb-dot, .life-climb-rung, .life-climb-rail, .life-login-check, .life-login-progress span { transition: none; animation: none; }
 }
+
+/* ── Today: four rows, all about the day ───────────────────────────────── */
+.life-today { display: grid; gap: 14px; }
+.life-today-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 760px) { .life-today-two { grid-template-columns: minmax(0, 1fr); } }
+.life-today-two > .life-card { display: flex; flex-direction: column; gap: 10px; }
+.life-today-two > .life-card > .life-card-title { margin-bottom: 2px; }
+.life-today-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding: 10px 16px; }
+.life-today-found { flex: 1 1 320px; min-width: 0; }
+.life-today-found[open] { flex-basis: 100%; }
+.life-today-found > summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; font-size: 13px; color: var(--life-body); }
+.life-today-found > summary::-webkit-details-marker { display: none; }
+.life-today-found > summary b { font-weight: 700; color: var(--life-ink); }
+.life-today-found[open] > summary { margin-bottom: 14px; }
+.life-today-more { font-size: 12px; font-weight: 600; color: var(--life-info-ink); }
+.life-today-more::after { content: " ▾"; }
+.life-today-found[open] .life-today-more::after { content: " ▴"; }
+.life-today-stats { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.life-today-stat { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--life-muted); }
+.life-main .life-today-stat input { width: 88px; padding: 5px 8px; }
+.life-main .life-today .life-journal-one { font-size: 17px; font-weight: 700; padding: 9px 12px; }
+.life-today-week { background: var(--life-info-bg); border-color: transparent; box-shadow: none; }
+.life-today-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.life-today-head small { font-size: 12px; font-weight: 600; color: var(--life-info-ink); }
+.life-today-commit { display: grid; gap: 2px; }
+.life-today-commit > span { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--life-info-ink); }
+.life-today-commit p { font-size: 17px; font-weight: 700; line-height: 1.3; color: var(--life-ink); overflow-wrap: anywhere; }
+.life-today-commit p.is-empty { font-weight: 500; color: var(--life-body); }
+.life-today-commit p.is-hit { color: var(--life-ok-ink); }
+.life-today-commit p.is-missed { color: var(--life-body); text-decoration: line-through; }
+.life-main .life-today-nhb { flex: 1; min-height: 120px; resize: vertical; line-height: 1.5; font-size: 15px; }
+.life-today-status { min-height: 16px; margin-top: -6px; font-size: 12px; text-align: right; color: var(--life-muted); }
+.life-today-status.is-error { color: #8F2459; }
+.life-little-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 8px 16px; margin: 22px 0 10px; }
+.life-little-head h2 { font-size: 18px; font-weight: 800; letter-spacing: -0.2px; color: var(--life-ink); }
+.life-little-month { display: flex; align-items: flex-end; gap: 10px; font-size: 12px; color: var(--life-muted); }
+.life-little-bars { display: flex; align-items: flex-end; gap: 2px; height: 24px; }
+.life-little-bars i { width: 5px; border-radius: 2px; background: var(--life-faint); }
+.life-little-bars i.is-now { background: var(--life-ok-ink); }
+.life-little-bars i.is-future { opacity: 0.4; }
+.life-little-done { margin-left: 4px; font-size: 20px; font-weight: 800; color: var(--life-ok-ink); }
