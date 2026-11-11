@@ -96,7 +96,7 @@ const owner = await ownerIdFrom(db);
 
 const { data: source, error: sErr } = await db
   .from('sources')
-  .upsert({ slug: 'whoop', name: 'Whoop', method: 'Whoop data export (CSV)', cadence: 'on demand' }, { onConflict: 'slug' })
+  .upsert({ slug: 'whoop', name: 'Whoop', method: 'Whoop API', cadence: 'daily' }, { onConflict: 'slug' })
   .select('id')
   .single();
 if (sErr || !source) throw new Error(`sources: ${sErr?.message}`);
