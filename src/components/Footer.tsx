@@ -40,6 +40,12 @@ export default function Footer() {
           >
             LinkedIn
           </Link>
+          <Link href="/privacy" className="text-white/25 text-[12px] hover:text-white/50 transition-colors">
+            Privacy
+          </Link>
+          <Link href="/terms" className="text-white/25 text-[12px] hover:text-white/50 transition-colors">
+            Terms
+          </Link>
           <a
             href="/llms.txt"
             className="text-white/25 text-[12px] hover:text-white/50 transition-colors"
