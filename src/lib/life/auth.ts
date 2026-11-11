@@ -26,7 +26,7 @@ export async function requireOwner() {
 }
 
 // Bearer-secret check for machine callers (Apps Script, Health Auto Export, cron).
-export function hasSecret(request: Request, envName: 'LIFE_INGEST_SECRET' | 'CRON_SECRET') {
+export function hasSecret(request: Request, envName: 'LIFE_INGEST_SECRET' | 'LIFE_GMAIL_INGEST_SECRET' | 'CRON_SECRET') {
   const expected = process.env[envName];
   const header = request.headers.get('authorization') ?? '';
   return !!expected && header === `Bearer ${expected}`;
