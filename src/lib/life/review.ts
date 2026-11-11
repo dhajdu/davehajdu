@@ -342,6 +342,17 @@ async function build(period: string, force: boolean): Promise<DraftResult> {
       .select('id')
       .single();
     if (error) throw new Error(error.message);
+    // A new draft needs the owner: put it on today's to-do list, at the end of today's items.
+    const today = ictToday();
+    const { data: last } = await db.from('todos').select('sort_order').eq('owner_id', owner).order('sort_order', { ascending: false }).limit(1);
+    const { error: todoErr } = await db.from('todos').insert({
+      owner_id: owner,
+      title: `Do the ${periodLabel(period, 'long')} review`,
+      added_on: today,
+      planned_on: today,
+      sort_order: (last?.[0]?.sort_order ?? 0) + 1,
+    });
+    if (todoErr) throw new Error(todoErr.message);
     return { ...base, reviewId: data.id, drafted: !!eo, action: 'inserted' };
   }
   const { error } = await db.from('reviews').update(patch).eq('id', existing.id);

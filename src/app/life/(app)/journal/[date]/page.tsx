@@ -7,10 +7,12 @@ import { Markdown } from '@/components/life/Markdown';
 import { SaveButton } from '@/components/life/SaveButton';
 import { TodoList } from '@/components/life/journal/TodoList';
 import { JournalRail } from '@/components/life/journal/JournalRail';
+import { Foundation } from '@/components/life/health/Foundation';
 import { getFocus, getLongGoals } from '@/lib/life/focus';
 import { EMPTY_FIELDS, dayFields, getDay, getDayNumber, getPinnedReferences, getTodos, isDateKey, nextDay, prevDay } from '@/lib/life/journal';
 import { fieldsFromMarkdown } from '@/lib/life/focus-parse';
-import { BLOOD_SUGAR, WEIGHT } from '@/lib/life/health';
+import { BLOOD_SUGAR, WEIGHT, getHealth } from '@/lib/life/health';
+import { getLabs } from '@/lib/life/labs';
 import { formatDate, ictToday, weekStart } from '@/lib/life/metrics';
 import { saveDay } from './actions';
 
@@ -23,7 +25,7 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
   const today = ictToday();
   if (date > today) notFound();
 
-  const [entry, dayNo, todos, weightRes, sugarRes, focus, goals, refs] = await Promise.all([
+  const [entry, dayNo, todos, weightRes, sugarRes, focus, goals, refs, health, labs] = await Promise.all([
     getDay(supabase, date),
     getDayNumber(supabase, date),
     getTodos(supabase, date),
@@ -32,9 +34,14 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
     getFocus(supabase, today),
     getLongGoals(supabase, today.slice(0, 7), weekStart(today)),
     getPinnedReferences(supabase),
+    getHealth(supabase, today, 30),
+    getLabs(supabase),
   ]);
   const weight = (weightRes.data as { value: number | string } | null)?.value;
   const sugar = (sugarRes.data as { value: number | string } | null)?.value;
+  const weightTarget = goals.find((x) => x.metric?.slug === WEIGHT && x.target_value !== null && x.status === 'open')?.target_value;
+  const hba1c = labs.readings.find((r) => r.metric.slug === 'hba1c') ?? null;
+  const hba1cTarget = goals.find((x) => x.metric?.slug === 'hba1c' && x.target_value !== null && x.status === 'open')?.target_value;
   const fromNotion = !!entry && !entry.fields;
   const f = dayFields(entry?.fields ?? (entry ? fieldsFromMarkdown(entry.body_md) : EMPTY_FIELDS));
   const g = [f.gratitude[0] ?? '', f.gratitude[1] ?? '', f.gratitude[2] ?? ''];
@@ -54,6 +61,16 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
           </div>
         }
       />
+
+      <Card title="The foundation" className="mb-5">
+        <Foundation
+          health={health}
+          today={today}
+          weightTarget={weightTarget === undefined || weightTarget === null ? null : Number(weightTarget)}
+          hba1c={hba1c}
+          hba1cTarget={hba1cTarget === undefined || hba1cTarget === null ? null : Number(hba1cTarget)}
+        />
+      </Card>
 
       <div className="life-journal-grid">
       <div className="space-y-5 min-w-0">
