@@ -55,6 +55,7 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ ready: true, imported: batch.length, remaining, skipped, total: photos.length });
   } catch (e) {
+    console.error('[memories] import failed:', e);
     const status = e instanceof GoogleDisconnected ? 409 : 500;
     return NextResponse.json({ error: e instanceof Error ? e.message : 'Import failed' }, { status });
   }
