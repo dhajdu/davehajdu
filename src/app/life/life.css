@@ -902,22 +902,12 @@
 @media (max-width: 760px) { .life-today-two { grid-template-columns: minmax(0, 1fr); } }
 .life-today-two > .life-card { display: flex; flex-direction: column; gap: 10px; }
 .life-today-two > .life-card > .life-card-title { margin-bottom: 2px; }
-.life-today-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding: 10px 16px; }
-.life-today-found { flex: 1 1 320px; min-width: 0; }
-.life-today-found[open] { flex-basis: 100%; }
-.life-today-found > summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; font-size: 13px; color: var(--life-body); }
-.life-today-found > summary::-webkit-details-marker { display: none; }
-.life-today-found > summary b { font-weight: 700; color: var(--life-ink); }
-.life-today-found[open] > summary { margin-bottom: 14px; }
-.life-today-more { font-size: 12px; font-weight: 600; color: var(--life-info-ink); }
-.life-today-more::after { content: " ▾"; }
-.life-today-found[open] .life-today-more::after { content: " ▴"; }
 .life-today-stats { display: flex; flex-wrap: wrap; gap: 8px 14px; }
 .life-today-stat { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--life-muted); }
 .life-main .life-today-stat input { width: 88px; padding: 5px 8px; }
 .life-main .life-today .life-journal-one { font-size: 17px; font-weight: 700; padding: 9px 12px; }
 .life-today-week { background: var(--life-info-bg); border-color: transparent; box-shadow: none; }
-.life-today-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.life-today-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
 .life-today-head small { font-size: 12px; font-weight: 600; color: var(--life-info-ink); }
 .life-today-commit { display: grid; gap: 2px; }
 .life-today-commit > span { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--life-info-ink); }
