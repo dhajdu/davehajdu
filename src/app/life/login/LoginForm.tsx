@@ -135,17 +135,17 @@ export default function LoginForm() {
           <Mark />
           <span>/life</span>
         </div>
-        <div className={`life-ladder${level === 4 ? ' is-top' : ''}`} aria-hidden>
-          <span className="life-ladder-rail is-left" />
-          <span className="life-ladder-rail is-right" />
+        <div className={`life-climb${level === 4 ? ' is-top' : ''}`} aria-hidden>
+          <span className="life-climb-rail is-left" />
+          <span className="life-climb-rail is-right" />
           {rungs.map((label, i) => (
-            <span key={i} className={`life-ladder-rung is-${i + 1}${level > i ? ' is-lit' : ''}`}>
+            <span key={i} className={`life-climb-rung is-${i + 1}${level > i ? ' is-lit' : ''}`}>
               <span>{label}</span>
             </span>
           ))}
-          <span className="life-ladder-goal" />
-          <span className="life-ladder-dot" style={{ bottom: DOT_BOTTOM[level] }} />
-          <span className="life-ladder-top">Today’s one thing</span>
+          <span className="life-climb-goal" />
+          <span className="life-climb-dot" style={{ bottom: DOT_BOTTOM[level] }} />
+          <span className="life-climb-top">Today’s one thing</span>
         </div>
         <p className="life-login-caption">
           {caption}
