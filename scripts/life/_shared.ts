@@ -1,8 +1,7 @@
 // Shared bits for /life scripts. Import it dynamically after the resolve hook
-// in each script is registered (see the top of notion-import.ts).
-import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+// in each script is registered (see the top of import-whoop.ts).
+import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -34,20 +33,4 @@ export async function ownerIdFrom(db: SupabaseClient): Promise<string> {
   const user = data.users.find((u) => u.email?.toLowerCase() === email);
   if (!user) throw new Error('Owner has not signed in to /life yet');
   return user.id;
-}
-
-// File cache for Notion block trees, keyed by page id + last edit time, so a
-// dry run followed by the real import fetches each page once.
-export function fileTreeCache(dir = join(tmpdir(), 'life-notion-cache')) {
-  mkdirSync(dir, { recursive: true });
-  const path = (k: string) => join(dir, k.replace(/[^a-zA-Z0-9-]/g, '_') + '.json');
-  return {
-    async get(k: string) {
-      const p = path(k);
-      return existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : undefined;
-    },
-    async set(k: string, v: unknown) {
-      writeFileSync(path(k), JSON.stringify(v));
-    },
-  };
 }

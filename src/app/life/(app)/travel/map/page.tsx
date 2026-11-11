@@ -94,7 +94,7 @@ export default async function TravelMapPage() {
       <TravelTabs active="map" hasCurrent={trips.some((t) => isCurrent(t, todayKey()))} />
 
       {visited.length === 0 ? (
-        <EmptyState>Places come from the airports and hotels on your bookings, which arrive from Gmail and TripIt. None yet.</EmptyState>
+        <EmptyState>Places come from the airports and hotels on your bookings, which arrive from Gmail. None yet.</EmptyState>
       ) : (
         <div className="space-y-5">
           {pins.length > 0 ? (

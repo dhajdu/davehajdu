@@ -52,9 +52,7 @@ NEXT_PUBLIC_LIFE_SUPABASE_PUBLISHABLE_KEY=
 LIFE_SUPABASE_SECRET_KEY=          # ingest routes + scripts only
 LIFE_OWNER_EMAIL=
 LIFE_INGEST_SECRET=                # shared with Apps Script and Health Auto Export
-NOTION_TOKEN=                      # internal integration shared with Journal + EO Updates
 ANTHROPIC_API_KEY=
-TRIPIT_ICAL_URL=                   # already in .env.local
 HOME_AIRPORT=SGN
 CRON_SECRET=                       # Vercel cron auth
 ```

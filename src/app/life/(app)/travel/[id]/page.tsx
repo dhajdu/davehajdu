@@ -122,7 +122,7 @@ export default async function TripPage({ params }: { params: Promise<{ id: strin
         {active.length > 0 ? (
           <Itinerary legs={active} />
         ) : (
-          <EmptyState>No bookings on this trip. Flights and hotels arrive from Gmail and TripIt.</EmptyState>
+          <EmptyState>No bookings on this trip. Flights and hotels arrive from Gmail.</EmptyState>
         )}
         {cancelled.length > 0 && (
           <details className="mt-4 text-sm">
