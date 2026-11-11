@@ -120,7 +120,8 @@ async function picker<T>(token: string, path: string, init?: RequestInit): Promi
   return json as T;
 }
 
-export type PickerSession = { id: string; pickerUri: string; mediaItemsSet?: boolean; pollingConfig?: { pollInterval?: string } };
+// expireTime is when Google drops the session; timeoutIn ("1800s") is how long it suggests polling.
+export type PickerSession = { id: string; pickerUri: string; mediaItemsSet?: boolean; expireTime?: string; pollingConfig?: { pollInterval?: string; timeoutIn?: string } };
 
 export type PickedItem = {
   id: string;

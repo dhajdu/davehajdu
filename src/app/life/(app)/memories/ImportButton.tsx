@@ -28,14 +28,19 @@ export default function ImportButton() {
     try {
       setPhase('picking');
       setNote('Opening Google Photos…');
-      const { sessionId, pickerUri } = await post<{ sessionId: string; pickerUri: string }>('/api/life/memories/picker');
-      if (tab) tab.location.href = pickerUri;
-      else window.open(pickerUri, '_blank');
-      setNote('Pick photos in the Google Photos tab, then press Done there.');
+      const { sessionId, pickerUri, deadline } = await post<{ sessionId: string; pickerUri: string; deadline: number | null }>('/api/life/memories/picker');
+      // /autoclose makes Google close its tab once Done is pressed.
+      const uri = `${pickerUri}/autoclose`;
+      if (tab) tab.location.href = uri;
+      else window.open(uri, '_blank');
+      // Google discards the whole selection if Done comes after its time limit, so say when that is.
+      const by = deadline ? new Date(deadline).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : null;
+      setNote(`Pick photos in the Google Photos tab, then press Done there${by ? ` before ${by}. After that Google discards the selection` : ''}.`);
 
       let imported = 0;
       let skipped = 0;
       while (!stop.current) {
+        if (deadline && Date.now() > deadline) throw new Error('Google closed the picking session before Done was pressed. Start again and pick a smaller batch.');
         const r = await post<{ ready: boolean; imported?: number; remaining?: number; skipped?: number; total?: number }>(
           '/api/life/memories/import',
           { sessionId }
