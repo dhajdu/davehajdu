@@ -258,7 +258,7 @@ A day written on `/life/journal/[date]` is an `entries` row (`kind=journal`) wit
 
 Trip purpose is business (default), eo or personal (holiday). The first pass set eo where a journal entry written during the trip mentions EO, a forum, Ignite, GLC, RLA or Nerve. The first vision and year rows were seeded from journal passages (the One Thing, the "Dealing with Age" forum presentation, the October 2026 EO update) and are meant to be rewritten in the app.
 
-Health reads the `whoop_*` metrics plus `weight_kg` (`src/lib/life/health.ts`). Whoop zones: recovery 67% and up is green, 34 to 66% yellow, under 34% red.
+Health reads the `whoop_*` metrics plus `weight_kg` (`src/lib/life/health.ts`). Whoop is connected by OAuth from Sources (`/life/auth/whoop`, tokens in `integrations`, the same Whoop developer app as Shadow Forum Challenge and Parkes Performance) and `/api/life/cron/whoop` re-reads the last 10 days every six hours (`src/lib/life/whoop.ts`); `scripts/life/import-whoop.ts` remains for backfilling from a CSV export. Whoop zones: recovery 67% and up is green, 34 to 66% yellow, under 34% red.
 
 ### Bloodwork
 

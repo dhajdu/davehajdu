@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import { requireOwner } from '@/lib/life/auth';
-import { PageHeader, Card, Chip, EmptyState } from '@/components/life/ui';
+import { PageHeader, Card, Chip, EmptyState, ButtonLink } from '@/components/life/ui';
+import { whoopConfigured, whoopConnection } from '@/lib/life/whoop';
 
 export const metadata: Metadata = { title: 'Sources', robots: { index: false, follow: false } };
 
 const HOUR = 3_600_000;
 const CADENCE_MS: Record<string, number> = { hourly: HOUR, daily: 24 * HOUR, nightly: 24 * HOUR, weekly: 168 * HOUR, monthly: 744 * HOUR };
 
-type Source = { id: string; name: string; method: string; cadence: string; enabled: boolean; last_run_at: string | null; last_status: string | null };
+type Source = { id: string; slug: string; name: string; method: string; cadence: string; enabled: boolean; last_run_at: string | null; last_status: string | null };
 type Run = { id: string; workflow: string; started_at: string; finished_at: string | null; status: string; items_in: number; items_out: number; error: string | null };
 
 function ago(iso: string | null, now: number) {
@@ -31,20 +32,25 @@ function state(s: Source, now: number): 'ok' | 'warn' | 'off' {
 const dot = { ok: 'bg-mint', warn: 'bg-magenta', off: 'bg-border' };
 
 async function load() {
-  const { supabase } = await requireOwner();
-  const [{ data: sources }, { data: runs }] = await Promise.all([
-    supabase.from('sources').select('id, name, method, cadence, enabled, last_run_at, last_status').order('name'),
+  const { supabase, user } = await requireOwner();
+  const [{ data: sources }, { data: runs }, whoop] = await Promise.all([
+    supabase.from('sources').select('id, slug, name, method, cadence, enabled, last_run_at, last_status').order('name'),
     supabase.from('workflow_runs').select('id, workflow, started_at, finished_at, status, items_in, items_out, error').order('started_at', { ascending: false }).limit(20),
+    whoopConnection(user.id),
   ]);
-  return { sources: sources as Source[] | null, runs: runs as Run[] | null, now: Date.now() };
+  return { sources: sources as Source[] | null, runs: runs as Run[] | null, whoop, now: Date.now() };
 }
 
-export default async function SourcesPage() {
-  const { sources, runs, now } = await load();
+export default async function SourcesPage({ searchParams }: { searchParams: Promise<{ whoop?: string }> }) {
+  const [{ sources, runs, whoop, now }, params] = await Promise.all([load(), searchParams]);
 
   return (
     <div className="max-w-4xl space-y-6">
       <PageHeader title="Sources" subtitle="Is everything still flowing?" />
+
+      {params.whoop === 'connected' && whoop && <p className="text-sm text-muted">Connected to Whoop as {whoop.account_email ?? 'your account'}.</p>}
+      {params.whoop === 'error' && <p className="text-sm text-magenta">Whoop did not finish connecting. Try again.</p>}
+      {params.whoop === 'config' && <p className="text-sm text-magenta">Whoop is not set up: WHOOP_CLIENT_ID and WHOOP_CLIENT_SECRET are missing.</p>}
 
       <Card>
         {!sources?.length ? (
@@ -73,7 +79,22 @@ export default async function SourcesPage() {
                         <span className={`inline-block w-2 h-2 rounded-full mr-2 ${dot[st]}`} aria-label={st} />
                         {s.enabled ? ago(s.last_run_at, now) : 'Off'}
                       </td>
-                      <td className="py-2 text-muted break-words">{s.last_status ?? ''}</td>
+                      <td className="py-2 text-muted break-words">
+                        {s.slug === 'whoop' ? (
+                          whoop ? (
+                            <>
+                              <Chip tone="mint">Connected</Chip> {s.last_status ?? ''}
+                            </>
+                          ) : (
+                            <span className="flex flex-wrap items-center gap-2">
+                              <Chip tone="magenta">Not connected</Chip>
+                              {whoopConfigured() && <ButtonLink href="/life/auth/whoop" primary>Connect Whoop</ButtonLink>}
+                            </span>
+                          )
+                        ) : (
+                          s.last_status ?? ''
+                        )}
+                      </td>
                     </tr>
                   );
                 })}
