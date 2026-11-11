@@ -10,14 +10,14 @@ import { Foundation } from '@/components/life/health/Foundation';
 import { TRACKS, getLongGoals } from '@/lib/life/focus';
 import { EMPTY_FIELDS, dayFields, doneCount, getDay, getDayNumber, getPinnedReferences, getTodos, isDateKey, nextDay, parseRoutine, prevDay } from '@/lib/life/journal';
 import { fieldsFromMarkdown } from '@/lib/life/focus-parse';
-import { BLOOD_SUGAR, WEIGHT, ZONE_WORD, fmtHours, getHealth, zone } from '@/lib/life/health';
+import { BLOOD_SUGAR, WEIGHT, getHealth } from '@/lib/life/health';
 import { getLabs } from '@/lib/life/labs';
 import { addDays, daysBetween, formatDate, ictToday, periodEnd, periodStart, weekOfMonth, weekStart } from '@/lib/life/metrics';
 import { saveDay } from './actions';
 
 export const metadata: Metadata = { title: 'Journal', robots: { index: false, follow: false } };
 
-// Today is about today, in four rows: the foundation; the one thing beside
+// Today is about today, in four rows: the foundation card; the one thing beside
 // this week's commitments; gratitude beside no holds barred; then the little
 // things, to do beside done. The longer horizons live on The One Thing.
 export default async function JournalDayPage({ params }: { params: Promise<{ date: string }> }) {
@@ -51,9 +51,6 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
   const g = [f.gratitude[0] ?? '', f.gratitude[1] ?? '', f.gratitude[2] ?? ''];
   const long = new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
-  const rec = health.stats.recovery.last;
-  const sleep = health.stats.sleep.last;
-  const hrv = health.stats.hrv.last;
   const weekGoals = goals.filter((x) => x.horizon === 'week' && x.period === week);
   const daysLeft = week === weekStart(today) ? daysBetween(today, addDays(week, 6)) : null;
 
@@ -84,39 +81,28 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
       <AutoSaveForm action={saveDay} className="life-today">
         <input type="hidden" name="date" value={date} />
 
-        <div className="life-card life-today-top">
-          <details className="life-today-found">
-            <summary>
-              {rec ? (
-                <span className={`life-zone is-${zone(rec.value)}`}>
-                  {Math.round(rec.value)}% recovery · {ZONE_WORD[zone(rec.value)]}
-                </span>
-              ) : (
-                <span>No recovery yet</span>
-              )}
-              {sleep && <span>Sleep <b>{fmtHours(sleep.value)}</b></span>}
-              {hrv && <span>HRV <b>{Math.round(hrv.value)}</b></span>}
-              <span className="life-today-more">The foundation</span>
-            </summary>
-            <Foundation
-              health={health}
-              today={today}
-              weightTarget={weightTarget === undefined || weightTarget === null ? null : Number(weightTarget)}
-              hba1c={hba1c}
-              hba1cTarget={hba1cTarget === undefined || hba1cTarget === null ? null : Number(hba1cTarget)}
-            />
-          </details>
-          <div className="life-today-stats">
-            <label className="life-today-stat">
-              Weight
-              <input name="weight" type="number" step="0.1" inputMode="decimal" min={30} max={250} defaultValue={weight === undefined ? '' : Number(weight)} placeholder="kg" />
-            </label>
-            <label className="life-today-stat">
-              Blood sugar
-              <input name="blood_sugar" type="number" step="1" inputMode="numeric" min={20} max={600} defaultValue={sugar === undefined ? '' : Number(sugar)} placeholder="mg/dL" />
-            </label>
+        <section className="life-card">
+          <div className="life-today-head">
+            <h2 className="life-card-title">The foundation</h2>
+            <div className="life-today-stats">
+              <label className="life-today-stat">
+                Weight
+                <input name="weight" type="number" step="0.1" inputMode="decimal" min={30} max={250} defaultValue={weight === undefined ? '' : Number(weight)} placeholder="kg" />
+              </label>
+              <label className="life-today-stat">
+                Blood sugar
+                <input name="blood_sugar" type="number" step="1" inputMode="numeric" min={20} max={600} defaultValue={sugar === undefined ? '' : Number(sugar)} placeholder="mg/dL" />
+              </label>
+            </div>
           </div>
-        </div>
+          <Foundation
+            health={health}
+            today={today}
+            weightTarget={weightTarget === undefined || weightTarget === null ? null : Number(weightTarget)}
+            hba1c={hba1c}
+            hba1cTarget={hba1cTarget === undefined || hba1cTarget === null ? null : Number(hba1cTarget)}
+          />
+        </section>
 
         <div className="life-today-two">
           <section className="life-card">
