@@ -56,7 +56,7 @@ export default async function GoalsPage() {
       </div>
 
       <p className="life-board-foot">
-        Today&apos;s two One Things are set on <Link href="/life">Today</Link>, where the vision statement, the core values and the whole picture also live.
+        Today&apos;s two One Things are set on <Link href="/life">The One Thing</Link>, where the vision statement, the core values and the whole picture also live.
       </p>
 
       {journalMonth && (

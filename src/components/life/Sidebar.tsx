@@ -9,7 +9,7 @@ type Item = { href: string; label: string };
 
 // Inbox on top, then the groups. Areas are hidden until they hold something.
 const SECTIONS: { label: string; items: Item[] }[] = [
-  { label: 'Productivity', items: [{ href: '/life', label: 'Today' }, { href: '/life/journal', label: 'Journal' }, { href: '/life/travel', label: 'Travel' }, { href: '/life/memories', label: 'Memories' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/review', label: 'Review' }] },
+  { label: 'Productivity', items: [{ href: '/life/journal', label: 'Today' }, { href: '/life', label: 'The One Thing' },{ href: '/life/travel', label: 'Travel' }, { href: '/life/memories', label: 'Memories' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/review', label: 'Review' }] },
   { label: 'Health', items: [{ href: '/life/health', label: 'Fitness' }, { href: '/life/health/medical', label: 'Medical' }] },
   { label: 'EO', items: [{ href: '/life/eo', label: 'Forum' }, { href: '/life/eo/presentations', label: 'Presentations' }] },
   { label: 'Marketing', items: [{ href: '/life/marketing', label: 'Overview' }, { href: '/life/marketing/calendar', label: 'Calendar' }, { href: '/life/marketing/campaigns', label: 'Campaigns' }] },

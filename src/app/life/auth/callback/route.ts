@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   if (code) {
     const supabase = await createLifeClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(new URL('/life', request.url));
+    if (!error) return NextResponse.redirect(new URL('/life/journal', request.url));
   }
 
   login.searchParams.set('error', 'link');

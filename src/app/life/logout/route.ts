@@ -5,5 +5,5 @@ import { createLifeClient } from '@/lib/life/supabase-server';
 export async function POST(request: Request) {
   const supabase = await createLifeClient();
   await supabase.auth.signOut();
-  return NextResponse.redirect(new URL('/life/login', request.url), { status: 303 });
+  return NextResponse.redirect(new URL('/life/login?signed_out=1', request.url), { status: 303 });
 }
