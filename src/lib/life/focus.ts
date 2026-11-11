@@ -102,12 +102,12 @@ export async function getPastGoals(db: Db, period: string): Promise<GoalRow[]> {
 }
 
 // Vision and year goals, plus the month goals of `period` and the week goals
-// of `week` (its Monday), the One Thing first.
-export async function getLongGoals(db: Db, period?: string, week?: string): Promise<GoalRow[]> {
+// of `week` (its Monday, or several Mondays), the One Thing first.
+export async function getLongGoals(db: Db, period?: string, week?: string | string[]): Promise<GoalRow[]> {
   let q = db.from('goals').select(GOAL_SELECT).neq('status', 'dropped').order('focus', { ascending: false }).order('created_at');
   const parts = ['horizon.in.(vision,year)'];
   if (period) parts.push(`and(horizon.eq.month,period.eq.${period})`);
-  if (week) parts.push(`and(horizon.eq.week,period.eq.${week})`);
+  if (week?.length) parts.push(`and(horizon.eq.week,period.in.(${[week].flat().join(',')}))`);
   q = parts.length > 1 ? q.or(parts.join(',')) : q.in('horizon', ['vision', 'year']);
   const { data, error } = await q;
   if (error) throw new Error(error.message);
