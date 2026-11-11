@@ -20,7 +20,6 @@ type Next = (spec: string, ctx: { parentURL?: string }) => unknown;
 });
 const L = await import('../../src/lib/life/extract/legs');
 const A = await import('../../src/lib/life/extract/airports');
-const I = await import('../../src/lib/life/extract/ical');
 const T = await import('../../src/lib/life/trips');
 import type { ComparableLeg, ExtractedLeg, ResolvedLeg, TravelExtraction } from '../../src/lib/life/extract/legs';
 import type { TripLeg } from '../../src/lib/life/trips';
@@ -144,89 +143,6 @@ test('Qatar multi-leg booking has no conflicts and four distinct keys', () => {
   const legs = fx['06-qatar-multileg'].expected.legs.map(resolve);
   assert.equal(new Set(legs.map((l) => l.leg_key)).size, 4);
   legs.forEach((l, i) => assert.deepEqual(L.detectConflicts(cmp(l), legs.filter((_, j) => j < i).map(cmp), conflictOpts), [], l.leg_key));
-});
-
-// ---------- iCal ----------
-const ICS = [
-  'BEGIN:VCALENDAR',
-  'VERSION:2.0',
-  'PRODID:-//TripIt//synthetic//EN',
-  'BEGIN:VEVENT',
-  'UID:trip-1@tripit.test',
-  'DTSTART;VALUE=DATE:20260314',
-  'DTEND;VALUE=DATE:20260324',
-  'SUMMARY:Sydney\\, Australia\\, March 2026',
-  'END:VEVENT',
-  'BEGIN:VEVENT',
-  'UID:air-773@tripit.test',
-  'DTSTART:20260314T165500Z',
-  'DTEND:20260315T001000Z',
-  'SUMMARY:VN773 SGN to SYD',
-  'DESCRIPTION:[Flight] Vietnam Airlines(VN) #773\\nConfirmation #: K7Q2ZP\\nde',
-  ' p SGN 11:55pm arr SYD 11:10am',
-  'END:VEVENT',
-  'BEGIN:VEVENT',
-  'UID:air-773@tripit.test',
-  'DTSTART:20260314T165500Z',
-  'DTEND:20260315T001000Z',
-  'SUMMARY:VN773 SGN to SYD',
-  'END:VEVENT',
-  'BEGIN:VEVENT',
-  'UID:lodging-in@tripit.test',
-  'DTSTART;TZID=Australia/Sydney:20260315T150000',
-  'DTEND;TZID=Australia/Sydney:20260315T160000',
-  'SUMMARY:Check-in: Sydney Harbour Marriott',
-  'LOCATION:30 Pitt Street\\, Sydney',
-  'DESCRIPTION:Confirmation #: 81234567',
-  'END:VEVENT',
-  'BEGIN:VEVENT',
-  'UID:lodging-out@tripit.test',
-  'DTSTART;TZID=Australia/Sydney:20260321T110000',
-  'DTEND;TZID=Australia/Sydney:20260321T120000',
-  'SUMMARY:Check-out: Sydney Harbour Marriott',
-  'END:VEVENT',
-  'BEGIN:VEVENT',
-  'UID:air-772@tripit.test',
-  'DTSTART:20260323T223000Z',
-  'DTEND:20260324T082500Z',
-  'SUMMARY:VN 772 SYD to SGN',
-  'END:VEVENT',
-  'END:VCALENDAR',
-].join('\r\n');
-
-test('iCal parse: unfolding, escapes, DATE / TZID / Z start times', () => {
-  const ev = I.parseIcal(ICS);
-  assert.equal(ev.length, 6);
-  assert.equal(ev[0].summary, 'Sydney, Australia, March 2026');
-  assert.deepEqual(ev[0].start, { value: '2026-03-14', tz: null, utc: false, allDay: true });
-  assert.ok(ev[1].description.includes('dep SGN 11:55pm'), 'folded line rejoined');
-  assert.ok(ev[1].description.includes('\nConfirmation #: K7Q2ZP'));
-  assert.deepEqual(ev[1].start, { value: '2026-03-14T16:55:00', tz: 'UTC', utc: true, allDay: false });
-  assert.deepEqual(ev[3].start, { value: '2026-03-15T15:00:00', tz: 'Australia/Sydney', utc: false, allDay: false });
-  assert.equal(ev[3].location, '30 Pitt Street, Sydney');
-});
-
-test('iCal dedupe and mapping to legs, skipping the trip summary', () => {
-  const ev = I.dedupeEvents(I.parseIcal(ICS));
-  assert.equal(ev.length, 5);
-  const { legs, skipped } = I.icalToLegs(ev, (c: string) => A.airportInfo(c));
-  assert.deepEqual(skipped, ['trip-1@tripit.test']);
-  assert.equal(legs.length, 3);
-  const f = legs.find((l) => l.external_id === 'air-773@tripit.test')!.leg;
-  assert.equal(f.number, 'VN773');
-  assert.equal(f.confirmation_code, 'K7Q2ZP');
-  assert.equal(f.starts_at_local, '2026-03-14T23:55');
-  assert.equal(f.start_tz, 'Asia/Ho_Chi_Minh');
-  assert.equal(f.ends_at_local, '2026-03-15T11:10');
-  assert.equal(L.legKey(f), L.legKey(fx['01-vn-flight'].expected.legs[0]), 'TripIt and Gmail produce the same key');
-  const h = legs.find((l) => l.external_id === 'lodging-in@tripit.test')!.leg;
-  assert.equal(h.kind, 'hotel');
-  assert.equal(h.hotel_name, 'Sydney Harbour Marriott');
-  assert.equal(h.ends_at_local, '2026-03-21T11:00');
-  assert.equal(h.city, 'Sydney');
-  const r = legs.find((l) => l.external_id === 'air-772@tripit.test')!.leg;
-  assert.equal(r.number, 'VN772');
-  assert.equal(r.starts_at_local, '2026-03-24T09:30');
 });
 
 // ---------- trip grouping ----------

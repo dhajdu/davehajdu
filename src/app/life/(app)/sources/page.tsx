@@ -34,7 +34,7 @@ const dot = { ok: 'bg-mint', warn: 'bg-magenta', off: 'bg-border' };
 async function load() {
   const { supabase, user } = await requireOwner();
   const [{ data: sources }, { data: runs }, whoop] = await Promise.all([
-    supabase.from('sources').select('id, slug, name, method, cadence, enabled, last_run_at, last_status').order('name'),
+    supabase.from('sources').select('id, slug, name, method, cadence, enabled, last_run_at, last_status').eq('enabled', true).order('name'),
     supabase.from('workflow_runs').select('id, workflow, started_at, finished_at, status, items_in, items_out, error').order('started_at', { ascending: false }).limit(20),
     whoopConnection(user.id),
   ]);

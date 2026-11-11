@@ -135,7 +135,7 @@ export default async function TravelPastPage() {
       )}
 
       {past.length === 0 ? (
-        <EmptyState>Trips arrive from Gmail and TripIt. No past trips yet.</EmptyState>
+        <EmptyState>Trips arrive from Gmail. No past trips yet.</EmptyState>
       ) : (
         <div className="space-y-4">
           {[...byYear.entries()].map(([year, list]) => (

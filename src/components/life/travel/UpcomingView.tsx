@@ -19,7 +19,7 @@ export function UpcomingView({ trips, legs, today, hasCurrent }: { trips: Trip[]
       <TravelTabs active="upcoming" hasCurrent={hasCurrent} />
 
       {!next ? (
-        <EmptyState>Trips arrive from Gmail and TripIt. Nothing upcoming yet.</EmptyState>
+        <EmptyState>Trips arrive from Gmail. Nothing upcoming yet.</EmptyState>
       ) : (
         <div className="space-y-8">
           <NextTripPass {...passPropsFor(next, nextLegs, today)} />
