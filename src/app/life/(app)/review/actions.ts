@@ -34,5 +34,5 @@ export async function saveMonthReview(formData: FormData) {
   if (error) throw new Error(error.message);
   revalidatePath(`/life/review/${period}`);
   revalidatePath('/life/review');
-  revalidatePath('/life');
+  revalidatePath('/life/one-thing');
 }

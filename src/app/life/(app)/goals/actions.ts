@@ -16,7 +16,7 @@ function str(fd: FormData, key: string): string | null {
 
 function refresh() {
   revalidatePath('/life/goals');
-  revalidatePath('/life');
+  revalidatePath('/life/one-thing');
 }
 
 function trackOf(fd: FormData): 'health' | 'business' {

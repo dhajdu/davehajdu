@@ -9,7 +9,7 @@ type Item = { href: string; label: string };
 
 // Inbox on top, then the groups. Areas are hidden until they hold something.
 const SECTIONS: { label: string; items: Item[] }[] = [
-  { label: 'Productivity', items: [{ href: '/life/journal', label: 'Today' }, { href: '/life', label: 'The One Thing' },{ href: '/life/travel', label: 'Travel' }, { href: '/life/memories', label: 'Memories' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/review', label: 'Review' }] },
+  { label: 'Productivity', items: [{ href: '/life/journal', label: 'Today' }, { href: '/life/one-thing', label: 'The One Thing' },{ href: '/life/travel', label: 'Travel' }, { href: '/life/memories', label: 'Memories' }, { href: '/life/goals', label: 'Goals' }, { href: '/life/review', label: 'Review' }] },
   { label: 'Health', items: [{ href: '/life/health', label: 'Fitness' }, { href: '/life/health/medical', label: 'Medical' }] },
   { label: 'EO', items: [{ href: '/life/eo', label: 'Forum' }, { href: '/life/eo/presentations', label: 'Presentations' }] },
   { label: 'Marketing', items: [{ href: '/life/marketing', label: 'Overview' }, { href: '/life/marketing/calendar', label: 'Calendar' }, { href: '/life/marketing/campaigns', label: 'Campaigns' }] },
@@ -29,7 +29,7 @@ function Mark() {
 }
 
 // Exact matches for pages that have their own child routes in another group.
-const EXACT = new Set(['/life', '/life/health', '/life/eo', '/life/settings', '/life/marketing']);
+const EXACT = new Set(['/life/health', '/life/eo', '/life/settings', '/life/marketing']);
 
 export default function Sidebar({ pending }: { pending: number }) {
   const path = usePathname() ?? '';

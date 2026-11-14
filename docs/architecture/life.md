@@ -196,7 +196,8 @@ Port from `~/code-projects/8edges`: `lib/admin-chat/` (`tools.ts`, `schema.ts`, 
 ```
 src/app/life/
   layout.tsx            requireOwner(), sidebar, noindex
-  page.tsx              Today: the One Thing ladder, the health foundation, month goals
+  page.tsx              Redirects to journal/, which opens today (the default screen)
+  one-thing/            The One Thing ladder, the health foundation, month goals
   journal/[date]/       The day, written in the app: One Thing, gratitude, No Holds Barred,
                         the to-do list (todos table), weight; a rail with vision, year, month
                         and the pinned reference blocks. Notion-synced days show read-only
