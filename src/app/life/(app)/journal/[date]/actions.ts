@@ -21,7 +21,7 @@ function dateOf(fd: FormData): string {
 function refresh(date: string) {
   revalidatePath(`/life/journal/${date}`);
   revalidatePath('/life/journal');
-  revalidatePath('/life');
+  revalidatePath('/life/one-thing');
   revalidatePath('/life/timeline');
 }
 

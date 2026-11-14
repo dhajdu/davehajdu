@@ -133,7 +133,7 @@ export default async function JournalDayPage({ params }: { params: Promise<{ dat
                 </div>
               );
             })}
-            <Link href="/life" className="text-xs font-semibold text-blue mt-auto">Set or adjust on The One Thing</Link>
+            <Link href="/life/one-thing" className="text-xs font-semibold text-blue mt-auto">Set or adjust on The One Thing</Link>
           </section>
         </div>
 
