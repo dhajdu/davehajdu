@@ -1,7 +1,7 @@
 'use client';
 
 import { useOptimistic, useState, useTransition, type DragEvent } from 'react';
-import { ArrowUp, GripVertical } from 'lucide-react';
+import { ArrowDown, ArrowUp, GripVertical } from 'lucide-react';
 import type { TodoNode, Todo } from '@/lib/life/journal';
 import { formatDate } from '@/lib/life/format';
 import { Chip } from '@/components/life/ui';
@@ -143,6 +143,12 @@ function OpenList({ date, open }: { date: string; open: TodoNode[] }) {
     setOrder(next);
     persist(next);
   }
+  // The down arrow: the item leaves today and heads the list of later items, just below the line.
+  function moveOutOfToday(id: string) {
+    const next = moveKey(order, id, LINE, false);
+    setOrder(next);
+    persist(next);
+  }
 
   return (
     <ul className="life-todo-list" onDrop={(e) => e.preventDefault()}>
@@ -181,7 +187,11 @@ function OpenList({ date, open }: { date: string; open: TodoNode[] }) {
           <button type="button" className="life-todo-up" onClick={() => moveToToday(n.id)} aria-label="Move into today" title="Move into today">
             <ArrowUp size={15} strokeWidth={2.4} aria-hidden />
           </button>
-        ) : null;
+        ) : (
+          <button type="button" className="life-todo-up" onClick={() => moveOutOfToday(n.id)} aria-label="Move out of today" title="Move out of today">
+            <ArrowDown size={15} strokeWidth={2.4} aria-hidden />
+          </button>
+        );
         return (
           <li key={n.id} className={dragging === n.id ? 'is-dragging' : undefined} onDragOver={(e) => onDragOver(e, n.id)}>
             <ul className="life-todo-group">
