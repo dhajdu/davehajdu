@@ -7,6 +7,7 @@ import type { Post } from '@/lib/blog/posts';
 
 const FILTERS = [
   { label: 'All Posts', value: 'all' },
+  { label: 'One Person Company', value: 'one-person-company' },
   { label: 'High Performance Culture', value: 'high-performance-culture' },
   { label: 'AI In Business', value: 'ai-in-business' },
   { label: 'Doing Business in Vietnam', value: 'doing-business-in-vietnam' },
@@ -17,6 +18,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   'High Performance Culture': 'bg-[#287BE8]/15 text-[#287BE8]',
   'AI In Business': 'bg-[#D1458B]/15 text-[#D1458B]',
   'Branding with AI': 'bg-purple-100 text-purple-700',
+  'One Person Company': 'bg-[#1A9E74]/15 text-[#1A9E74]',
 };
 
 const DAY_GRADIENTS = [

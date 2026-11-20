@@ -44,6 +44,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   'High Performance Culture': 'bg-[#287BE8]/15 text-[#287BE8]',
   'AI In Business': 'bg-[#D1458B]/15 text-[#D1458B]',
   'Branding with AI': 'bg-purple-100 text-purple-700',
+  'One Person Company': 'bg-[#1A9E74]/15 text-[#1A9E74]',
 };
 
 const DAY_GRADIENTS = [
@@ -107,6 +108,7 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
               </div>
             );
           case 'video':
+          case 'widevideo':
             return (
               <figure key={i} className="my-10 not-prose">
                 <video
@@ -115,7 +117,7 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
                   preload="metadata"
                   poster={block.images?.[1]}
                   src={block.images?.[0]}
-                  className="mx-auto w-full max-w-[380px] rounded-lg border border-[#E8ECF2] bg-[#04102D]"
+                  className={`mx-auto w-full ${block.tag === 'widevideo' ? 'aspect-video' : 'max-w-[380px]'} rounded-lg border border-[#E8ECF2] bg-[#04102D]`}
                 />
                 {block.caption && (
                   <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
