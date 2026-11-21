@@ -126,6 +126,11 @@
   .tbl .tn { background: var(--navy); color: var(--white); font-family: var(--mono); font-size: 13px; font-weight: 700; padding: 7px 10px; overflow-wrap: anywhere; }
   .tbl .cols { padding: 8px 10px; font-family: var(--mono); font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
   .tbl .cols i { font-style: normal; color: var(--muted); font-family: var(--font); }
+
+  /* video */
+  .film { padding-block: 40px 8px; }
+  .film video { display: block; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: var(--r-xl); background: var(--navy); border: 1px solid var(--border); }
+  .film p { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
   footer { padding-block: 32px 48px; font-size: 13px; color: var(--muted); }
 
   @media (max-width: 520px) {
@@ -142,6 +147,7 @@
     <h1>/life, my personal operating system that also runs my blog</h1>
     <p>How Dave built a private app on top of one database that holds his journal, goals, health, travel and memories, and how the public blog at davehajdu.com reads from that same database. Take what's useful and skip the rest.</p>
     <nav class="toc" aria-label="Sections">
+      <a href="#video">Watch the tour</a>
       <a href="#idea">The idea</a>
       <a href="#shape">The shape</a>
       <a href="#data">How the data is organized</a>
@@ -157,6 +163,15 @@
 </header>
 
 <main>
+<section class="film" id="video" style="border-bottom:0">
+  <div class="wrap">
+    <video controls preload="metadata" playsinline poster="/videos/life-blueprint-for-tk-poster.jpg">
+      <source src="/videos/life-blueprint-for-tk.mp4" type="video/mp4">
+    </video>
+    <p>A short tour, narrated by Dave. Every screenshot uses sample data.</p>
+  </div>
+</section>
+
 <section id="idea">
   <div class="wrap">
     <p class="num">The idea</p>
