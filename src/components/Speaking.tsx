@@ -22,9 +22,9 @@ const services = [
   {
     icon: '◧',
     label: 'Books',
-    title: 'The frameworks, in your hands.',
-    body: 'Two books. The Four Offices of the Future connects outcomes to AI across every business function. The Other 50% reframes what leadership means when half of it is human and half is AI.',
-    cta: 'View the Books',
+    title: 'Stop using AI, start leading it',
+    body: 'The Night the Fight Broke Out is a leadership fable about how a business builds the foundations to lead AI, one workflow at a time.',
+    cta: 'View the Book',
     href: '/books',
     accentClass: 'text-[#6FF2C1]/70',
   },
