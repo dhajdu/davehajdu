@@ -8,12 +8,13 @@
 //   ::figure /a.webp | Caption
 //   ::gallery /a.webp /b.webp | Caption
 //   ::screens /a.webp /b.webp | Caption
-//   ::video /clip.mp4 /poster.webp | Caption
+//   ::video /clip.mp4 /poster.webp | Caption          (vertical, phone width)
+//   ::widevideo /clip.mp4 /poster.webp | Caption      (16:9, full column width)
 //   anything else         p
 
 export type Block = { tag: string; text?: string; images?: string[]; caption?: string };
 
-const MEDIA = new Set(['figure', 'gallery', 'screens', 'video']);
+const MEDIA = new Set(['figure', 'gallery', 'screens', 'video', 'widevideo']);
 const PREFIX: Record<string, string> = { h2: '## ', h3: '### ', h4: '#### ', blockquote: '> ', li: '- ' };
 
 export function parseBody(md: string): Block[] {

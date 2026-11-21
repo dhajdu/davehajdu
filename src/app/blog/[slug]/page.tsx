@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { listPosts, getPost } from '@/lib/blog/posts';
 import { parseBody, type Block } from '@/lib/blog/body';
+import PostVideo from './PostVideo';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -44,18 +45,22 @@ const CATEGORY_COLORS: Record<string, string> = {
   'High Performance Culture': 'bg-[#287BE8]/15 text-[#287BE8]',
   'AI In Business': 'bg-[#D1458B]/15 text-[#D1458B]',
   'Branding with AI': 'bg-purple-100 text-purple-700',
+  'One Person Company': 'bg-[#1A9E74]/15 text-[#1A9E74]',
 };
 
-const DAY_GRADIENTS = [
-  'from-[#0d1b3e] to-[#1a2d5a]',
-  'from-[#1a0d3e] to-[#2d1a5a]',
-  'from-[#0d2e1b] to-[#1a5a2d]',
-  'from-[#3e0d1b] to-[#5a1a2d]',
-  'from-[#0d1e3e] to-[#163a6e]',
-];
+// Posts in a series get a "the series" card at the end, oldest first.
+const SERIES = new Set(['One Person Company']);
+
+// Wide blocks break out of the reading column on large screens.
+const WIDE = 'lg:-mx-28';
 
 function H({ html }: { html?: string }) {
   return <span dangerouslySetInnerHTML={{ __html: html ?? '' }} />;
+}
+
+function Caption({ text }: { text?: string }) {
+  if (!text) return null;
+  return <figcaption className="text-[13px] leading-snug text-[#6B7280] mt-3 text-center max-w-[560px] mx-auto">{text}</figcaption>;
 }
 
 function BlockRenderer({ blocks }: { blocks: Block[] }) {
@@ -64,27 +69,25 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
       {blocks.map((block, i) => {
         switch (block.tag) {
           case 'h1':
-            return (
-              <h1 key={i} className="text-[28px] md:text-[34px] font-black text-[#04102D] mt-10 mb-4 leading-snug">
-                <H html={block.text} />
-              </h1>
-            );
           case 'h2':
             return (
-              <h2 key={i} className="text-[22px] md:text-[26px] font-bold text-[#04102D] mt-8 mb-3 leading-snug">
+              <h2
+                key={i}
+                className="text-[26px] md:text-[32px] font-black tracking-[-0.02em] text-[#04102D] mt-16 mb-5 leading-[1.15] before:block before:w-10 before:h-[5px] before:rounded-full before:bg-[#6FF2C1] before:mb-5"
+              >
                 <H html={block.text} />
               </h2>
             );
           case 'h3':
             return (
-              <h3 key={i} className="text-[18px] font-bold text-[#04102D] mt-7 mb-2 leading-snug">
+              <h3 key={i} className="text-[20px] md:text-[22px] font-bold text-[#04102D] mt-10 mb-3 leading-snug">
                 <H html={block.text} />
               </h3>
             );
           case 'h4':
           case 'h5':
             return (
-              <h4 key={i} className="text-[15px] font-bold text-[#04102D] mt-6 mb-2 uppercase tracking-wide">
+              <h4 key={i} className="text-[13px] font-bold text-[#04102D] mt-8 mb-2 uppercase tracking-[0.12em]">
                 <H html={block.text} />
               </h4>
             );
@@ -92,58 +95,50 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
             return (
               <blockquote
                 key={i}
-                className="border-l-4 border-[#287BE8] pl-5 my-6 text-[15px] italic text-[#2A3044] bg-[#F8F9FC] py-3 pr-4 rounded-r-lg"
+                className="my-10 border-l-4 border-[#6FF2C1] pl-6 text-[21px] md:text-[24px] font-semibold leading-snug text-[#04102D]"
               >
                 <H html={block.text} />
               </blockquote>
             );
           case 'li':
             return (
-              <div key={i} className="flex gap-3 my-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#287BE8] flex-shrink-0 mt-2" />
-                <p className="text-[15px] text-[#2A3044] leading-relaxed">
-                  <H html={block.text} />
-                </p>
-              </div>
+              <ul key={i} className="my-6 space-y-3">
+                {(block.text ?? '').split(/\n-\s+/).map((item, j) => (
+                  <li key={j} className="flex gap-3.5 text-[17px] md:text-[18px] text-[#2A3044] leading-[1.7]">
+                    <span className="w-2 h-2 rounded-full bg-[#287BE8] flex-shrink-0 mt-[11px]" />
+                    <span>
+                      <H html={item} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
             );
           case 'video':
+          case 'widevideo':
             return (
-              <figure key={i} className="my-10 not-prose">
-                <video
-                  controls
-                  playsInline
-                  preload="metadata"
-                  poster={block.images?.[1]}
-                  src={block.images?.[0]}
-                  className="mx-auto w-full max-w-[380px] rounded-lg border border-[#E8ECF2] bg-[#04102D]"
-                />
-                {block.caption && (
-                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
-                    {block.caption}
-                  </figcaption>
-                )}
+              <figure key={i} className={`my-12 not-prose ${WIDE}`}>
+                <div className="overflow-hidden rounded-2xl bg-[#04102D] shadow-[0_24px_60px_-24px_rgba(4,16,45,0.45)]">
+                  <PostVideo src={block.images?.[0]} poster={block.images?.[1]} wide={block.tag === 'widevideo'} />
+                </div>
+                <Caption text={block.caption} />
               </figure>
             );
           case 'screens':
             return (
-              <figure key={i} className="my-10 not-prose">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <figure key={i} className={`my-12 not-prose ${WIDE}`}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {(block.images ?? []).map((src, j) => (
-                    <div key={j} className="relative aspect-[9/16] overflow-hidden rounded-lg border border-[#E8ECF2]">
-                      <Image src={src} alt={`${block.caption ?? 'Screen'} ${j + 1}`} fill sizes="(min-width: 768px) 240px, 50vw" className="object-cover" />
+                    <div key={j} className="relative aspect-[9/16] overflow-hidden rounded-xl border border-[#E8ECF2] shadow-sm">
+                      <Image src={src} alt={`${block.caption ?? 'Screen'} ${j + 1}`} fill sizes="(min-width: 1024px) 300px, 50vw" className="object-cover" />
                     </div>
                   ))}
                 </div>
-                {block.caption && (
-                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
-                    {block.caption}
-                  </figcaption>
-                )}
+                <Caption text={block.caption} />
               </figure>
             );
           case 'figure':
             return (
-              <figure key={i} className="my-10 not-prose">
+              <figure key={i} className={`my-12 not-prose ${WIDE}`}>
                 {(block.images ?? []).map((src, j) => (
                   <Image
                     key={j}
@@ -151,55 +146,44 @@ function BlockRenderer({ blocks }: { blocks: Block[] }) {
                     alt={block.caption ?? 'Figure'}
                     width={1800}
                     height={1770}
-                    sizes="(min-width: 768px) 720px, 100vw"
-                    className="w-full h-auto rounded-lg border border-[#E8ECF2]"
+                    sizes="(min-width: 1024px) 900px, 100vw"
+                    className="w-full h-auto rounded-2xl border border-[#E8ECF2] shadow-[0_16px_40px_-24px_rgba(4,16,45,0.35)]"
                   />
                 ))}
-                {block.caption && (
-                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
-                    {block.caption}
-                  </figcaption>
-                )}
+                <Caption text={block.caption} />
               </figure>
             );
           case 'gallery':
             return (
-              <figure key={i} className="my-10 not-prose">
-                <div className="grid grid-cols-2 gap-3">
+              <figure key={i} className={`my-12 not-prose ${WIDE}`}>
+                <div className="grid sm:grid-cols-2 gap-4">
                   {(block.images ?? []).map((src, j) => (
-                    <div
-                      key={j}
-                      className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[#F0F2F5]"
-                    >
+                    <div key={j} className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#F0F2F5] shadow-sm">
                       <Image
                         src={src}
                         alt={`${block.caption ?? 'Photo'} ${j + 1}`}
                         fill
-                        sizes="(min-width: 768px) 360px, 50vw"
+                        sizes="(min-width: 1024px) 450px, 100vw"
                         className="object-cover"
                       />
                     </div>
                   ))}
                 </div>
-                {block.caption && (
-                  <figcaption className="text-[12px] text-[#6B7280] italic mt-3 text-center">
-                    {block.caption}
-                  </figcaption>
-                )}
+                <Caption text={block.caption} />
               </figure>
             );
           case 'table':
             return (
               <div
                 key={i}
-                className="blog-table my-8 overflow-x-auto rounded-xl border border-[#EAEEF2]"
+                className="blog-table my-10 overflow-x-auto rounded-2xl border border-[#EAEEF2]"
                 dangerouslySetInnerHTML={{ __html: block.text ?? '' }}
               />
             );
           case 'p':
           default:
             return (
-              <p key={i} className="text-[15px] md:text-[16px] text-[#2A3044] leading-relaxed my-4">
+              <p key={i} className="text-[17px] md:text-[18px] text-[#2A3044] leading-[1.75] my-6">
                 <H html={block.text} />
               </p>
             );
@@ -214,16 +198,21 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  const blocks = parseBody(post.bodyMd);
+  let blocks = parseBody(post.bodyMd);
+  // The first video near the top becomes the feature, shown big under the title.
+  const fi = blocks.findIndex((b, i) => i < 6 && (b.tag === 'video' || b.tag === 'widevideo'));
+  const feature = fi >= 0 ? blocks[fi] : null;
+  if (feature) blocks = blocks.filter((_, i) => i !== fi);
+
   const faqs = post.faqs;
-  const gradient = DAY_GRADIENTS[(post.dayNumber ?? 0) % DAY_GRADIENTS.length];
-  const categoryColor = CATEGORY_COLORS[post.category] ?? 'bg-gray-100 text-gray-600';
+  const categoryColor = CATEGORY_COLORS[post.category] ?? 'bg-white/10 text-white';
 
   // Adjacent posts
   const posts = await listPosts();
   const idx = posts.findIndex((p) => p.slug === slug);
   const prevPost = idx < posts.length - 1 ? posts[idx + 1] : null;
   const nextPost = idx > 0 ? posts[idx - 1] : null;
+  const series = SERIES.has(post.category) ? posts.filter((p) => p.category === post.category).reverse() : [];
 
   return (
     <>
@@ -247,21 +236,20 @@ export default async function BlogPostPage({ params }: Props) {
         />
       )}
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className={`relative overflow-hidden min-h-[340px] flex items-end bg-gradient-to-br ${gradient}`}>
-        {post.dayNumber && (
-          <div className="absolute inset-0 flex items-center justify-center select-none">
-            <div className="text-[180px] font-black text-white/5 leading-none">{post.dayNumber}</div>
-          </div>
-        )}
-        <div className="relative z-20 max-w-[800px] mx-auto px-8 max-md:px-6 py-14 w-full">
+      <section className="relative overflow-hidden bg-[#04102D]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_60%_at_12%_0%,rgba(40,123,232,0.35),transparent_70%),radial-gradient(40%_50%_at_92%_10%,rgba(111,242,193,0.16),transparent_70%)]"
+        />
+        <div className={`relative max-w-[900px] mx-auto px-6 md:px-8 pt-24 md:pt-28 text-center ${feature ? 'pb-10 md:pb-14' : 'pb-16 md:pb-20'}`}>
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-white/60 text-[12px] font-medium hover:text-white transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-white/55 text-[12px] font-medium hover:text-white transition-colors mb-8"
           >
-            ← Back to Blog
+            ← All posts
           </Link>
-          <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className={`inline-block text-[10px] font-bold tracking-[0.1em] uppercase px-2.5 py-1 rounded-full ${categoryColor}`}>
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            <span className={`inline-block text-[10px] font-bold tracking-[0.12em] uppercase px-3 py-1 rounded-full ${categoryColor}`}>
               {post.category}
             </span>
             {post.dayNumber && (
@@ -270,44 +258,95 @@ export default async function BlogPostPage({ params }: Props) {
               </span>
             )}
           </div>
-          <h1 className="text-[28px] md:text-[40px] font-black text-white leading-[1.1] mb-4 max-w-[680px]">
+          <h1 className="text-[34px] md:text-[54px] font-black text-white leading-[1.05] tracking-[-0.025em] mb-6 max-w-[820px] mx-auto text-balance">
             {post.title}
           </h1>
-          <div className="flex items-center gap-4 text-white/50 text-[12px]">
+          <p className="text-[17px] md:text-[20px] text-white/70 leading-relaxed max-w-[680px] mx-auto mb-8 text-pretty">
+            {post.excerpt}
+          </p>
+          <div className="flex items-center justify-center gap-3 text-[13px] text-white/55">
+            <Image
+              src="/images/dave-speaking.webp"
+              alt="Dave Hajdu"
+              width={36}
+              height={36}
+              className="w-9 h-9 rounded-full object-cover ring-2 ring-white/20"
+            />
+            <span className="font-semibold text-white/85">Dave Hajdu</span>
+            <span aria-hidden>·</span>
             <span>{post.date}</span>
-            <span>·</span>
+            <span aria-hidden>·</span>
             <span>{post.readTime} read</span>
           </div>
         </div>
+        {feature && (
+          <div className="relative px-4 md:px-8">
+            {/* white lower half so the video sits across the edge of the hero */}
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-white" />
+            <figure className="relative max-w-[1120px] mx-auto">
+              <div className="overflow-hidden rounded-2xl md:rounded-3xl bg-black ring-1 ring-white/10 shadow-[0_40px_100px_-30px_rgba(4,16,45,0.7)]">
+                <PostVideo src={feature.images?.[0]} poster={feature.images?.[1]} wide={feature.tag === 'widevideo'} />
+              </div>
+              <Caption text={feature.caption} />
+            </figure>
+          </div>
+        )}
       </section>
 
       {/* ── Article Body ─────────────────────────────────────── */}
-      <div className="max-w-[800px] mx-auto px-8 max-md:px-6 py-12">
-        {/* Excerpt lead */}
-        <p className="text-[17px] md:text-[18px] font-medium text-[#2A3044] leading-relaxed border-l-4 border-[#6FF2C1] pl-5 mb-10 bg-[#F8F9FC] py-4 pr-4 rounded-r-lg">
-          {post.excerpt}
-        </p>
+      <article className="px-6 md:px-8 pt-8 md:pt-12 pb-16">
+        <div className="max-w-[680px] mx-auto">
+          {blocks.length > 0 ? (
+            <BlockRenderer blocks={blocks} />
+          ) : (
+            <p className="text-[15px] text-[#6B7280] italic">Full article content coming soon.</p>
+          )}
 
-        {/* Body blocks */}
-        {blocks.length > 0 ? (
-          <BlockRenderer blocks={blocks} />
-        ) : (
-          <p className="text-[15px] text-[#6B7280] italic">Full article content coming soon.</p>
-        )}
+          {/* Series */}
+          {series.length > 1 && (
+            <nav className={`mt-16 rounded-3xl bg-[#04102D] p-6 md:p-8 ${WIDE}`} aria-label={post.category}>
+              <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#6FF2C1] mb-5">The series · {post.category}</p>
+              <ol className="grid sm:grid-cols-2 gap-3">
+                {series.map((p, i) => {
+                  const m = p.title.match(/^Day (\d+):\s*(.*)$/);
+                  const current = p.slug === post.slug;
+                  return (
+                    <li key={p.slug}>
+                      <Link
+                        href={`/blog/${p.slug}`}
+                        aria-current={current ? 'page' : undefined}
+                        className={`flex h-full items-start gap-4 rounded-2xl p-4 transition-colors ${current ? 'bg-white text-[#04102D]' : 'bg-white/5 text-white hover:bg-white/10'}`}
+                      >
+                        <span className={`text-[28px] font-black leading-none ${current ? 'text-[#1A9E74]' : 'text-[#6FF2C1]'}`}>
+                          {m ? m[1] : i + 1}
+                        </span>
+                        <span className="text-[14px] font-semibold leading-snug pt-1">
+                          {m ? m[2] : p.title}
+                          {current && <span className="block text-[11px] font-medium text-[#6B7280] mt-1">You&apos;re reading this one</span>}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ol>
+            </nav>
+          )}
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mt-12 pt-8 border-t border-[#D4D9E0]">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-[11px] font-medium text-[#6B7280] bg-[#F8F9FC] border border-[#D4D9E0] px-3 py-1 rounded-full"
-            >
-              #{tag}
-            </span>
-          ))}
+          {/* Tags */}
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-12 pt-8 border-t border-[#E8ECF2]">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[11px] font-medium text-[#6B7280] bg-[#F8F9FC] border border-[#E8ECF2] px-3 py-1 rounded-full"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
-
+      </article>
       {/* ── Next / Prev ───────────────────────────────────────── */}
       {(prevPost || nextPost) && (
         <div className="border-t border-[#D4D9E0] bg-[#F8F9FC]">
