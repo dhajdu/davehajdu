@@ -7,7 +7,7 @@ const AMAZON_URL = 'https://www.amazon.com/dp/B0HR5JJHF4';
 export const metadata: Metadata = {
   title: 'The Night the Fight Broke Out, a Leadership Fable by Dave Hajdu',
   description:
-    'The Night the Fight Broke Out: a leadership fable about how a business builds the foundations to lead AI. Out now in paperback and Kindle.',
+    'The Night the Fight Broke Out: a leadership fable about how a business builds the foundations to lead AI. Out now in paperback and Kindle. The Other 50% is coming Q1 2027.',
   openGraph: {
     title: 'The Night the Fight Broke Out',
     description: 'A leadership fable about how a business builds the foundations to lead AI. Stop using AI, start leading it.',
@@ -133,7 +133,7 @@ export default function BooksPage() {
             ))}
           </div>
           <p className="text-[#04102D]/60 text-[16px] leading-[1.75] mb-10">
-            The story ends with The Model: the three skills, the Four Offices, the line between human and AI work, and the sequence for building it. {book.forWho}
+            The story ends with The Model: the three skills, the line between human and AI work, and the sequence for building it. {book.forWho}
           </p>
 
           <div className="flex flex-wrap items-center gap-2 mb-10">
@@ -154,6 +154,32 @@ export default function BooksPage() {
           >
             Get it on Amazon →
           </a>
+        </div>
+      </section>
+
+      {/* ── Coming next ──────────────────────────────────────── */}
+      <section className="bg-[#EAEEF2] py-20 md:py-24">
+        <div className="max-w-[760px] mx-auto px-8 sm:px-10">
+          <div className="flex items-center gap-2 mb-5 w-fit bg-white border border-[#04102D]/[0.08] rounded-full px-3 py-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D1458B]" />
+            <span className="text-[#04102D]/70 text-[10px] font-bold tracking-[0.1em] uppercase">Coming Q1 2027</span>
+          </div>
+          <h2
+            className="text-[#04102D] font-black tracking-tight leading-[1.1] mb-3"
+            style={{ fontSize: 'clamp(28px, 3.8vw, 42px)' }}
+          >
+            The Other 50%
+          </h2>
+          <p className="text-[#287BE8] text-[14px] font-bold mb-6">Leadership has changed, 50% is human and 50% is AI</p>
+          <p className="text-[#04102D]/60 text-[16px] leading-[1.75] mb-8">
+            The leaders who win the next decade aren&apos;t the ones who adopt AI fastest. They&apos;re the ones who learn to lead with it. The Other 50% reframes what leadership means when half the work is done by machines: identity, judgment, and the rare mix of human and technical fluency organizations need right now.
+          </p>
+          <Link
+            href="/#contact"
+            className="text-[#287BE8] text-[12px] font-bold tracking-[0.07em] uppercase inline-flex items-center gap-2 hover:text-[#04102D] transition-colors"
+          >
+            Get notified when it drops →
+          </Link>
         </div>
       </section>
 
