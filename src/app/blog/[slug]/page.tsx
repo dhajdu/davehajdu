@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { listPosts, getPost } from '@/lib/blog/posts';
 import { parseBody, type Block } from '@/lib/blog/body';
 import PostVideo from './PostVideo';
+import Scoreboard from './Scoreboard';
+import { scoreboardFor } from '@/lib/blog/scoreboard';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -204,6 +206,7 @@ export default async function BlogPostPage({ params }: Props) {
   const feature = fi >= 0 ? blocks[fi] : null;
   if (feature) blocks = blocks.filter((_, i) => i !== fi);
 
+  const score = scoreboardFor(post.slug);
   const faqs = post.faqs;
   const categoryColor = CATEGORY_COLORS[post.category] ?? 'bg-white/10 text-white';
 
@@ -296,6 +299,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* ── Article Body ─────────────────────────────────────── */}
       <article className="px-6 md:px-8 pt-8 md:pt-12 pb-16">
         <div className="max-w-[680px] mx-auto">
+          {score && <Scoreboard days={score} />}
           {blocks.length > 0 ? (
             <BlockRenderer blocks={blocks} />
           ) : (
