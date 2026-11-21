@@ -23,7 +23,7 @@ const CORE_PAGES: { path: string; title: string; desc: string }[] = [
   {
     path: '/books',
     title: 'Books',
-    desc: 'The Four Offices of the Future (a diagnostic lens for mapping AI to outcomes) and The Other 50% (leading when half the work is done by machines).',
+    desc: 'The Night the Fight Broke Out: a leadership fable about how a business builds the foundations to lead AI. Out now on Amazon.',
   },
   {
     path: '/blog',
