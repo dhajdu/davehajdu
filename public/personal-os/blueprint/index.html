@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="How Dave Hajdu built /life, a private personal operating system on one database, and how it runs the davehajdu.com blog. A loose blueprint to borrow from.">
+<title>The /life Blueprint</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Layout: navy hero band, then white sections on one 1040px column; diagrams as tinted columns of nodes. Light only. */
+  :root {
+    --navy: #04102D;
+    --blue: #287BE8;
+    --magenta: #D1458B;
+    --mint: #6FF2C1;
+    --light-gray: #EAEEF2;
+    --body-text: #2A3044;
+    --muted: #6B7280;
+    --border: #D4D9E0;
+    --white: #ffffff;
+    --hero-sub: #C9D2E3;
+    --r-md: 6px;
+    --r-lg: 8px;
+    --r-xl: 12px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--white); color: var(--body-text); font-family: var(--font); -webkit-font-smoothing: antialiased; line-height: 1.55; font-size: 16px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header.hero { background: var(--navy); color: var(--white); padding-block: 64px 56px; }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .04em; color: var(--mint); margin: 0 0 12px; }
+  h1 { font-size: clamp(34px, 6vw, 54px); line-height: 1.05; margin: 0 0 18px; font-weight: 800; letter-spacing: -.02em; text-wrap: balance; }
+  .hero p { max-width: 680px; font-size: 18px; color: var(--hero-sub); margin: 0; }
+  .toc { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .toc a { color: var(--white); text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: rgb(255 255 255 / .1); }
+  .toc a:hover, .toc a:focus-visible { background: rgb(255 255 255 / .2); outline: none; }
+  section { padding-block: 56px; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: 0; }
+  .num { font-size: 13px; font-weight: 800; color: var(--magenta); margin: 0 0 6px; }
+  h2 { font-size: clamp(26px, 4vw, 32px); color: var(--navy); margin: 0 0 10px; letter-spacing: -.01em; line-height: 1.15; text-wrap: balance; }
+  h3 { font-size: 18px; color: var(--navy); margin: 0 0 8px; }
+  h4 { font-size: 15px; color: var(--navy); margin: 0 0 6px; }
+  .lede { color: var(--muted); margin: 0 0 28px; max-width: 700px; font-size: 17px; }
+  p { margin: 0 0 14px; }
+  .prose { max-width: 680px; }
+  .quote { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; color: var(--navy); line-height: 1.2; border-left: 4px solid var(--magenta); padding: 4px 0 4px 18px; margin: 4px 0 28px; max-width: 760px; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .grid > * { min-width: 0; }
+  .card { border: 1px solid var(--border); border-radius: var(--r-xl); padding: 20px; background: var(--white); }
+  .card p, .card li { font-size: 14px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card.fill { background: var(--light-gray); border-color: var(--light-gray); }
+  .card.navy { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .card.navy h4 { color: var(--mint); }
+  ul.tight { margin: 0; padding-left: 18px; }
+  ul.tight li { margin-bottom: 6px; }
+  code { font-family: var(--mono); font-size: 12.5px; background: var(--light-gray); padding: 1px 5px; border-radius: 4px; color: var(--navy); overflow-wrap: anywhere; }
+  .card.navy code { background: rgb(255 255 255 / .12); color: var(--white); }
+  .note { font-size: 14px; color: var(--muted); border-left: 3px solid var(--mint); padding: 4px 12px; margin: 20px 0 0; max-width: 760px; }
+  .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--light-gray); color: var(--navy); white-space: nowrap; }
+  .chip.blue { background: var(--blue); color: var(--white); }
+  .chip.mint { background: var(--mint); color: var(--navy); }
+  .chip.magenta { background: var(--magenta); color: var(--white); }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--r-xl); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
+  th { text-align: left; font-size: 12px; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--light-gray); white-space: nowrap; }
+  td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.k { font-weight: 700; color: var(--navy); white-space: nowrap; }
+
+  /* flow diagram */
+  .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .flow .col { background: var(--light-gray); border-radius: var(--r-xl); padding: 14px; min-width: 0; }
+  .flow .col h5 { margin: 0 0 10px; font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .03em; }
+  .node { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 8px 10px; font-size: 12.5px; margin-bottom: 8px; }
+  .node:last-child { margin-bottom: 0; }
+  .node b { color: var(--navy); display: block; font-size: 13px; }
+  .node.hl { border-color: var(--blue); box-shadow: inset 3px 0 0 var(--blue); }
+  .node.mg { border-color: var(--magenta); box-shadow: inset 3px 0 0 var(--magenta); }
+  .arrow-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 12px; font-weight: 600; }
+
+  /* matrix: areas x kinds */
+  .matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 20px; }
+  .area { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 10px 12px; font-size: 13px; }
+  .area b { display: block; color: var(--navy); font-size: 14px; }
+  .area span { color: var(--muted); font-size: 12px; }
+  .area.live { border-color: var(--navy); }
+
+  /* ladder */
+  .ladder { display: grid; gap: 6px; max-width: 640px; }
+  .rung { display: grid; grid-template-columns: 110px 1fr 1fr; gap: 8px; align-items: stretch; }
+  .rung > div { border: 1px solid var(--border); border-radius: var(--r-md); padding: 8px 10px; font-size: 13px; min-width: 0; }
+  .rung .lbl { background: var(--navy); color: var(--white); border-color: var(--navy); font-weight: 700; }
+  .rung.head > div { border: 0; padding: 0 10px; font-size: 12px; font-weight: 600; color: var(--muted); }
+  .rung.base .lbl { background: var(--magenta); border-color: var(--magenta); }
+
+  /* pipeline */
+  .pipe { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 24px; }
+  .pipe .st { border: 1.5px solid var(--navy); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: var(--navy); }
+  .pipe .st.you { background: var(--navy); color: var(--white); }
+  .pipe .ar { color: var(--muted); font-weight: 700; }
+
+  ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 12px; }
+  ol.steps li { counter-increment: s; display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start; }
+  ol.steps li::before { content: counter(s); width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--mint); font-weight: 800; display: grid; place-items: center; font-size: 15px; }
+  ol.steps li div { min-width: 0; padding-top: 6px; }
+  ol.steps li b { color: var(--navy); }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 28px; margin: 0 0 24px; }
+  .stat b { display: block; font-size: 30px; font-weight: 800; color: var(--navy); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .stat span { font-size: 13px; color: var(--muted); }
+
+  footer { padding-block: 32px 48px; font-size: 13px; color: var(--muted); }
+
+  @media (max-width: 520px) {
+    .rung { grid-template-columns: 78px 1fr 1fr; }
+    .rung > div { font-size: 12px; padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">A loose blueprint, for TK</p>
+    <h1>/life, my personal operating system that also runs my blog</h1>
+    <p>How Dave built a private app on top of one database that holds his journal, goals, health, travel and memories, and how the public blog at davehajdu.com reads from that same database. Take what's useful and skip the rest.</p>
+    <nav class="toc" aria-label="Sections">
+      <a href="#idea">The idea</a>
+      <a href="#shape">The shape</a>
+      <a href="#data">How the data is organized</a>
+      <a href="#sources">What feeds it</a>
+      <a href="#daily">How I use it</a>
+      <a href="#blog">The blog back end</a>
+      <a href="#guardrails">Guardrails</a>
+      <a href="#built">How we built it</a>
+      <a href="#yours">Building your own</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section id="idea">
+  <div class="wrap">
+    <p class="num">The idea</p>
+    <h2>One question, one database</h2>
+    <p class="quote">Am I living the life I intend to live?</p>
+    <div class="prose">
+      <p>Everything in /life exists to answer that question. Years of my life were spread across Notion pages, a travel app, a fitness band, Gmail, Google Photos and PDFs from the clinic. None of it talked to each other, so none of it could tell me whether this month was a good one.</p>
+      <p>So we pulled it all into one private Postgres database, put a small app on top behind a single login, and made the app run a loop: capture what happens, review the month, reflect, set the next goals. Once the data lived in one place, the blog became the obvious next tenant. My journal is where my ideas start, so the posts now live in the same database and get drafted from it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="shape">
+  <div class="wrap">
+    <p class="num">The shape</p>
+    <h2>Sources in, one inbox, three ways out</h2>
+    <p class="lede">Every outside source lands in a raw inbox first. Claude extracts what matters. Confident results go straight to the tables; anything doubtful waits in a review queue for me to approve.</p>
+    <div class="flow" role="img" aria-label="Data flows from sources into a raw inbox, through Claude extraction, into the database, and out to the private app, AI assistants, and the public blog">
+      <div class="col">
+        <h5>Sources</h5>
+        <div class="node"><b>Journal</b>written in the app every day</div>
+        <div class="node"><b>Gmail</b>bookings, hourly sweep</div>
+        <div class="node"><b>Whoop and Apple Health</b>recovery, sleep, weight</div>
+        <div class="node"><b>Google Photos</b>picked, not bulk-synced</div>
+        <div class="node"><b>PDFs</b>lab reports, documents</div>
+      </div>
+      <div class="col">
+        <h5>Intake</h5>
+        <div class="node hl"><b>Raw inbox</b>every item kept as it arrived</div>
+        <div class="node hl"><b>Claude extraction</b>structured output with a confidence score</div>
+        <div class="node mg"><b>Review queue</b>low confidence or conflicts wait for me</div>
+      </div>
+      <div class="col">
+        <h5>One database</h5>
+        <div class="node"><b>Life data</b>entries, metrics, trips, goals, reviews, memories</div>
+        <div class="node"><b>Content</b>brands, pillars, campaigns, posts</div>
+        <div class="node"><b>Run log</b>every job and assistant call recorded</div>
+      </div>
+      <div class="col">
+        <h5>Out</h5>
+        <div class="node hl"><b>/life app</b>private, one login</div>
+        <div class="node hl"><b>Assistants</b>scoped AI access over MCP</div>
+        <div class="node mg"><b>Public blog</b>reads published posts only</div>
+      </div>
+    </div>
+    <p class="arrow-note">Sources → raw inbox → extraction → tables or review queue → app, assistants, blog</p>
+  </div>
+</section>
+
+<section id="data">
+  <div class="wrap">
+    <p class="num">How the data is organized</p>
+    <h2>Ten areas, three kinds of data, direction on top</h2>
+    <p class="lede">The model is simple enough to hold in your head. That matters more than any feature.</p>
+    <div class="matrix">
+      <div class="area live"><b>Body</b><span>health, fitness, labs</span></div>
+      <div class="area live"><b>Mind</b><span>journal, learnings</span></div>
+      <div class="area"><b>People</b><span>relationships</span></div>
+      <div class="area"><b>Money</b><span>accounts, net worth</span></div>
+      <div class="area"><b>Work</b><span>companies, roles</span></div>
+      <div class="area live"><b>Places</b><span>trips, flights, hotels</span></div>
+      <div class="area"><b>Time</b><span>where the hours go</span></div>
+      <div class="area live"><b>Direction</b><span>goals, reviews, vision</span></div>
+      <div class="area"><b>Admin</b><span>documents, renewals</span></div>
+      <div class="area live"><b>Legacy</b><span>memories, photos</span></div>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <h4>Records</h4>
+        <p>Things that happened, with a date and how sure we are of it (day, month, year or approximate). A move, a job, a surgery, a trip.</p>
+      </div>
+      <div class="card">
+        <h4>Measurements</h4>
+        <p>A number on a day. Steps, recovery, weight, nights away. One row per metric per day, so a re-send overwrites instead of duplicating.</p>
+      </div>
+      <div class="card">
+        <h4>Entries</h4>
+        <p>Writing. Journal days, forum updates, learnings, presentations. Full-text searchable, which is what the blog assistant mines.</p>
+      </div>
+    </div>
+    <p class="note">The trick that keeps it cheap to grow: areas, metrics and sources are rows, not code. A new metric or a new source is an insert, not a schema change. Areas with a dark border are the ones I use daily today; the rest have tables waiting.</p>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <p class="num">What feeds it</p>
+    <h2>Automate the boring sources, type the meaningful ones</h2>
+    <p class="lede">Some sources were one-time imports and then switched off. That's fine. The goal was to get history in once, then stop depending on the old tool.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Source</th><th>How it gets in</th><th>Cadence</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Journal</td><td>Written in the app: the day's One Thing, gratitude, a free-write, to-dos, weight and blood sugar</td><td>Daily, by hand</td><td><span class="chip mint">Live</span></td></tr>
+          <tr><td class="k">Gmail</td><td>A Google Apps Script in my own inbox finds booking emails and posts them to an ingest endpoint with a shared secret. No OAuth app to maintain</td><td>Hourly</td><td><span class="chip mint">Live</span></td></tr>
+          <tr><td class="k">Whoop</td><td>OAuth connection from the Sources page; a cron re-reads the last 10 days</td><td>Every 6 hours</td><td><span class="chip mint">Live</span></td></tr>
+          <tr><td class="k">Apple Health</td><td>The Health Auto Export iOS app pushes daily aggregates to an endpoint</td><td>Daily push</td><td><span class="chip mint">Live</span></td></tr>
+          <tr><td class="k">Google Photos</td><td>The Photos Picker: I choose the photos, they're copied into a private bucket</td><td>When I want</td><td><span class="chip mint">Live</span></td></tr>
+          <tr><td class="k">Lab reports</td><td>PDF stored privately, each result transcribed and checked against its reference range</td><td>Per panel</td><td><span class="chip mint">Live</span></td></tr>
+          <tr><td class="k">Notion</td><td>Five years of daily journal pages and monthly forum updates. Carried-forward template text was stripped so each day holds only that day's writing</td><td>Once</td><td><span class="chip">Imported, retired</span></td></tr>
+          <tr><td class="k">TripIt</td><td>Calendar feed used to backfill and cross-check old trips</td><td>Once</td><td><span class="chip">Imported, retired</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Every job writes a run row and updates its source's last run and status, so the Sources page shows at a glance when something stopped flowing.</p>
+  </div>
+</section>
+
+<section id="daily">
+  <div class="wrap">
+    <p class="num">How I use it</p>
+    <h2>The ladder, and the pages around it</h2>
+    <p class="lede">The home screen is one ladder from today up to five years, in two tracks. Health is the foundation under everything; if that rung is broken, the business rungs don't matter much.</p>
+    <div class="ladder" aria-label="The focus ladder">
+      <div class="rung head"><div></div><div>Health</div><div>Business</div></div>
+      <div class="rung"><div class="lbl">5 years</div><div>Vision, values, the picture</div><div>Vision, values, the picture</div></div>
+      <div class="rung"><div class="lbl">Year</div><div>Year goal</div><div>Year goal</div></div>
+      <div class="rung"><div class="lbl">Month</div><div>One Thing this month</div><div>One Thing this month</div></div>
+      <div class="rung"><div class="lbl">Week</div><div>One Thing this week</div><div>One Thing this week</div></div>
+      <div class="rung"><div class="lbl">Today</div><div>One Thing today</div><div>One Thing today</div></div>
+      <div class="rung base"><div class="lbl">Foundation</div><div>Recovery, sleep, weight</div><div>To-do list, above and below the line</div></div>
+    </div>
+    <div class="grid g3" style="margin-top:28px">
+      <div class="card fill"><h4>Today and Journal</h4><p>Write the day, drag to-dos above the line for today, log weight. Old Notion days show alongside app-written ones.</p></div>
+      <div class="card fill"><h4>Goals and Review</h4><p>Goals board with a track record per month. The monthly review drafts itself on the 1st from the month's data; I grade it in about 15 minutes.</p></div>
+      <div class="card fill"><h4>Travel</h4><p>Trips built automatically from flights and hotels, split at my home airport. Current, upcoming, past and a map.</p></div>
+      <div class="card fill"><h4>Health</h4><p>Fitness from Whoop plus a medical page with every lab marker charted against its range.</p></div>
+      <div class="card fill"><h4>Memories and EO</h4><p>Picked photos on a timeline. My EO forum updates, scores and presentations, kept apart from the journal.</p></div>
+      <div class="card fill"><h4>Ask</h4><p>Plain-English questions over the whole database ("how many times have I been to Australia?"), answered with the rows it used. Read-only.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="blog">
+  <div class="wrap">
+    <p class="num">The blog back end</p>
+    <h2>The journal is the source, the blog is a view</h2>
+    <p class="lede">Posts used to be hardcoded in the site and needed a deploy to change. Now they're rows in the same database, managed from a Marketing section inside /life. The public blog reads published rows and nothing else.</p>
+    <div class="pipe" aria-label="Post status pipeline">
+      <span class="st">Idea</span><span class="ar">→</span>
+      <span class="st">Drafted</span><span class="ar">→</span>
+      <span class="st you">Approved</span><span class="ar">→</span>
+      <span class="st you">Scheduled</span><span class="ar">→</span>
+      <span class="st you">Published</span>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h4>How a post gets made</h4>
+        <ul class="tight">
+          <li>The writing assistant reads a week or a month of journal days for raw material, plus the brand profile (voice, banned words, pillars).</li>
+          <li>It creates and edits drafts, generates a hero image and runs the checks. Every edit needs a reason and leaves an audit row.</li>
+          <li>I edit in the cockpit, approve, and pick a date. A daily cron publishes at 8am my time.</li>
+          <li>Publishing refreshes the post, the index, the home page, the sitemap and <code>llms.txt</code>, then fetches the live URL to confirm it responded.</li>
+        </ul>
+      </div>
+      <div class="card navy">
+        <h4>The rules that keep it honest</h4>
+        <ul class="tight">
+          <li><b>Only I approve.</b> The assistant has no approve, schedule or publish tool, and the database role it runs as can't touch those columns.</li>
+          <li><b>Approval is tied to the exact words.</b> Approval stores a hash of the version. Change a comma and it's unapproved.</li>
+          <li><b>Publish gate.</b> 600+ words, a hero image, a title tag, a meta description, at least two internal links, no banned words.</li>
+          <li><b>Live posts are locked.</b> To change words on a published post, unpublish, edit, approve again. The original date is kept.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">The public side uses the low-privilege key. Row-level security lets anonymous readers see published posts, brands and pillars, and nothing from /life. Pages are static and refreshed hourly or on publish, so a database hiccup doesn't take the blog down.</p>
+  </div>
+</section>
+
+<section id="guardrails">
+  <div class="wrap">
+    <p class="num">Guardrails</p>
+    <h2>Let the database say no</h2>
+    <p class="lede">This holds my health data and my private writing, and AI assistants can reach it. The safety lives in Postgres, not in app code that might have a bug.</p>
+    <div class="grid g3">
+      <div class="card"><h4>One owner</h4><p>Supabase Auth with an allowlist of one email. Every table has row-level security so a broken page can't leak rows.</p></div>
+      <div class="card"><h4>A role per assistant</h4><p>Ask runs as a read-only role. The personal assistant can read journal, goals and trips, and only add to-dos and a couple of measurements. The blog assistant can only write drafts.</p></div>
+      <div class="card"><h4>Secrets stay server-side</h4><p>The powerful key is used only by ingest routes and scripts. Each source has its own ingest secret.</p></div>
+      <div class="card"><h4>Private files</h4><p>Documents and photos sit in a private bucket and open through short-lived signed links after an owner check.</p></div>
+      <div class="card"><h4>Ask before guessing</h4><p>Extraction below 0.8 confidence, or any conflict (two hotels on one night), goes to the review queue instead of the tables.</p></div>
+      <div class="card"><h4>Invisible to search</h4><p>/life is noindex and left out of the sitemap and robots file.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="built">
+  <div class="wrap">
+    <p class="num">How we built it</p>
+    <h2>Three weeks of small pull requests with Claude Code</h2>
+    <div class="stats">
+      <div class="stat"><b>Nov 1</b><span>first /life commit, 2026</span></div>
+      <div class="stat"><b>~90</b><span>merged pull requests</span></div>
+      <div class="stat"><b>1</b><span>repo, one deploy, one database</span></div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h4>The process</h4>
+        <ul class="tight">
+          <li><b>Brief first.</b> A short HTML product brief: the question, the areas, the loop, wireframes.</li>
+          <li><b>Then a dev plan</b> in Markdown: schema, workflows, and twelve PR slices, each with a gate that had to be true to merge.</li>
+          <li><b>Claude Code did the building,</b> one small branch and PR at a time. I reviewed, merged, and Vercel deployed on push.</li>
+          <li><b>Use it, then fix it.</b> Most of the later PRs are tiny: a field that got cut off, a button in the wrong place, a better default.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>The stack</h4>
+        <ul class="tight">
+          <li>Next.js App Router and Tailwind, inside the existing personal site at <code>/life</code></li>
+          <li>Supabase: Postgres, Auth, Storage, row-level security, separate project from the site's leads database</li>
+          <li>Vercel hosting and cron jobs</li>
+          <li>Claude for extraction, the monthly review and Ask</li>
+          <li>MCP endpoints so outside AI assistants get scoped access</li>
+          <li>Google Apps Script for the Gmail sweep</li>
+        </ul>
+      </div>
+    </div>
+    <h3 style="margin-top:32px">Phases</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Areas</th><th>What it unlocked</th></tr></thead>
+        <tbody>
+          <tr><td class="k">1 · The loop</td><td>Direction, Mind, Body, Places</td><td>Journal, goals, monthly review, health, travel, Ask. Done</td></tr>
+          <tr><td class="k">Marketing</td><td>Content</td><td>Blog on the database, cockpit, publish gate, writing assistant. Done</td></tr>
+          <tr><td class="k">2 · People and money</td><td>People, Money, Work, Admin</td><td>Contacts and nudges, statements and net worth, renewals. Tables exist</td></tr>
+          <tr><td class="k">3 · Memory</td><td>Legacy, Time</td><td>Photos started; family history, calendar time and reading still to come</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="yours">
+  <div class="wrap">
+    <p class="num">Building your own</p>
+    <h2>If I were starting over</h2>
+    <ol class="steps">
+      <li><div><b>Write your one question first.</b> Mine is about intention. Yours might be about energy, family, or money. It decides which areas you build first and which you ignore.</div></li>
+      <li><div><b>Pick three or four areas, not ten.</b> Make the tables generic enough for the rest, but only build screens for what you'll open every day.</div></li>
+      <li><div><b>Choose one daily writing habit and move it in.</b> The journal is what makes everything else meaningful, and it's what feeds the blog.</div></li>
+      <li><div><b>Import history once, then cut the cord.</b> Backfill from the old tools, strip the noise, and turn the sync off. Living with two sources of truth is worse than either.</div></li>
+      <li><div><b>Put everything through one inbox.</b> Keep the raw item, let the AI propose, and queue anything it isn't sure about. You'll trust the data because you saw the doubtful bits.</div></li>
+      <li><div><b>Give every AI its own database role.</b> Decide what it may read and write in SQL grants, not prompts. Log every call.</div></li>
+      <li><div><b>Make the blog a view of your writing.</b> Drafts can be assisted. Approval and publishing stay yours, tied to the exact version you read.</div></li>
+      <li><div><b>Ship small and use it daily.</b> A plan with gates, short PRs, deploy on push. The best features came from noticing what annoyed me that morning.</div></li>
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">Dave Hajdu · November 2026 · davehajdu.com. Shared as a loose reference, not a spec.</div>
+</footer>
+</body>
+</html>

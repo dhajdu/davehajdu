@@ -6,7 +6,10 @@ const nextConfig: NextConfig = {
   // Post images live in dave-life's public blog bucket.
   images: { remotePatterns: [{ protocol: 'https', hostname: 'akqpginnzgegavihlwmw.supabase.co', pathname: '/storage/v1/object/public/blog/**' }] },
   async rewrites() {
-    return [{ source: '/personal-os', destination: '/personal-os/index.html' }];
+    return [
+      { source: '/personal-os', destination: '/personal-os/index.html' },
+      { source: '/personal-os/blueprint', destination: '/personal-os/blueprint/index.html' },
+    ];
   },
   async redirects() {
     return [
